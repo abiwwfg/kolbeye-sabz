@@ -1,3 +1,4 @@
+```js
 "use strict";
 
 const express = require("express");
@@ -7,7 +8,15 @@ const session = require("express-session");
 const bcrypt = require("bcrypt");
 
 const app = express();
+
+// =====================================================
+// تنظیمات سرور
+// =====================================================
+
 const PORT = process.env.PORT || 3000;
+
+// Render پشت Proxy قرار دارد
+app.set("trust proxy", 1);
 
 // =====================================================
 // مسیرهای اصلی پروژه
@@ -15,8 +24,15 @@ const PORT = process.env.PORT || 3000;
 
 const projectPath = __dirname;
 
-const dataPath = path.join(projectPath, "properties.json");
-const usersPath = path.join(projectPath, "users.json");
+const dataPath = path.join(
+    projectPath,
+    "properties.json"
+);
+
+const usersPath = path.join(
+    projectPath,
+    "users.json"
+);
 
 // =====================================================
 // Middleware
@@ -35,8 +51,14 @@ app.use(express.urlencoded({
 // Session
 // =====================================================
 
+const isProduction =
+    process.env.NODE_ENV === "production";
+
 app.use(session({
-    secret: process.env.SESSION_SECRET || "kolbeye-sabz-secret-key-2026",
+
+    secret:
+        process.env.SESSION_SECRET ||
+        "kolbeye-sabz-secret-key-2026",
 
     resave: false,
 
@@ -45,21 +67,55 @@ app.use(session({
     rolling: true,
 
     cookie: {
+
         httpOnly: true,
+
         sameSite: "lax",
-        secure: false,
-        maxAge: 1000 * 60 * 60 * 8
+
+        secure: isProduction,
+
+        maxAge:
+            1000 * 60 * 60 * 8
+
     }
+
 }));
 
 // =====================================================
 // فایل‌های استاتیک
 // =====================================================
 
-app.use(express.static(projectPath));
+app.use(
+    express.static(projectPath)
+);
 
 // =====================================================
-// ساخت فایل properties.json در صورت نبودن
+// Health Check برای Render
+// =====================================================
+
+app.get(
+    "/health",
+    function (req, res) {
+
+        return res.status(200).json({
+
+            success: true,
+
+            status: "ok",
+
+            message:
+                "Kolbeye Sabz Server is running",
+
+            port:
+                PORT
+
+        });
+
+    }
+);
+
+// =====================================================
+// ساخت properties.json در صورت نبودن
 // =====================================================
 
 function ensurePropertiesFile() {
@@ -69,9 +125,17 @@ function ensurePropertiesFile() {
         if (!fs.existsSync(dataPath)) {
 
             fs.writeFileSync(
+
                 dataPath,
-                JSON.stringify([], null, 2),
+
+                JSON.stringify(
+                    [],
+                    null,
+                    2
+                ),
+
                 "utf8"
+
             );
 
         }
@@ -88,7 +152,7 @@ function ensurePropertiesFile() {
 }
 
 // =====================================================
-// ساخت فایل users.json در صورت نبودن
+// ساخت users.json در صورت نبودن
 // =====================================================
 
 function ensureUsersFile() {
@@ -100,23 +164,41 @@ function ensureUsersFile() {
             const defaultUsers = [
 
                 {
+
                     id: 1,
-                    fullname: "مدیر سیستم",
-                    username: "admin",
+
+                    fullname:
+                        "مدیر سیستم",
+
+                    username:
+                        "admin",
 
                     // رمز اولیه: 123456
-                    password: "123456",
+                    password:
+                        "123456",
 
-                    role: "admin",
-                    status: true
+                    role:
+                        "admin",
+
+                    status:
+                        true
+
                 }
 
             ];
 
             fs.writeFileSync(
+
                 usersPath,
-                JSON.stringify(defaultUsers, null, 2),
+
+                JSON.stringify(
+                    defaultUsers,
+                    null,
+                    2
+                ),
+
                 "utf8"
+
             );
 
         }
@@ -132,8 +214,12 @@ function ensureUsersFile() {
 
 }
 
+// =====================================================
 // اجرای اولیه فایل‌ها
+// =====================================================
+
 ensurePropertiesFile();
+
 ensureUsersFile();
 
 // =====================================================
@@ -146,16 +232,20 @@ function getProperties() {
 
         ensurePropertiesFile();
 
-        const raw = fs.readFileSync(
-            dataPath,
-            "utf8"
-        );
+        const raw =
+            fs.readFileSync(
+                dataPath,
+                "utf8"
+            );
 
         if (!raw.trim()) {
+
             return [];
+
         }
 
-        const data = JSON.parse(raw);
+        const data =
+            JSON.parse(raw);
 
         return Array.isArray(data)
             ? data
@@ -178,12 +268,22 @@ function getProperties() {
 // ذخیره املاک
 // =====================================================
 
-function saveProperties(properties) {
+function saveProperties(
+    properties
+) {
 
     fs.writeFileSync(
+
         dataPath,
-        JSON.stringify(properties, null, 2),
+
+        JSON.stringify(
+            properties,
+            null,
+            2
+        ),
+
         "utf8"
+
     );
 
 }
@@ -198,16 +298,20 @@ function getUsers() {
 
         ensureUsersFile();
 
-        const raw = fs.readFileSync(
-            usersPath,
-            "utf8"
-        );
+        const raw =
+            fs.readFileSync(
+                usersPath,
+                "utf8"
+            );
 
         if (!raw.trim()) {
+
             return [];
+
         }
 
-        const users = JSON.parse(raw);
+        const users =
+            JSON.parse(raw);
 
         return Array.isArray(users)
             ? users
@@ -230,12 +334,22 @@ function getUsers() {
 // ذخیره کاربران
 // =====================================================
 
-function saveUsers(users) {
+function saveUsers(
+    users
+) {
 
     fs.writeFileSync(
+
         usersPath,
-        JSON.stringify(users, null, 2),
+
+        JSON.stringify(
+            users,
+            null,
+            2
+        ),
+
         "utf8"
+
     );
 
 }
@@ -246,23 +360,36 @@ function saveUsers(users) {
 
 async function migratePasswords() {
 
-    const users = getUsers();
+    const users =
+        getUsers();
 
-    let changed = false;
+    let changed =
+        false;
 
-    for (const user of users) {
+    for (
+        const user of users
+    ) {
 
         if (
+
             user.password &&
-            !String(user.password).startsWith("$2")
+
+            !String(
+                user.password
+            ).startsWith("$2")
+
         ) {
 
-            user.password = await bcrypt.hash(
-                String(user.password),
-                12
-            );
+            user.password =
+                await bcrypt.hash(
+                    String(
+                        user.password
+                    ),
+                    12
+                );
 
-            changed = true;
+            changed =
+                true;
 
         }
 
@@ -284,11 +411,18 @@ async function migratePasswords() {
 // احراز هویت
 // =====================================================
 
-function requireAuth(req, res, next) {
+function requireAuth(
+    req,
+    res,
+    next
+) {
 
     if (
+
         !req.session ||
+
         !req.session.user
+
     ) {
 
         return res.status(401).json({
@@ -310,13 +444,22 @@ function requireAuth(req, res, next) {
 // بررسی نقش کاربر
 // =====================================================
 
-function requireRole(...roles) {
+function requireRole(
+    ...roles
+) {
 
-    return function (req, res, next) {
+    return function (
+        req,
+        res,
+        next
+    ) {
 
         if (
+
             !req.session ||
+
             !req.session.user
+
         ) {
 
             return res.status(401).json({
@@ -331,9 +474,11 @@ function requireRole(...roles) {
         }
 
         if (
+
             !roles.includes(
                 req.session.user.role
             )
+
         ) {
 
             return res.status(403).json({
@@ -357,235 +502,248 @@ function requireRole(...roles) {
 // API وضعیت ورود
 // =====================================================
 
-app.get("/api/me", requireAuth, function (req, res) {
+app.get(
+    "/api/me",
+    requireAuth,
+    function (
+        req,
+        res
+    ) {
 
-    return res.json({
+        return res.json({
 
-        success: true,
+            success: true,
 
-        user: req.session.user
+            user:
+                req.session.user
 
-    });
+        });
 
-});
+    }
+);
 
 // =====================================================
 // LOGIN
 // =====================================================
 
-app.post("/api/login", async function (req, res) {
+app.post(
+    "/api/login",
+    async function (
+        req,
+        res
+    ) {
 
-    try {
+        try {
 
-        const username =
-            String(
-                req.body.username || ""
-            ).trim();
+            const username =
+                String(
+                    req.body.username || ""
+                ).trim();
 
-        const password =
-            String(
-                req.body.password || ""
-            );
-
-        if (!username || !password) {
-
-            return res.status(400).json({
-
-                success: false,
-
-                message:
-                    "نام کاربری و رمز عبور را وارد کنید."
-
-            });
-
-        }
-
-        const users = getUsers();
-
-        const user = users.find(function (item) {
-
-            return (
-                String(item.username)
-                    .trim()
-                    .toLowerCase() ===
-                username.toLowerCase()
-                &&
-                item.status !== false
-            );
-
-        });
-
-        if (!user) {
-
-            return res.status(401).json({
-
-                success: false,
-
-                message:
-                    "نام کاربری یا رمز عبور اشتباه است."
-
-            });
-
-        }
-
-        let passwordOK = false;
-
-        // -------------------------------------------------
-        // بررسی bcrypt
-        // -------------------------------------------------
-
-        if (
-            user.password &&
-            String(user.password).startsWith("$2")
-        ) {
-
-            passwordOK =
-                await bcrypt.compare(
-                    password,
-                    user.password
+            const password =
+                String(
+                    req.body.password || ""
                 );
 
-        }
+            if (
+                !username ||
+                !password
+            ) {
 
-        // -------------------------------------------------
-        // پشتیبانی از رمز قدیمی
-        // -------------------------------------------------
-
-        else {
-
-            passwordOK =
-                password ===
-                String(user.password);
-
-            if (passwordOK) {
-
-                user.password =
-                    await bcrypt.hash(
-                        password,
-                        12
-                    );
-
-                saveUsers(users);
-
-            }
-
-        }
-
-        if (!passwordOK) {
-
-            return res.status(401).json({
-
-                success: false,
-
-                message:
-                    "نام کاربری یا رمز عبور اشتباه است."
-
-            });
-
-        }
-
-        // -------------------------------------------------
-        // ایجاد Session
-        // -------------------------------------------------
-
-        req.session.user = {
-
-            id: user.id,
-
-            fullname:
-                user.fullname ||
-                user.name ||
-                user.username,
-
-            username:
-                user.username,
-
-            role:
-                user.role ||
-                "consultant"
-
-        };
-
-        // -------------------------------------------------
-        // ذخیره Session قبل از پاسخ
-        // -------------------------------------------------
-
-        req.session.save(function (sessionError) {
-
-            if (sessionError) {
-
-                console.error(
-                    "Session Save Error:",
-                    sessionError
-                );
-
-                return res.status(500).json({
+                return res.status(400).json({
 
                     success: false,
 
                     message:
-                        "خطا در ایجاد جلسه ورود."
+                        "نام کاربری و رمز عبور را وارد کنید."
 
                 });
 
             }
 
-            return res.json({
+            const users =
+                getUsers();
 
-                success: true,
+            const user =
+                users.find(
+                    function (
+                        item
+                    ) {
 
-                message:
-                    "ورود با موفقیت انجام شد.",
+                        return (
 
-                user:
-                    req.session.user
+                            String(
+                                item.username
+                            )
+                            .trim()
+                            .toLowerCase()
 
-            });
+                            ===
 
-        });
+                            username
+                                .toLowerCase()
 
-    } catch (error) {
+                            &&
 
-        console.error(
-            "LOGIN ERROR:",
-            error
-        );
+                            item.status !== false
 
-        return res.status(500).json({
+                        );
 
-            success: false,
+                    }
+                );
 
-            message:
-                "خطا در ورود به سامانه."
+            if (!user) {
 
-        });
+                return res.status(401).json({
 
-    }
+                    success: false,
 
-});
+                    message:
+                        "نام کاربری یا رمز عبور اشتباه است."
 
-// =====================================================
-// LOGOUT
-// =====================================================
+                });
 
-app.post("/api/logout", function (req, res) {
+            }
 
-    if (!req.session) {
+            let passwordOK =
+                false;
 
-        return res.json({
+            // =================================================
+            // بررسی bcrypt
+            // =================================================
 
-            success: true
+            if (
 
-        });
+                user.password &&
 
-    }
+                String(
+                    user.password
+                ).startsWith("$2")
 
-    req.session.destroy(function (error) {
+            ) {
 
-        if (error) {
+                passwordOK =
+                    await bcrypt.compare(
+
+                        password,
+
+                        user.password
+
+                    );
+
+            }
+
+            // =================================================
+            // پشتیبانی از رمز قدیمی
+            // =================================================
+
+            else {
+
+                passwordOK =
+                    password ===
+                    String(
+                        user.password
+                    );
+
+                if (passwordOK) {
+
+                    user.password =
+                        await bcrypt.hash(
+
+                            password,
+
+                            12
+
+                        );
+
+                    saveUsers(users);
+
+                }
+
+            }
+
+            if (!passwordOK) {
+
+                return res.status(401).json({
+
+                    success: false,
+
+                    message:
+                        "نام کاربری یا رمز عبور اشتباه است."
+
+                });
+
+            }
+
+            // =================================================
+            // ایجاد Session
+            // =================================================
+
+            req.session.user = {
+
+                id:
+                    user.id,
+
+                fullname:
+                    user.fullname ||
+                    user.name ||
+                    user.username,
+
+                username:
+                    user.username,
+
+                role:
+                    user.role ||
+                    "consultant"
+
+            };
+
+            // =================================================
+            // ذخیره Session
+            // =================================================
+
+            req.session.save(
+                function (
+                    sessionError
+                ) {
+
+                    if (sessionError) {
+
+                        console.error(
+                            "Session Save Error:",
+                            sessionError
+                        );
+
+                        return res.status(500).json({
+
+                            success: false,
+
+                            message:
+                                "خطا در ایجاد جلسه ورود."
+
+                        });
+
+                    }
+
+                    return res.json({
+
+                        success: true,
+
+                        message:
+                            "ورود با موفقیت انجام شد.",
+
+                        user:
+                            req.session.user
+
+                    });
+
+                }
+            );
+
+        } catch (error) {
 
             console.error(
-                "Logout Error:",
+                "LOGIN ERROR:",
                 error
             );
 
@@ -594,33 +752,87 @@ app.post("/api/logout", function (req, res) {
                 success: false,
 
                 message:
-                    "خروج از سامانه انجام نشد."
+                    "خطا در ورود به سامانه."
 
             });
 
         }
 
-        res.clearCookie(
-            "connect.sid",
-            {
-                httpOnly: true,
-                sameSite: "lax",
-                secure: false
+    }
+);
+
+// =====================================================
+// LOGOUT
+// =====================================================
+
+app.post(
+    "/api/logout",
+    function (
+        req,
+        res
+    ) {
+
+        if (!req.session) {
+
+            return res.json({
+
+                success: true
+
+            });
+
+        }
+
+        req.session.destroy(
+            function (
+                error
+            ) {
+
+                if (error) {
+
+                    console.error(
+                        "Logout Error:",
+                        error
+                    );
+
+                    return res.status(500).json({
+
+                        success: false,
+
+                        message:
+                            "خروج از سامانه انجام نشد."
+
+                    });
+
+                }
+
+                res.clearCookie(
+                    "connect.sid",
+                    {
+
+                        httpOnly: true,
+
+                        sameSite: "lax",
+
+                        secure:
+                            isProduction
+
+                    }
+                );
+
+                return res.json({
+
+                    success: true,
+
+                    message:
+                        "با موفقیت خارج شدید."
+
+                });
+
             }
         );
 
-        return res.json({
-
-            success: true,
-
-            message:
-                "با موفقیت خارج شدید."
-
-        });
-
-    });
-
-});
+    }
+);
 
 // =====================================================
 // دریافت تمام املاک
@@ -629,7 +841,10 @@ app.post("/api/logout", function (req, res) {
 app.get(
     "/api/properties",
     requireAuth,
-    function (req, res) {
+    function (
+        req,
+        res
+    ) {
 
         try {
 
@@ -673,7 +888,10 @@ app.get(
 app.get(
     "/api/properties/:id",
     requireAuth,
-    function (req, res) {
+    function (
+        req,
+        res
+    ) {
 
         try {
 
@@ -681,14 +899,27 @@ app.get(
                 getProperties();
 
             const property =
-                properties.find(function (item) {
+                properties.find(
+                    function (
+                        item
+                    ) {
 
-                    return (
-                        String(item.id) ===
-                        String(req.params.id)
-                    );
+                        return (
 
-                });
+                            String(
+                                item.id
+                            )
+
+                            ===
+
+                            String(
+                                req.params.id
+                            )
+
+                        );
+
+                    }
+                );
 
             if (!property) {
 
@@ -740,13 +971,20 @@ app.get(
 app.post(
     "/api/properties",
     requireAuth,
-    function (req, res) {
+    function (
+        req,
+        res
+    ) {
 
         try {
 
             if (
+
                 !req.body ||
-                typeof req.body !== "object"
+
+                typeof req.body !==
+                    "object"
+
             ) {
 
                 return res.status(400).json({
@@ -764,12 +1002,14 @@ app.post(
                 getProperties();
 
             const property = {
+
                 ...req.body
+
             };
 
-            // -------------------------------------------------
+            // =================================================
             // شناسه اصلی
-            // -------------------------------------------------
+            // =================================================
 
             property.id =
                 "KS-" +
@@ -779,13 +1019,18 @@ app.post(
                     .toString(36)
                     .substring(2, 7);
 
-            // -------------------------------------------------
+            // =================================================
             // کد فایل
-            // -------------------------------------------------
+            // =================================================
 
             if (
+
                 !property.code ||
-                !String(property.code).trim()
+
+                !String(
+                    property.code
+                ).trim()
+
             ) {
 
                 property.code =
@@ -794,13 +1039,15 @@ app.post(
 
             }
 
-            // -------------------------------------------------
+            // =================================================
             // اطلاعات ثبت
-            // -------------------------------------------------
+            // =================================================
 
             property.createdAt =
                 new Date()
-                    .toLocaleString("fa-IR");
+                    .toLocaleString(
+                        "fa-IR"
+                    );
 
             property.createdBy =
                 req.session.user.fullname;
@@ -808,9 +1055,9 @@ app.post(
             property.createdById =
                 req.session.user.id;
 
-            // -------------------------------------------------
+            // =================================================
             // آرایه‌های ضروری
-            // -------------------------------------------------
+            // =================================================
 
             if (
                 !Array.isArray(
@@ -818,7 +1065,8 @@ app.post(
                 )
             ) {
 
-                property.features = [];
+                property.features =
+                    [];
 
             }
 
@@ -828,17 +1076,22 @@ app.post(
                 )
             ) {
 
-                property.images = [];
+                property.images =
+                    [];
 
             }
 
-            // -------------------------------------------------
+            // =================================================
             // ذخیره
-            // -------------------------------------------------
+            // =================================================
 
-            properties.push(property);
+            properties.push(
+                property
+            );
 
-            saveProperties(properties);
+            saveProperties(
+                properties
+            );
 
             return res.status(201).json({
 
@@ -880,7 +1133,10 @@ app.post(
 app.put(
     "/api/properties/:id",
     requireAuth,
-    function (req, res) {
+    function (
+        req,
+        res
+    ) {
 
         try {
 
@@ -889,11 +1145,22 @@ app.put(
 
             const index =
                 properties.findIndex(
-                    function (item) {
+                    function (
+                        item
+                    ) {
 
                         return (
-                            String(item.id) ===
-                            String(req.params.id)
+
+                            String(
+                                item.id
+                            )
+
+                            ===
+
+                            String(
+                                req.params.id
+                            )
+
                         );
 
                     }
@@ -921,9 +1188,6 @@ app.put(
 
                 ...req.body,
 
-                // این موارد نباید توسط
-                // فرم ویرایش تغییر کنند
-
                 id:
                     oldProperty.id,
 
@@ -942,7 +1206,9 @@ app.put(
 
                 updatedAt:
                     new Date()
-                        .toLocaleString("fa-IR"),
+                        .toLocaleString(
+                            "fa-IR"
+                        ),
 
                 updatedBy:
                     req.session.user.fullname,
@@ -958,7 +1224,8 @@ app.put(
                 )
             ) {
 
-                updatedProperty.features = [];
+                updatedProperty.features =
+                    [];
 
             }
 
@@ -968,14 +1235,17 @@ app.put(
                 )
             ) {
 
-                updatedProperty.images = [];
+                updatedProperty.images =
+                    [];
 
             }
 
             properties[index] =
                 updatedProperty;
 
-            saveProperties(properties);
+            saveProperties(
+                properties
+            );
 
             return res.json({
 
@@ -1017,7 +1287,10 @@ app.put(
 app.delete(
     "/api/properties/:id",
     requireRole("admin"),
-    function (req, res) {
+    function (
+        req,
+        res
+    ) {
 
         try {
 
@@ -1029,11 +1302,22 @@ app.delete(
 
             properties =
                 properties.filter(
-                    function (item) {
+                    function (
+                        item
+                    ) {
 
                         return (
-                            String(item.id) !==
-                            String(req.params.id)
+
+                            String(
+                                item.id
+                            )
+
+                            !==
+
+                            String(
+                                req.params.id
+                            )
+
                         );
 
                     }
@@ -1055,7 +1339,9 @@ app.delete(
 
             }
 
-            saveProperties(properties);
+            saveProperties(
+                properties
+            );
 
             return res.json({
 
@@ -1094,7 +1380,10 @@ app.delete(
 app.post(
     "/api/users",
     requireRole("admin"),
-    async function (req, res) {
+    async function (
+        req,
+        res
+    ) {
 
         try {
 
@@ -1139,12 +1428,22 @@ app.post(
 
             const exists =
                 users.some(
-                    function (user) {
+                    function (
+                        user
+                    ) {
 
                         return (
-                            String(user.username)
-                                .toLowerCase() ===
-                            username.toLowerCase()
+
+                            String(
+                                user.username
+                            )
+                            .toLowerCase()
+
+                            ===
+
+                            username
+                                .toLowerCase()
+
                         );
 
                     }
@@ -1191,9 +1490,13 @@ app.post(
 
             };
 
-            users.push(newUser);
+            users.push(
+                newUser
+            );
 
-            saveUsers(users);
+            saveUsers(
+                users
+            );
 
             return res.status(201).json({
 
@@ -1251,7 +1554,10 @@ app.post(
 app.get(
     "/api/users",
     requireRole("admin"),
-    function (req, res) {
+    function (
+        req,
+        res
+    ) {
 
         try {
 
@@ -1260,7 +1566,9 @@ app.get(
 
             const safeUsers =
                 users.map(
-                    function (user) {
+                    function (
+                        user
+                    ) {
 
                         return {
 
@@ -1321,7 +1629,10 @@ app.get(
 app.delete(
     "/api/users/:id",
     requireRole("admin"),
-    function (req, res) {
+    function (
+        req,
+        res
+    ) {
 
         try {
 
@@ -1330,11 +1641,22 @@ app.delete(
 
             const target =
                 users.find(
-                    function (user) {
+                    function (
+                        user
+                    ) {
 
                         return (
-                            String(user.id) ===
-                            String(req.params.id)
+
+                            String(
+                                user.id
+                            )
+
+                            ===
+
+                            String(
+                                req.params.id
+                            )
+
                         );
 
                     }
@@ -1354,9 +1676,16 @@ app.delete(
             }
 
             if (
-                String(target.username)
-                    .toLowerCase() ===
+
+                String(
+                    target.username
+                )
+                .toLowerCase()
+
+                ===
+
                 "admin"
+
             ) {
 
                 return res.status(403).json({
@@ -1372,17 +1701,30 @@ app.delete(
 
             users =
                 users.filter(
-                    function (user) {
+                    function (
+                        user
+                    ) {
 
                         return (
-                            String(user.id) !==
-                            String(req.params.id)
+
+                            String(
+                                user.id
+                            )
+
+                            !==
+
+                            String(
+                                req.params.id
+                            )
+
                         );
 
                     }
                 );
 
-            saveUsers(users);
+            saveUsers(
+                users
+            );
 
             return res.json({
 
@@ -1418,16 +1760,24 @@ app.delete(
 // صفحه اصلی
 // =====================================================
 
-app.get("/", function (req, res) {
+app.get(
+    "/",
+    function (
+        req,
+        res
+    ) {
 
-    res.sendFile(
-        path.join(
-            projectPath,
-            "index.html"
-        )
-    );
+        return res.sendFile(
 
-});
+            path.join(
+                projectPath,
+                "index.html"
+            )
+
+        );
+
+    }
+);
 
 // =====================================================
 // خطای 404 برای API
@@ -1435,7 +1785,10 @@ app.get("/", function (req, res) {
 
 app.use(
     "/api",
-    function (req, res) {
+    function (
+        req,
+        res
+    ) {
 
         return res.status(404).json({
 
@@ -1454,7 +1807,12 @@ app.use(
 // =====================================================
 
 app.use(
-    function (error, req, res, next) {
+    function (
+        error,
+        req,
+        res,
+        next
+    ) {
 
         console.error(
             "EXPRESS ERROR:",
@@ -1462,7 +1820,9 @@ app.use(
         );
 
         if (res.headersSent) {
+
             return next(error);
+
         }
 
         return res.status(500).json({
@@ -1491,58 +1851,88 @@ async function startServer() {
 
         await migratePasswords();
 
-        app.listen(
-            PORT,
-            "0.0.0.0",
-            function () {
+        const server =
+            app.listen(
 
-                console.log("");
-                console.log(
-                    "=========================================="
+                PORT,
+
+                "0.0.0.0",
+
+                function () {
+
+                    console.log("");
+
+                    console.log(
+                        "=========================================="
+                    );
+
+                    console.log(
+                        "     سامانه تخصصی املاک کلبه سبز"
+                    );
+
+                    console.log(
+                        "=========================================="
+                    );
+
+                    console.log(
+                        "Server Running:"
+                    );
+
+                    console.log(
+                        "Port: " +
+                        PORT
+                    );
+
+                    console.log(
+                        "Host: 0.0.0.0"
+                    );
+
+                    console.log(
+                        "Health: /health"
+                    );
+
+                    console.log(
+                        "=========================================="
+                    );
+
+                    console.log(
+                        "Authentication : ACTIVE"
+                    );
+
+                    console.log(
+                        "Session        : ACTIVE"
+                    );
+
+                    console.log(
+                        "Properties API : ACTIVE"
+                    );
+
+                    console.log(
+                        "Users API      : ACTIVE"
+                    );
+
+                    console.log(
+                        "=========================================="
+                    );
+
+                    console.log("");
+
+                }
+
+            );
+
+        server.on(
+            "error",
+            function (
+                error
+            ) {
+
+                console.error(
+                    "SERVER ERROR:",
+                    error
                 );
 
-                console.log(
-                    "     سامانه تخصصی املاک کلبه سبز"
-                );
-
-                console.log(
-                    "=========================================="
-                );
-
-                console.log(
-                    "Server Running:"
-                );
-
-                console.log(
-                    "http://localhost:" +
-                    PORT
-                );
-
-                console.log(
-                    "=========================================="
-                );
-
-                console.log(
-                    "Authentication : ACTIVE"
-                );
-
-                console.log(
-                    "Session        : ACTIVE"
-                );
-
-                console.log(
-                    "Properties API : ACTIVE"
-                );
-
-                console.log(
-                    "Users API      : ACTIVE"
-                );
-
-                console.log(
-                    "=========================================="
-                );
-
-                console.log("");
+                process.exit(1);
 
             }
         );
@@ -1568,7 +1958,9 @@ startServer();
 
 process.on(
     "uncaughtException",
-    function (error) {
+    function (
+        error
+    ) {
 
         console.error(
             "UNCAUGHT EXCEPTION:",
@@ -1580,7 +1972,9 @@ process.on(
 
 process.on(
     "unhandledRejection",
-    function (error) {
+    function (
+        error
+    ) {
 
         console.error(
             "UNHANDLED REJECTION:",
@@ -1589,3 +1983,4 @@ process.on(
 
     }
 );
+```
