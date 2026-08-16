@@ -1,4 +1,3 @@
-js
 "use strict";
 
 const express = require("express");
@@ -1980,6 +1979,5 @@ process.on(
             "UNHANDLED REJECTION:",
             error
         );
-
     }
 );
