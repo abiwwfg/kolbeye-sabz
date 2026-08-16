@@ -1,4 +1,4 @@
-```js
+js
 "use strict";
 
 const express = require("express");
@@ -1983,4 +1983,3 @@ process.on(
 
     }
 );
-```
