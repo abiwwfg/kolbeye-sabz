@@ -1,0 +1,1698 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>
+گزارش‌ها | سامانه تخصصی املاک کلبه سبز
+</title>
+
+<link rel="stylesheet"
+      href="css/style.css">
+
+<style>
+
+:root{
+    --green-dark:#10231b;
+    --green:#1b3a2d;
+    --gold:#c8a653;
+    --gold-light:#e1c878;
+    --cream:#f6f3eb;
+    --white:#fff;
+    --text:#1d2922;
+    --muted:#7c847f;
+    --border:#e8e4d9;
+    --danger:#b84b4b;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Tahoma,Arial,sans-serif;
+    background:
+        linear-gradient(135deg,#faf9f5,#f1efe7);
+    color:var(--text);
+}
+
+
+/* ===============================
+   SIDEBAR
+================================ */
+
+.sidebar{
+    position:fixed;
+    top:20px;
+    right:20px;
+    width:235px;
+    height:calc(100vh - 40px);
+    padding:22px 15px;
+    border-radius:24px;
+
+    background:
+        linear-gradient(
+            160deg,
+            #10231b,
+            #173126
+        );
+
+    box-shadow:
+        0 20px 55px
+        rgba(16,35,27,.20);
+
+    z-index:1000;
+}
+
+.brand{
+    text-align:center;
+    padding-bottom:22px;
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.08);
+}
+
+.brand-logo{
+    width:55px;
+    height:55px;
+    margin:0 auto 10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--gold),
+            var(--gold-light)
+        );
+
+    font-size:26px;
+}
+
+.brand h2{
+    margin:0;
+    color:#fff;
+    font-size:17px;
+}
+
+.brand span{
+    display:block;
+    margin-top:6px;
+    color:rgba(255,255,255,.5);
+    font-size:10px;
+}
+
+.menu-title{
+    margin:18px 12px 8px;
+    color:rgba(255,255,255,.35);
+    font-size:10px;
+}
+
+.sidebar a,
+.sidebar button{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px;
+    margin-bottom:6px;
+    border:0;
+    border-radius:12px;
+    background:transparent;
+    color:rgba(255,255,255,.72);
+    text-decoration:none;
+    font-family:inherit;
+    font-size:12px;
+    cursor:pointer;
+    text-align:right;
+    transition:.25s;
+}
+
+.sidebar a:hover,
+.sidebar a.active{
+    color:var(--gold-light);
+    background:rgba(200,166,83,.13);
+}
+
+.sidebar a.active{
+    border-right:
+        3px solid
+        var(--gold);
+}
+
+.sidebar button{
+    margin-top:20px;
+    color:#e7aaa5;
+}
+
+
+/* ===============================
+   MAIN
+================================ */
+
+.main-content{
+    margin-right:275px;
+    padding:30px 35px 50px;
+}
+
+.page-header{
+    margin-bottom:25px;
+}
+
+.page-header h1{
+    margin:0;
+    color:var(--green-dark);
+    font-size:25px;
+}
+
+.page-header p{
+    margin:8px 0 0;
+    color:var(--muted);
+    font-size:11px;
+}
+
+
+/* ===============================
+   STAT CARDS
+================================ */
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(4,1fr);
+    gap:15px;
+    margin-bottom:22px;
+}
+
+.stat-card{
+    position:relative;
+    overflow:hidden;
+
+    background:#fff;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:18px;
+
+    padding:19px;
+
+    box-shadow:
+        0 10px 30px
+        rgba(31,42,35,.06);
+}
+
+.stat-card::after{
+    content:"";
+    position:absolute;
+
+    width:75px;
+    height:75px;
+
+    left:-25px;
+    bottom:-30px;
+
+    border-radius:50%;
+
+    background:
+        rgba(200,166,83,.08);
+}
+
+.stat-icon{
+    width:42px;
+    height:42px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:13px;
+
+    background:
+        #f5f0df;
+
+    color:
+        var(--gold);
+
+    font-size:19px;
+
+    margin-bottom:12px;
+}
+
+.stat-label{
+    color:var(--muted);
+    font-size:10px;
+    margin-bottom:6px;
+}
+
+.stat-number{
+    color:var(--green-dark);
+    font-size:23px;
+    font-weight:bold;
+}
+
+
+/* ===============================
+   CONTENT GRID
+================================ */
+
+.content-grid{
+    display:grid;
+    grid-template-columns:
+        1fr 1fr;
+    gap:18px;
+    margin-bottom:20px;
+}
+
+.panel{
+    background:#fff;
+    border:
+        1px solid
+        var(--border);
+    border-radius:19px;
+    padding:20px;
+
+    box-shadow:
+        0 10px 30px
+        rgba(31,42,35,.05);
+}
+
+.panel-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding-bottom:13px;
+    margin-bottom:15px;
+
+    border-bottom:
+        1px solid
+        #efede6;
+}
+
+.panel-title h2{
+    margin:0;
+    color:var(--green-dark);
+    font-size:14px;
+}
+
+.panel-title span{
+    color:var(--muted);
+    font-size:9px;
+}
+
+
+/* ===============================
+   BARS
+================================ */
+
+.bar-row{
+    margin-bottom:15px;
+}
+
+.bar-info{
+    display:flex;
+    justify-content:space-between;
+
+    margin-bottom:6px;
+
+    font-size:10px;
+}
+
+.bar-name{
+    color:#59635d;
+}
+
+.bar-value{
+    color:var(--green-dark);
+    font-weight:bold;
+}
+
+.bar{
+    height:8px;
+    background:#f0eee7;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.bar-fill{
+    height:100%;
+
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--gold),
+            var(--gold-light)
+        );
+
+    transition:
+        width .5s ease;
+}
+
+
+/* ===============================
+   TABLE
+================================ */
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    color:var(--muted);
+    font-size:9px;
+    font-weight:normal;
+    padding:10px;
+    text-align:right;
+    background:#faf9f5;
+}
+
+td{
+    color:var(--green-dark);
+    font-size:9px;
+    padding:11px 10px;
+    border-bottom:
+        1px solid
+        #f0eee8;
+}
+
+td strong{
+    font-size:10px;
+}
+
+.badge{
+    display:inline-block;
+
+    padding:5px 7px;
+
+    border-radius:7px;
+
+    background:#f5f0df;
+
+    color:#90752c;
+
+    font-size:8px;
+}
+
+
+/* ===============================
+   EMPTY
+================================ */
+
+.empty{
+    text-align:center;
+    padding:35px 10px;
+    color:var(--muted);
+    font-size:10px;
+}
+
+
+/* ===============================
+   FULL PANEL
+================================ */
+
+.full-panel{
+    margin-bottom:20px;
+}
+
+
+/* ===============================
+   RESPONSIVE
+================================ */
+
+@media(max-width:1200px){
+
+    .stats-grid{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:950px){
+
+    .content-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:900px){
+
+    .sidebar{
+        position:relative;
+        top:auto;
+        right:auto;
+        width:calc(100% - 30px);
+        height:auto;
+        margin:15px;
+    }
+
+    .main-content{
+        margin-right:0;
+        padding:15px;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .stats-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ===============================
+     SIDEBAR
+================================ -->
+
+<aside class="sidebar">
+
+    <div class="brand">
+
+        <div>
+                <img
+                src="file_000000006740820a810ef460bf5ae223.png"
+                alt="کلبه سبز"
+                style="width:80px;height:80px;object-fit:cover;border-radius:15px;"
+            >
+        </div>
+
+        <h2>
+            کلبه سبز
+        </h2>
+
+        <span>
+            سامانه تخصصی املاک
+        </span>
+
+    </div>
+
+
+    <div class="menu-title">
+        منوی اصلی
+    </div>
+
+
+    <a href="dashboard.html">
+        🏠
+        داشبورد
+    </a>
+
+
+    <a href="add-property.html">
+        ➕
+        ثبت ملک
+    </a>
+
+
+    <a href="properties.html">
+        📁
+        فایل‌های ملکی
+    </a>
+
+
+    <a href="customers.html">
+        👥
+        مشتریان
+    </a>
+
+
+    <div class="menu-title">
+        مدیریت
+    </div>
+
+
+    <a href="reports.html"
+       class="active">
+
+        📊
+        گزارش‌ها
+
+    </a>
+
+
+    <a id="usersMenu"
+       href="users.html">
+
+        👤
+        مدیریت کاربران
+
+    </a>
+
+
+    <a href="settings.html">
+
+        ⚙️
+        تنظیمات
+
+    </a>
+
+
+    <button
+        type="button"
+        onclick="logout()">
+
+        🚪
+        خروج از حساب
+
+    </button>
+
+</aside>
+
+
+<!-- ===============================
+     MAIN
+================================ -->
+
+<main class="main-content">
+
+
+    <header class="page-header">
+
+        <h1>
+            گزارش‌ها و آمار
+        </h1>
+
+        <p>
+            نمای کلی از عملکرد سامانه و فایل‌های ملکی
+        </p>
+
+    </header>
+
+
+    <!-- ===============================
+         STATS
+    ================================= -->
+
+    <section class="stats-grid">
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📁
+            </div>
+
+            <div class="stat-label">
+                کل فایل‌های ملکی
+            </div>
+
+            <div
+                class="stat-number"
+                id="totalProperties">
+
+                ۰
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                👥
+            </div>
+
+            <div class="stat-label">
+                کل مشتریان
+            </div>
+
+            <div
+                class="stat-number"
+                id="totalCustomers">
+
+                ۰
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🖼️
+            </div>
+
+            <div class="stat-label">
+                فایل‌های دارای تصویر
+            </div>
+
+            <div
+                class="stat-number"
+                id="imageProperties">
+
+                ۰
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📍
+            </div>
+
+            <div class="stat-label">
+                مناطق فعال
+            </div>
+
+            <div
+                class="stat-number"
+                id="activeRegions">
+
+                ۰
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- ===============================
+         CHARTS
+    ================================= -->
+
+    <section class="content-grid">
+
+
+        <!-- معامله -->
+
+        <div class="panel">
+
+            <div class="panel-title">
+
+                <h2>
+                    نوع معامله
+                </h2>
+
+                <span>
+                    تعداد فایل
+                </span>
+
+            </div>
+
+
+            <div id="transactionStats">
+            </div>
+
+        </div>
+
+
+        <!-- نوع ملک -->
+
+        <div class="panel">
+
+            <div class="panel-title">
+
+                <h2>
+                    نوع ملک
+                </h2>
+
+                <span>
+                    تعداد فایل
+                </span>
+
+            </div>
+
+
+            <div id="propertyTypeStats">
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- ===============================
+         REGIONS
+    ================================= -->
+
+    <section class="panel full-panel">
+
+        <div class="panel-title">
+
+            <h2>
+                مناطق فعال
+            </h2>
+
+            <span>
+                بیشترین فایل
+            </span>
+
+        </div>
+
+
+        <div id="regionStats">
+        </div>
+
+    </section>
+
+
+    <!-- ===============================
+         LATEST PROPERTIES
+    ================================= -->
+
+    <section class="panel full-panel">
+
+        <div class="panel-title">
+
+            <h2>
+                آخرین فایل‌های ثبت‌شده
+            </h2>
+
+            <span>
+                آخرین اطلاعات سامانه
+            </span>
+
+        </div>
+
+
+        <div
+            class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            کد فایل
+                        </th>
+
+                        <th>
+                            منطقه
+                        </th>
+
+                        <th>
+                            نوع ملک
+                        </th>
+
+                        <th>
+                            متراژ
+                        </th>
+
+                        <th>
+                            معامله
+                        </th>
+
+                        <th>
+                            ثبت‌کننده
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="latestProperties">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- ===============================
+         LATEST CUSTOMERS
+    ================================= -->
+
+    <section class="panel full-panel">
+
+        <div class="panel-title">
+
+            <h2>
+                آخرین مشتریان
+            </h2>
+
+            <span>
+                مشتریان ثبت‌شده
+            </span>
+
+        </div>
+
+
+        <div
+            class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            نام
+                        </th>
+
+                        <th>
+                            شماره تماس
+                        </th>
+
+                        <th>
+                            نوع مشتری
+                        </th>
+
+                        <th>
+                            نوع ملک
+                        </th>
+
+                        <th>
+                            منطقه
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="latestCustomers">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<script>
+
+"use strict";
+
+
+/* =================================
+   DATA
+================================= */
+
+let properties = [];
+
+let customers = [];
+
+
+/* =================================
+   LOAD
+================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        loadData();
+
+        generateReports();
+
+    }
+);
+
+
+/* =================================
+   LOAD DATA
+================================= */
+
+function loadData(){
+
+    try{
+
+        const storedProperties =
+            JSON.parse(
+                localStorage.getItem(
+                    "properties"
+                )
+            );
+
+        properties =
+            Array.isArray(
+                storedProperties
+            )
+                ? storedProperties
+                : [];
+
+    }
+    catch(error){
+
+        properties = [];
+
+    }
+
+
+    try{
+
+        const storedCustomers =
+            JSON.parse(
+                localStorage.getItem(
+                    "customers"
+                )
+            );
+
+        customers =
+            Array.isArray(
+                storedCustomers
+            )
+                ? storedCustomers
+                : [];
+
+    }
+    catch(error){
+
+        customers = [];
+
+    }
+
+}
+
+
+/* =================================
+   REPORTS
+================================= */
+
+function generateReports(){
+
+    updateMainStats();
+
+    generateTransactionStats();
+
+    generatePropertyTypeStats();
+
+    generateRegionStats();
+
+    generateLatestProperties();
+
+    generateLatestCustomers();
+
+}
+
+
+/* =================================
+   MAIN STATS
+================================= */
+
+function updateMainStats(){
+
+    document
+        .getElementById(
+            "totalProperties"
+        )
+        .textContent =
+            properties.length
+                .toLocaleString("fa-IR");
+
+
+    document
+        .getElementById(
+            "totalCustomers"
+        )
+        .textContent =
+            customers.length
+                .toLocaleString("fa-IR");
+
+
+    const imageCount =
+        properties.filter(
+            function(property){
+
+                return (
+                    Array.isArray(
+                        property.images
+                    ) &&
+                    property.images.length > 0
+                );
+
+            }
+        ).length;
+
+
+    document
+        .getElementById(
+            "imageProperties"
+        )
+        .textContent =
+            imageCount
+                .toLocaleString("fa-IR");
+
+
+    const regions = [];
+
+
+    properties.forEach(
+        function(property){
+
+            const region =
+                property.region ||
+                property.areaName ||
+                property.district ||
+                property.zone;
+
+
+            if(
+                region &&
+                !regions.includes(
+                    region
+                )
+            ){
+
+                regions.push(
+                    region
+                );
+
+            }
+
+        }
+    );
+
+
+    document
+        .getElementById(
+            "activeRegions"
+        )
+        .textContent =
+            regions.length
+                .toLocaleString("fa-IR");
+
+}
+
+
+/* =================================
+   TRANSACTION
+================================= */
+
+function generateTransactionStats(){
+
+    const container =
+        document.getElementById(
+            "transactionStats"
+        );
+
+
+    const stats = {};
+
+
+    properties.forEach(
+        function(property){
+
+            const type =
+                property.transactionType ||
+                property.dealType ||
+                property.transaction ||
+                "نامشخص";
+
+
+            stats[type] =
+                (stats[type] || 0) + 1;
+
+        }
+    );
+
+
+    renderBars(
+        container,
+        stats
+    );
+
+}
+
+
+/* =================================
+   PROPERTY TYPE
+================================= */
+
+function generatePropertyTypeStats(){
+
+    const container =
+        document.getElementById(
+            "propertyTypeStats"
+        );
+
+
+    const stats = {};
+
+
+    properties.forEach(
+        function(property){
+
+            const type =
+                property.propertyType ||
+                property.type ||
+                property.propertyCategory ||
+                "نامشخص";
+
+
+            stats[type] =
+                (stats[type] || 0) + 1;
+
+        }
+    );
+
+
+    renderBars(
+        container,
+        stats
+    );
+
+}
+
+
+/* =================================
+   REGIONS
+================================= */
+
+function generateRegionStats(){
+
+    const container =
+        document.getElementById(
+            "regionStats"
+        );
+
+
+    const stats = {};
+
+
+    properties.forEach(
+        function(property){
+
+            const region =
+                property.region ||
+                property.areaName ||
+                property.district ||
+                property.zone ||
+                "نامشخص";
+
+
+            stats[region] =
+                (stats[region] || 0) + 1;
+
+        }
+    );
+
+
+    renderBars(
+        container,
+        stats,
+        8
+    );
+
+}
+
+
+/* =================================
+   RENDER BARS
+================================= */
+
+function renderBars(
+    container,
+    stats,
+    limit = 6
+){
+
+    const entries =
+        Object.entries(
+            stats
+        )
+        .sort(
+            function(a,b){
+
+                return b[1] - a[1];
+
+            }
+        )
+        .slice(
+            0,
+            limit
+        );
+
+
+    if(!entries.length){
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                اطلاعاتی برای نمایش وجود ندارد.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const max =
+        entries[0][1];
+
+
+    container.innerHTML = "";
+
+
+    entries.forEach(
+        function(item){
+
+            const name =
+                item[0];
+
+            const value =
+                item[1];
+
+            const percentage =
+                max
+                    ? (value / max) * 100
+                    : 0;
+
+
+            container.innerHTML += `
+
+                <div class="bar-row">
+
+                    <div class="bar-info">
+
+                        <span
+                            class="bar-name">
+
+                            ${escapeHTML(
+                                name
+                            )}
+
+                        </span>
+
+                        <span
+                            class="bar-value">
+
+                            ${value.toLocaleString("fa-IR")}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="bar">
+
+                        <div
+                            class="bar-fill"
+                            style="width:${percentage}%">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+    );
+
+}
+
+
+/* =================================
+   LATEST PROPERTIES
+================================= */
+
+function generateLatestProperties(){
+
+    const tbody =
+        document.getElementById(
+            "latestProperties"
+        );
+
+
+    const latest =
+        [...properties]
+        .reverse()
+        .slice(
+            0,
+            8
+        );
+
+
+    if(!latest.length){
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    class="empty">
+
+                    هنوز فایلی ثبت نشده است.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML = "";
+
+
+    latest.forEach(
+        function(property){
+
+            const code =
+                property.code ||
+                property.propertyCode ||
+                "-";
+
+
+            const region =
+                property.region ||
+                property.areaName ||
+                property.district ||
+                property.zone ||
+                "-";
+
+
+            const propertyType =
+                property.propertyType ||
+                property.type ||
+                property.propertyCategory ||
+                "-";
+
+
+            const area =
+                property.area ||
+                property.metraj ||
+                property.meterage ||
+                property.size ||
+                "-";
+
+
+            const transaction =
+                property.transactionType ||
+                property.dealType ||
+                property.transaction ||
+                "-";
+
+
+            const creator =
+                property.createdBy ||
+                "کاربر سامانه";
+
+
+            tbody.innerHTML += `
+
+                <tr>
+
+                    <td>
+
+                        <strong>
+
+                            ${escapeHTML(
+                                code
+                            )}
+
+                        </strong>
+
+                    </td>
+
+                    <td>
+
+                        ${escapeHTML(
+                            region
+                        )}
+
+                    </td>
+
+                    <td>
+
+                        ${escapeHTML(
+                            propertyType
+                        )}
+
+                    </td>
+
+                    <td>
+
+                        ${escapeHTML(
+                            area
+                        )}
+
+                        متر
+
+                    </td>
+
+                    <td>
+
+                        <span
+                            class="badge">
+
+                            ${escapeHTML(
+                                transaction
+                            )}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        ${escapeHTML(
+                            creator
+                        )}
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+}
+
+
+/* =================================
+   LATEST CUSTOMERS
+================================= */
+
+function generateLatestCustomers(){
+
+    const tbody =
+        document.getElementById(
+            "latestCustomers"
+        );
+
+
+    const latest =
+        [...customers]
+        .reverse()
+        .slice(
+            0,
+            8
+        );
+
+
+    if(!latest.length){
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="5"
+                    class="empty">
+
+                    هنوز مشتری ثبت نشده است.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML = "";
+
+
+    latest.forEach(
+        function(customer){
+
+            tbody.innerHTML += `
+
+                <tr>
+
+                    <td>
+
+                        <strong>
+
+                            ${escapeHTML(
+                                customer.name ||
+                                "-"
+                            )}
+
+                        </strong>
+
+                    </td>
+
+                    <td>
+
+                        ${escapeHTML(
+                            customer.phone ||
+                            "-"
+                        )}
+
+                    </td>
+
+                    <td>
+
+                        <span
+                            class="badge">
+
+                            ${escapeHTML(
+                                customer.type ||
+                                "-"
+                            )}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        ${escapeHTML(
+                            customer.propertyType ||
+                            "-"
+                        )}
+
+                    </td>
+
+                    <td>
+
+                        ${escapeHTML(
+                            customer.region ||
+                            "-"
+                        )}
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+}
+
+
+/* =================================
+   ESCAPE
+================================= */
+
+function escapeHTML(value){
+
+    if(
+        value === undefined ||
+        value === null
+    ){
+
+        return "";
+
+    }
+
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =================================
+   LOGOUT
+================================= */
+
+function logout(){
+
+    localStorage.removeItem(
+        "currentUser"
+    );
+
+    window.location.href =
+        "index.html";
+
+}
+
+</script>
+
+
+</body>
+
+</html>

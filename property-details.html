@@ -1,0 +1,2749 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>جزئیات ملک | سامانه تخصصی املاک کلبه سبز</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+
+        *{
+            box-sizing:border-box;
+        }
+
+        body{
+            margin:0;
+            font-family:Tahoma,Arial,sans-serif;
+            background:#f5f6f8;
+            color:#222;
+        }
+
+        .main-content{
+            padding:25px;
+            max-width:1400px;
+            margin:auto;
+        }
+
+        .page-header{
+            background:#17231c;
+            color:white;
+            border-radius:18px;
+            padding:22px;
+            margin-bottom:20px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:15px;
+        }
+
+        .page-header h1{
+            margin:0 0 7px;
+            font-size:24px;
+        }
+
+        .page-header p{
+            margin:0;
+            color:#d8ddd9;
+            font-size:13px;
+        }
+
+        .header-actions{
+            display:flex;
+            gap:8px;
+            flex-wrap:wrap;
+        }
+
+        .header-btn{
+            border:0;
+            text-decoration:none;
+            cursor:pointer;
+            padding:11px 16px;
+            border-radius:10px;
+            font-family:inherit;
+            font-weight:bold;
+            font-size:12px;
+        }
+
+        .back-btn{
+            background:#fff;
+            color:#17231c;
+        }
+
+        .edit-btn{
+            background:#c7a54d;
+            color:#fff;
+        }
+
+        .property-code-bar{
+            background:#fff;
+            border-radius:14px;
+            padding:12px 16px;
+            margin-bottom:20px;
+            box-shadow:0 3px 14px rgba(0,0,0,.05);
+
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:15px;
+        }
+
+        .code-info{
+            display:flex;
+            gap:20px;
+            flex-wrap:wrap;
+        }
+
+        .code-item{
+            font-size:11px;
+            color:#888;
+        }
+
+        .code-item strong{
+            color:#444;
+            font-size:12px;
+            font-weight:bold;
+        }
+
+        .section{
+            background:#fff;
+            border-radius:18px;
+            padding:20px;
+            margin-bottom:20px;
+            box-shadow:0 4px 18px rgba(0,0,0,.05);
+        }
+
+        .section-title{
+            font-size:17px;
+            font-weight:bold;
+            color:#17231c;
+            padding-bottom:12px;
+            margin-bottom:18px;
+            border-bottom:1px solid #eee;
+        }
+
+        .info-table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        .info-table tr{
+            border-bottom:1px solid #eee;
+        }
+
+        .info-table tr:last-child{
+            border-bottom:none;
+        }
+
+        .info-table td{
+            padding:11px 8px;
+            font-size:13px;
+            vertical-align:middle;
+        }
+
+        .info-table td:first-child{
+            width:35%;
+            color:#888;
+            font-size:12px;
+        }
+
+        .info-table td:last-child{
+            color:#333;
+            font-weight:bold;
+        }
+
+        .info-grid{
+            display:grid;
+            grid-template-columns:repeat(2,minmax(0,1fr));
+            gap:20px;
+        }
+
+        .transaction-box{
+            background:#faf5e7;
+            border:1px solid #e3d19a;
+            border-radius:14px;
+            padding:16px;
+        }
+
+        .transaction-label{
+            color:#8a6b18;
+            font-size:11px;
+            margin-bottom:8px;
+        }
+
+        .transaction-value{
+            color:#6f5515;
+            font-size:18px;
+            font-weight:bold;
+        }
+
+        .price-list{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+            gap:12px;
+        }
+
+        .price-item{
+            background:#fafafa;
+            border:1px solid #eee;
+            border-radius:12px;
+            padding:13px;
+        }
+
+        .price-item-title{
+            color:#888;
+            font-size:11px;
+            margin-bottom:6px;
+        }
+
+        .price-item-value{
+            color:#333;
+            font-size:14px;
+            font-weight:bold;
+        }
+
+        .features{
+            display:flex;
+            flex-wrap:wrap;
+            gap:8px;
+        }
+
+        .feature{
+            background:#edf2ee;
+            color:#31563b;
+            border-radius:8px;
+            padding:8px 11px;
+            font-size:11px;
+            font-weight:bold;
+        }
+
+        .address-box{
+            background:#f8f9f8;
+            border:1px solid #e5e8e5;
+            border-radius:12px;
+            padding:15px;
+            line-height:2;
+            font-size:13px;
+            color:#444;
+        }
+
+        .description-box{
+            background:#f8f9f8;
+            border-radius:12px;
+            padding:15px;
+            line-height:2.1;
+            font-size:13px;
+            color:#444;
+            white-space:pre-wrap;
+        }
+
+        .gallery-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+            gap:12px;
+        }
+
+        .gallery-item{
+            height:170px;
+            border-radius:13px;
+            overflow:hidden;
+            background:#eee;
+            cursor:pointer;
+        }
+
+        .gallery-item img{
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            display:block;
+            transition:.2s;
+        }
+
+        .gallery-item:hover img{
+            transform:scale(1.04);
+        }
+
+        .owner-grid{
+            display:grid;
+            grid-template-columns:repeat(2,minmax(0,1fr));
+            gap:12px;
+        }
+
+        .owner-item{
+            background:#f8f9f8;
+            border-radius:12px;
+            padding:13px;
+        }
+
+        .owner-label{
+            color:#888;
+            font-size:11px;
+            margin-bottom:5px;
+        }
+
+        .owner-value{
+            color:#333;
+            font-weight:bold;
+            font-size:13px;
+        }
+
+        .empty{
+            background:#fff;
+            border-radius:18px;
+            padding:60px 20px;
+            text-align:center;
+            box-shadow:0 4px 18px rgba(0,0,0,.05);
+        }
+
+        .empty h2{
+            margin-top:0;
+            color:#555;
+        }
+
+        .empty p{
+            color:#999;
+        }
+
+        .hidden{
+            display:none !important;
+        }
+
+        .image-modal{
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,.85);
+            display:none;
+            align-items:center;
+            justify-content:center;
+            z-index:9999;
+            padding:20px;
+        }
+
+        .image-modal.active{
+            display:flex;
+        }
+
+        .image-modal img{
+            max-width:95%;
+            max-height:90vh;
+            object-fit:contain;
+            border-radius:10px;
+        }
+
+        .close-modal{
+            position:absolute;
+            top:20px;
+            left:20px;
+            width:40px;
+            height:40px;
+            border:0;
+            border-radius:50%;
+            background:#fff;
+            color:#222;
+            font-size:24px;
+            cursor:pointer;
+        }
+
+        @media(max-width:800px){
+
+            .main-content{
+                padding:15px;
+            }
+
+            .page-header{
+                flex-direction:column;
+                align-items:stretch;
+            }
+
+            .header-actions{
+                width:100%;
+            }
+
+            .header-btn{
+                flex:1;
+                text-align:center;
+            }
+
+            .info-grid{
+                grid-template-columns:1fr;
+            }
+
+            .owner-grid{
+                grid-template-columns:1fr;
+            }
+
+            .property-code-bar{
+                align-items:flex-start;
+                flex-direction:column;
+            }
+
+            .gallery-grid{
+                grid-template-columns:repeat(2,minmax(0,1fr));
+            }
+
+        }
+
+        @media(max-width:500px){
+
+            .page-header h1{
+                font-size:19px;
+            }
+
+            .gallery-grid{
+                grid-template-columns:1fr;
+            }
+
+            .gallery-item{
+                height:220px;
+            }
+
+            .info-table td{
+                padding:9px 4px;
+                font-size:12px;
+            }
+
+        }
+/* جلوگیری از بیرون‌زدگی کل صفحه */
+html,
+body{
+    width:100%;
+    max-width:100%;
+    overflow-x:hidden;
+}
+
+/* محتوای اصلی */
+.main-content{
+    width:100%;
+    max-width:1400px;
+    margin:0 auto;
+    padding:25px;
+}
+
+/* جدول‌ها */
+.info-table{
+    width:100%;
+    max-width:100%;
+    table-layout:fixed;
+}
+
+.info-table td{
+    word-break:break-word;
+    overflow-wrap:anywhere;
+}
+
+/* عنوان‌ها */
+.section-title{
+    line-height:1.8;
+}
+
+/* قیمت‌ها */
+.price-list{
+    width:100%;
+}
+
+/* گالری */
+.gallery-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(auto-fill,minmax(140px,1fr));
+    gap:10px;
+}
+
+.gallery-item{
+    width:100%;
+    height:120px;
+    overflow:hidden;
+    border-radius:12px;
+}
+
+.gallery-item img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+/* اطلاعات مالک */
+.owner-grid{
+    width:100%;
+}
+
+/* آدرس و توضیحات */
+.address-box,
+.description-box{
+    width:100%;
+    max-width:100%;
+    overflow-wrap:anywhere;
+    word-break:break-word;
+}
+
+/* =====================================================
+   TABLET
+   ===================================================== */
+
+@media (max-width:1000px){
+
+    .main-content{
+        padding:20px;
+    }
+
+    .page-header{
+        padding:20px;
+    }
+
+    .page-header h1{
+        font-size:21px;
+    }
+
+    .info-grid{
+        grid-template-columns:1fr 1fr;
+        gap:15px;
+    }
+
+    .info-table td{
+        padding:10px 6px;
+        font-size:12px;
+    }
+
+    .info-table td:first-child{
+        width:38%;
+    }
+
+    .price-list{
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+    }
+
+    .gallery-grid{
+        grid-template-columns:
+            repeat(4,minmax(0,1fr));
+    }
+
+    .gallery-item{
+        height:115px;
+    }
+
+}
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width:800px){
+
+    .main-content{
+        padding:12px;
+    }
+
+    .page-header{
+        padding:17px;
+        border-radius:14px;
+        flex-direction:column;
+        align-items:stretch;
+        gap:14px;
+    }
+
+    .page-header h1{
+        font-size:18px;
+        line-height:1.8;
+        margin-bottom:5px;
+    }
+
+    .page-header p{
+        font-size:11px;
+        line-height:1.8;
+    }
+
+    .header-actions{
+        width:100%;
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:8px;
+    }
+
+    .header-btn{
+        width:100%;
+        padding:11px 8px;
+        text-align:center;
+        font-size:11px;
+    }
+
+    /* نوار کد */
+    .property-code-bar{
+        padding:14px;
+        flex-direction:column;
+        align-items:stretch;
+        gap:10px;
+    }
+
+    .code-info{
+        display:grid;
+        grid-template-columns:1fr;
+        gap:9px;
+    }
+
+    .code-item{
+        background:#f8f9f8;
+        padding:9px;
+        border-radius:8px;
+        font-size:10px;
+    }
+
+    .code-item strong{
+        font-size:11px;
+    }
+
+    /* بخش‌ها */
+    .section{
+        padding:15px;
+        margin-bottom:14px;
+        border-radius:14px;
+    }
+
+    .section-title{
+        font-size:15px;
+        margin-bottom:14px;
+        padding-bottom:9px;
+    }
+
+    /* اطلاعات اصلی */
+    .info-grid{
+        grid-template-columns:1fr;
+        gap:12px;
+    }
+
+    .info-table{
+        table-layout:fixed;
+    }
+
+    .info-table td{
+        padding:9px 5px;
+        font-size:12px;
+        line-height:1.8;
+    }
+
+    .info-table td:first-child{
+        width:42%;
+        font-size:11px;
+    }
+
+    .info-table td:last-child{
+        width:58%;
+    }
+
+ /* معامله */
+    .transaction-box{
+        padding:14px;
+    }
+
+    .transaction-label{
+        font-size:10px;
+    }
+
+    .transaction-value{
+        font-size:16px;
+    }
+
+    /* قیمت */
+    .price-list{
+        grid-template-columns:1fr;
+        gap:9px;
+    }
+
+    .price-item{
+        padding:12px;
+    }
+
+    .price-item-title{
+        font-size:10px;
+    }
+
+    .price-item-value{
+        font-size:13px;
+    }
+
+    /* امکانات */
+    .features{
+        gap:6px;
+    }
+
+    .feature{
+        padding:7px 9px;
+        font-size:10px;
+    }
+
+    /* مالک */
+    .owner-grid{
+        grid-template-columns:1fr;
+        gap:9px;
+    }
+
+    .owner-item{
+        padding:12px;
+    }
+
+    .owner-label{
+        font-size:10px;
+    }
+
+    .owner-value{
+        font-size:12px;
+        overflow-wrap:anywhere;
+    }
+
+    /* آدرس */
+    .address-box{
+        padding:12px;
+        font-size:12px;
+        line-height:2;
+    }
+
+    /* توضیحات */
+    .description-box{
+        padding:12px;
+        font-size:12px;
+        line-height:2;
+    }
+
+    /* گالری */
+    .gallery-grid{
+        grid-template-columns:
+            repeat(3,minmax(0,1fr));
+        gap:7px;
+    }
+
+    .gallery-item{
+        height:95px;
+        border-radius:9px;
+    }
+
+}
+
+/* =====================================================
+   SMALL MOBILE
+   ===================================================== */
+@media (max-width:500px){
+
+    .main-content{
+        padding:9px;
+    }
+
+    .page-header{
+        padding:14px;
+    }
+
+    .page-header h1{
+        font-size:16px;
+    }
+
+    .page-header p{
+        font-size:10px;
+    }
+
+    .header-actions{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .header-btn{
+        font-size:10px;
+        padding:10px 5px;
+    }
+
+    .section{
+        padding:12px;
+        border-radius:12px;
+    }
+
+    .section-title{
+        font-size:14px;
+    }
+
+    .info-table td{
+        font-size:11px;
+        padding:8px 4px;
+    }
+
+    .info-table td:first-child{
+        width:44%;
+        font-size:10px;
+    }
+
+    .info-table td:last-child{
+        width:56%;
+    }
+
+    /* گالری دو ستونه در گوشی کوچک */
+    .gallery-grid{
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+        gap:8px;
+    }
+
+    .gallery-item{
+        height:120px;
+        border-radius:10px;
+    }
+
+    .feature{
+        font-size:9px;
+        padding:6px 8px;
+    }
+
+    .transaction-value{
+        font-size:15px;
+    }
+
+}
+
+/* =====================================================
+   VERY SMALL MOBILE
+   ===================================================== */
+
+@media (max-width:360px){
+
+    .main-content{
+        padding:7px;
+    }
+
+    .header-actions{
+        grid-template-columns:1fr;
+    }
+
+    .gallery-grid{
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+    }
+
+    .gallery-item{
+        height:105px;
+    }
+
+    .info-table td{
+        font-size:10px;
+    }
+
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="main-content">
+
+    <div id="emptyState" class="empty hidden">
+
+        <h2>
+            ملک پیدا نشد
+        </h2>
+
+        <p>
+            اطلاعات ملک برای نمایش وجود ندارد.
+        </p>
+
+        <a
+            href="properties.html"
+            class="header-btn edit-btn">
+            بازگشت به فایل‌های ملکی
+        </a>
+
+    </div>
+
+
+    <div id="detailsContent" class="hidden">
+
+
+        <!-- HEADER -->
+
+        <div class="page-header">
+
+            <div>
+
+                <h1 id="pageTitle">
+                    جزئیات ملک
+                </h1>
+
+                <p id="pageSubtitle">
+                    اطلاعات کامل فایل ملکی
+                </p>
+
+            </div>
+
+
+            <div class="header-actions">
+
+                <button
+                    type="button"
+                    class="header-btn edit-btn"
+                    onclick="editCurrentProperty()">
+                    ویرایش ملک
+                </button>
+
+                <a
+                    href="properties.html"
+                    class="header-btn back-btn">
+                    بازگشت
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- CODE -->
+
+        <div class="property-code-bar">
+
+            <div class="code-info">
+
+                <div class="code-item">
+                    کد فایل:
+                    <strong id="fileCode">
+                        ثبت نشده
+                    </strong>
+                </div>
+
+                <div class="code-item">
+                    تاریخ ثبت:
+                    <strong id="createdAt">
+                        ثبت نشده
+                    </strong>
+                </div>
+
+                <div class="code-item">
+                    ثبت‌کننده:
+                    <strong id="createdBy">
+                        ثبت نشده
+                    </strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- BASIC -->
+
+        <div class="section">
+
+            <div class="section-title">
+                اطلاعات اصلی ملک
+            </div>
+
+
+            <div class="info-grid">
+
+
+                <table class="info-table">
+
+                    <tr>
+                        <td>نوع ملک</td>
+                        <td id="propertyType">
+                            ثبت نشده
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>نوع معامله</td>
+                        <td id="transactionType">
+                            ثبت نشده
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>منطقه</td>
+                        <td id="region">
+                            ثبت نشده
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>متراژ</td>
+                        <td id="area">
+                            ثبت نشده
+                        </td>
+                    </tr>
+
+                    <tr id="landAreaRow">
+                        <td>متراژ عرصه</td>
+                        <td id="landArea">
+                            ثبت نشده
+                        </td>
+                    </tr>
+
+                    <tr id="builtAreaRow">
+                        <td>متراژ اعیان</td>
+                        <td id="builtArea">
+                            ثبت نشده
+                        </td>
+                    </tr>
+
+                </table>
+
+
+                <table class="info-table">
+
+                    <tr>
+                        <td>تعداد خواب</td>
+                        <td id="rooms">
+                            ثبت نشده
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>طبقه</td>
+                        <td id="floor">
+                            ثبت نشده
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>تعداد واحد در طبقه</td>
+                        <td id="unitsPerFloor">
+                            ثبت نشده
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>جهت واحد</td>
+                        <td id="direction">
+                            ثبت نشده
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>سال ساخت</td>
+                        <td id="buildYear">
+                            ثبت نشده
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>وضعیت ساختمان</td>
+                        <td id="buildingStatus">
+                            ثبت نشده
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>نوع سند</td>
+                        <td id="documentType">
+                            ثبت نشده
+                        </td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- TRANSACTION -->
+
+        <div class="section">
+
+            <div class="section-title">
+                نوع معامله
+            </div>
+
+            <div class="transaction-box">
+
+                <div class="transaction-label">
+                    نوع معامله
+                </div>
+
+                <div
+                    id="transactionBoxValue"
+                    class="transaction-value">
+                    ثبت نشده
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PRICE -->
+
+        <div class="section">
+
+            <div class="section-title">
+                اطلاعات مالی
+            </div>
+
+            <div
+                id="priceList"
+                class="price-list">
+            </div>
+
+        </div>
+
+
+        <!-- UNIT -->
+
+        <div class="section">
+
+            <div class="section-title">
+                مشخصات واحد
+            </div>
+
+            <table class="info-table">
+
+                <tr>
+                    <td>کف</td>
+                    <td id="floorMaterial">
+                        ثبت نشده
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>سیستم گرمایش</td>
+                    <td id="heatingType">
+                        ثبت نشده
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>سیستم سرمایش</td>
+                    <td id="coolingType">
+                        ثبت نشده
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+
+
+        <!-- FEATURES -->
+
+        <div class="section">
+
+            <div class="section-title">
+                امکانات و مشاعات
+            </div>
+
+            <div
+                id="features"
+                class="features">
+            </div>
+
+        </div>
+
+
+        <!-- ADDRESS -->
+
+        <div class="section">
+
+            <div class="section-title">
+                آدرس ملک
+            </div>
+
+            <div
+                id="address"
+                class="address-box">
+                ثبت نشده
+            </div>
+
+        </div>
+
+
+        <!-- OWNER -->
+
+        <div class="section">
+
+            <div class="section-title">
+                اطلاعات مالک
+            </div>
+
+            <div class="owner-grid">
+
+                <div class="owner-item">
+
+                    <div class="owner-label">
+                        نام مالک
+                    </div>
+
+                    <div
+                        id="ownerName"
+                        class="owner-value">
+                        ثبت نشده
+                    </div>
+
+                </div>
+
+
+                <div class="owner-item">
+
+                    <div class="owner-label">
+                        شماره تماس مالک
+                    </div>
+
+                    <div
+                        id="ownerPhone"
+                        class="owner-value">
+                        ثبت نشده
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- IMAGES -->
+
+        <div
+            id="gallerySection"
+            class="section">
+
+            <div class="section-title">
+                تصاویر ملک
+            </div>
+
+            <div
+                id="gallery"
+                class="gallery-grid">
+            </div>
+
+        </div>
+
+
+        <!-- DESCRIPTION -->
+
+        <div class="section">
+
+            <div class="section-title">
+                توضیحات
+            </div>
+
+            <div
+                id="description"
+                class="description-box">
+                ثبت نشده
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- IMAGE MODAL -->
+
+<div
+    id="imageModal"
+    class="image-modal"
+    onclick="closeImage()">
+
+    <button
+        type="button"
+        class="close-modal"
+        onclick="closeImage();event.stopPropagation();">
+        ×
+    </button>
+
+    <img
+        id="modalImage"
+        src=""
+        alt="تصویر ملک">
+
+</div>
+
+
+<script src="js/app.js"></script>
+
+
+<script>
+
+"use strict";
+
+
+/* =====================================================
+   HELPERS
+   ===================================================== */
+
+function escapeHTML(value){
+
+    if(
+        value === undefined ||
+        value === null ||
+        value === ""
+    ){
+
+        return "ثبت نشده";
+
+    }
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+function firstValue(){
+
+    for(
+        let i = 0;
+        i < arguments.length;
+        i++
+    ){
+
+        const value = arguments[i];
+
+        if(
+            value !== undefined &&
+            value !== null &&
+            value !== ""
+        ){
+
+            return value;
+
+        }
+
+    }
+
+    return "";
+
+}
+
+
+/* =====================================================
+   PROPERTY
+   ===================================================== */
+
+let property = null;
+
+
+function loadProperty(){
+
+    try{
+
+        const selected =
+            JSON.parse(
+                localStorage.getItem(
+                    "selectedProperty"
+                )
+            );
+
+        if(selected){
+
+            return selected;
+
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =====================================================
+   FORMAT NUMBER
+   ===================================================== */
+
+function formatMoney(value){
+
+    if(
+        value === undefined ||
+        value === null ||
+        value === ""
+    ){
+
+        return "ثبت نشده";
+
+    }
+
+
+    const clean =
+        String(value)
+            .replace(/,/g,"")
+            .replace(/[^\d.]/g,"");
+
+
+    if(!clean){
+
+        return escapeHTML(value);
+
+    }
+
+
+    const number =
+        Number(clean);
+
+
+    if(Number.isNaN(number)){
+
+        return escapeHTML(value);
+
+    }
+
+
+    return (
+        number.toLocaleString("fa-IR")
+        + " تومان"
+    );
+
+}
+
+
+/* =====================================================
+   TRANSACTION
+   ===================================================== */
+
+function getTransaction(p){
+
+    return firstValue(
+
+        p.transactionType,
+
+        p.dealType,
+
+        p.transaction,
+
+        p.typeOfTransaction
+
+    );
+
+}
+
+
+/* =====================================================
+   PROPERTY TYPE
+   ===================================================== */
+
+function getPropertyType(p){
+
+    return firstValue(
+
+        p.propertyType,
+
+        p.typeOfProperty,
+
+        p.type,
+
+        p.propertyKind
+
+    );
+
+}
+
+
+/* =====================================================
+   REGION
+   ===================================================== */
+
+function getRegion(p){
+
+    return firstValue(
+
+        p.region,
+
+        p.areaName,
+
+        p.district,
+
+        p.zone
+
+    );
+
+}
+
+
+/* =====================================================
+   AREA
+
+   مهم:
+   فقط area برای متراژ استفاده می‌شود.
+   region هیچ‌وقت اینجا استفاده نمی‌شود.
+   ===================================================== */
+
+function getArea(p){
+
+    return firstValue(
+
+        p.area,
+
+        p.metraj,
+
+        p.meterage,
+
+        p.meter
+
+    );
+
+}
+
+
+/* =====================================================
+   LAND AREA
+   ===================================================== */
+
+function getLandArea(p){
+
+    return firstValue(
+
+        p.landArea,
+
+        p.estateArea,
+
+        p.arasa,
+
+        p.arse
+
+    );
+
+}
+
+
+/* =====================================================
+   BUILT AREA
+   ===================================================== */
+
+function getBuiltArea(p){
+
+    return firstValue(
+
+        p.builtArea,
+
+        p.banaArea,
+
+        p.ayan,
+
+        p.ear
+
+    );
+
+}
+
+
+/* =====================================================
+   ROOMS
+   ===================================================== */
+
+function getRooms(p){
+
+    return firstValue(
+
+        p.rooms,
+
+        p.bedrooms,
+
+        p.room
+
+    );
+
+}
+
+
+/* =====================================================
+   FLOOR
+   ===================================================== */
+
+function getFloor(p){
+
+    return firstValue(
+
+        p.floor,
+
+        p.tabaghe
+
+    );
+
+}
+
+
+/* =====================================================
+   UNITS PER FLOOR
+   ===================================================== */
+
+function getUnitsPerFloor(p){
+
+    return firstValue(
+
+        p.unitsPerFloor,
+
+        p.unitPerFloor,
+
+        p.unitsInFloor,
+
+        p.numberOfUnits
+
+    );
+
+}
+
+
+/* =====================================================
+   DIRECTION
+   ===================================================== */
+
+function getDirection(p){
+
+    return firstValue(
+
+        p.direction,
+
+        p.unitDirection,
+
+        p.jahat
+
+    );
+
+}
+
+
+/* =====================================================
+   BUILD YEAR
+   ===================================================== */
+
+function getBuildYear(p){
+
+    return firstValue(
+
+        p.buildYear,
+
+        p.constructionYear,
+
+        p.yearBuilt,
+
+        p.sakht
+
+    );
+
+}
+
+
+/* =====================================================
+   BUILDING STATUS
+   ===================================================== */
+
+function getBuildingStatus(p){
+
+    return firstValue(
+
+        p.buildingStatus,
+
+        p.status
+
+    );
+
+}
+
+
+/* =====================================================
+   DOCUMENT
+   ===================================================== */
+
+function getDocumentType(p){
+
+    return firstValue(
+
+        p.documentType,
+
+        p.document,
+
+        p.sanad
+
+    );
+
+}
+
+
+/* =====================================================
+   PRICE
+   ===================================================== */
+
+function getPrice(p){
+
+    return firstValue(
+
+        p.price,
+
+        p.salePrice,
+
+        p.totalPrice,
+
+        p.sellPrice
+
+    );
+
+}
+
+
+/* =====================================================
+   DEPOSIT
+   ===================================================== */
+
+function getDeposit(p){
+
+    return firstValue(
+
+        p.deposit,
+
+        p.rahn,
+
+        p.rentDeposit
+
+    );
+
+}
+
+
+/* =====================================================
+   RENT
+   ===================================================== */
+
+function getRent(p){
+
+    return firstValue(
+
+        p.rent,
+
+        p.ejare,
+
+        p.monthlyRent
+
+    );
+
+}
+
+
+/* =====================================================
+   FEATURES
+   ===================================================== */
+
+function getFeatures(p){
+
+    if(
+        Array.isArray(p.features)
+    ){
+
+        return p.features;
+
+    }
+
+
+    if(
+        p.features &&
+        typeof p.features === "object"
+    ){
+
+        return Object.keys(
+            p.features
+        ).filter(
+            key =>
+                p.features[key]
+        );
+
+    }
+
+
+    return [];
+
+}
+
+
+/* =====================================================
+   FEATURE NAMES
+   ===================================================== */
+
+const featureNames = {
+
+    elevator:"آسانسور",
+
+    parking:"پارکینگ",
+
+    storage:"انباری",
+
+    balcony:"بالکن",
+
+    terrace:"تراس",
+
+    pool:"استخر",
+
+    sauna:"سونا",
+
+    jacuzzi:"جکوزی",
+
+    gym:"سالن ورزشی",
+
+    closet:"کمد دیواری",
+
+    cabinet:"کابینت MDF",
+
+    highGlossCabinet:"کابینت هایگلاس",
+
+    package:"پکیج",
+
+    radiator:"رادیاتور",
+
+    floorHeating:"گرمایش از کف",
+
+    airCondition:"کولر گازی",
+
+    doubleGlass:"پنجره دوجداره",
+
+    securityDoor:"درب ضد سرقت",
+
+    intercom:"آیفون تصویری",
+
+    roofGarden:"روف گاردن",
+
+    camera:"دوربین مداربسته",
+
+    guard:"نگهبانی"
+
+};
+
+
+/* =====================================================
+   IMAGES
+   ===================================================== */
+
+function getImages(p){
+
+    if(
+        Array.isArray(p.images)
+    ){
+
+        return p.images;
+
+    }
+
+
+    if(
+        Array.isArray(p.photos)
+    ){
+
+        return p.photos;
+
+    }
+
+
+    return [];
+
+}
+
+
+/* =====================================================
+   ADDRESS
+
+   نسخه‌های مختلف برای سازگاری
+   ===================================================== */
+
+function getAddress(p){
+
+    return firstValue(
+
+        p.address,
+
+        p.propertyAddress,
+
+        p.fullAddress,
+
+        p.locationAddress
+
+    );
+
+}
+
+
+/* =====================================================
+   SET TEXT
+   ===================================================== */
+
+function setText(id,value){
+
+    const element =
+        document.getElementById(id);
+
+
+    if(!element){
+
+        return;
+
+    }
+
+
+    element.textContent =
+        value === undefined ||
+        value === null ||
+        value === ""
+            ? "ثبت نشده"
+            : value;
+
+}
+
+
+/* =====================================================
+   SHOW BASIC INFO
+   ===================================================== */
+
+function renderBasicInfo(){
+
+    setText(
+        "propertyType",
+        getPropertyType(property)
+    );
+
+    setText(
+        "transactionType",
+        getTransaction(property)
+    );
+
+    setText(
+        "region",
+        getRegion(property)
+    );
+
+    const area =
+        getArea(property);
+
+
+    setText(
+        "area",
+        area
+            ? Number(area).toLocaleString("fa-IR") + " متر"
+            : ""
+    );
+
+
+    const landArea =
+        getLandArea(property);
+
+
+    const builtArea =
+        getBuiltArea(property);
+
+
+    const landRow =
+        document.getElementById(
+            "landAreaRow"
+        );
+
+
+    const builtRow =
+        document.getElementById(
+            "builtAreaRow"
+        );
+
+
+    /*
+       عرصه و اعیان فقط برای حیاط مسکونی
+       یا زمانی که مقدار واقعاً ثبت شده باشد
+    */
+
+    const type =
+        String(
+            getPropertyType(property)
+        );
+
+
+    const isYard =
+        type.includes("حیاط");
+
+
+    if(
+        landArea ||
+        isYard
+    ){
+
+        landRow.classList.remove(
+            "hidden"
+        );
+
+        setText(
+            "landArea",
+            landArea
+                ? Number(landArea)
+                    .toLocaleString("fa-IR")
+                    + " متر"
+                : ""
+        );
+
+    }else{
+
+        landRow.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    if(
+        builtArea ||
+        isYard
+    ){
+
+        builtRow.classList.remove(
+            "hidden"
+        );
+
+        setText(
+            "builtArea",
+            builtArea
+                ? Number(builtArea)
+                    .toLocaleString("fa-IR")
+                    + " متر"
+                : ""
+        );
+
+    }else{
+
+        builtRow.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    setText(
+        "rooms",
+        getRooms(property)
+    );
+
+    setText(
+        "floor",
+        getFloor(property)
+    );
+
+    setText(
+        "unitsPerFloor",
+        getUnitsPerFloor(property)
+    );
+
+    setText(
+        "direction",
+        getDirection(property)
+    );
+
+    setText(
+        "buildYear",
+        getBuildYear(property)
+    );
+
+    setText(
+        "buildingStatus",
+        getBuildingStatus(property)
+    );
+
+    setText(
+        "documentType",
+        getDocumentType(property)
+    );
+
+}
+
+
+/* =====================================================
+   HEADER
+   ===================================================== */
+
+function renderHeader(){
+
+    const type =
+        getPropertyType(property);
+
+
+    const region =
+        getRegion(property);
+
+
+    const area =
+        getArea(property);
+
+
+    let title = "جزئیات ملک";
+
+
+    if(type){
+
+        title = type;
+
+    }
+
+
+    if(region){
+
+        title += " | " + region;
+
+    }
+
+
+    if(area){
+
+        title +=
+            " | " +
+            Number(area)
+                .toLocaleString("fa-IR") +
+            " متر";
+
+    }
+
+
+    setText(
+        "pageTitle",
+        title
+    );
+
+
+    setText(
+        "pageSubtitle",
+        "اطلاعات کامل فایل ملکی"
+    );
+
+
+    setText(
+        "fileCode",
+        firstValue(
+            property.code,
+            property.propertyCode
+        )
+    );
+
+
+    setText(
+        "createdAt",
+        property.createdAt
+    );
+
+
+    setText(
+        "createdBy",
+        firstValue(
+            property.createdBy,
+            property.consultant
+        )
+    );
+
+}
+
+
+/* =====================================================
+   TRANSACTION BOX
+   ===================================================== */
+
+function renderTransaction(){
+
+    const type =
+        getTransaction(property);
+
+
+    setText(
+        "transactionBoxValue",
+        type
+    );
+
+}
+
+
+/* =====================================================
+   PRICE
+   ===================================================== */
+
+function renderPrice(){
+
+    const container =
+        document.getElementById(
+            "priceList"
+        );
+
+
+    const type =
+        String(
+            getTransaction(property)
+        );
+
+
+    const price =
+        getPrice(property);
+
+
+    const deposit =
+        getDeposit(property);
+
+
+    const rent =
+        getRent(property);
+
+
+    let html = "";
+
+
+    if(
+        type.includes("فروش")
+    ){
+
+        html += `
+            <div class="price-item">
+
+                <div class="price-item-title">
+                    قیمت فروش
+                </div>
+
+                <div class="price-item-value">
+                    ${formatMoney(price)}
+                </div>
+
+            </div>
+        `;
+
+    }
+
+
+    if(
+        type.includes("رهن")
+    ){
+
+        html += `
+            <div class="price-item">
+
+                <div class="price-item-title">
+                    مبلغ رهن
+                </div>
+
+                <div class="price-item-value">
+                    ${formatMoney(deposit)}
+                </div>
+
+            </div>
+        `;
+
+    }
+
+
+    if(
+        type.includes("اجاره")
+    ){
+
+        html += `
+            <div class="price-item">
+
+                <div class="price-item-title">
+                    مبلغ اجاره
+                </div>
+
+                <div class="price-item-value">
+                    ${formatMoney(rent)}
+                </div>
+
+            </div>
+        `;
+
+    }
+
+
+    if(
+        type.includes("پیش فروش")
+    ){
+
+        html += `
+            <div class="price-item">
+
+                <div class="price-item-title">
+                    قیمت پیش‌فروش
+                </div>
+
+                <div class="price-item-value">
+                    ${formatMoney(price)}
+                </div>
+
+            </div>
+        `;
+
+    }
+
+
+    /*
+       اگر نوع معامله با اطلاعات ذخیره شده
+       همخوانی نداشت، اطلاعات موجود را نمایش بده
+    */
+
+    if(!html){
+
+        if(price){
+
+            html += `
+                <div class="price-item">
+
+                    <div class="price-item-title">
+                        قیمت
+                    </div>
+
+                    <div class="price-item-value">
+                        ${formatMoney(price)}
+                    </div>
+
+                </div>
+            `;
+
+        }
+
+
+        if(deposit){
+
+            html += `
+                <div class="price-item">
+
+                    <div class="price-item-title">
+                        رهن
+                    </div>
+
+                    <div class="price-item-value">
+                        ${formatMoney(deposit)}
+                    </div>
+
+                </div>
+            `;
+
+        }
+
+
+        if(rent){
+
+            html += `
+                <div class="price-item">
+
+                    <div class="price-item-title">
+                        اجاره
+                    </div>
+
+                    <div class="price-item-value">
+                        ${formatMoney(rent)}
+                    </div>
+
+                </div>
+            `;
+
+        }
+
+    }
+
+
+    if(!html){
+
+        html = `
+            <div class="price-item">
+
+                <div class="price-item-title">
+                    اطلاعات مالی
+                </div>
+
+                <div class="price-item-value">
+                    ثبت نشده
+                </div>
+
+            </div>
+        `;
+
+    }
+
+
+    container.innerHTML =
+        html;
+
+}
+
+
+/* =====================================================
+   UNIT DETAILS
+   ===================================================== */
+
+function renderUnitDetails(){
+
+    setText(
+        "floorMaterial",
+        property.floorMaterial
+    );
+
+    setText(
+        "heatingType",
+        property.heatingType
+    );
+
+    setText(
+        "coolingType",
+        property.coolingType
+    );
+
+}
+
+
+/* =====================================================
+   FEATURES
+   ===================================================== */
+
+function renderFeatures(){
+
+    const container =
+        document.getElementById(
+            "features"
+        );
+
+
+    const features =
+        getFeatures(property);
+
+
+    if(!features.length){
+
+        container.innerHTML =
+            `<span class="feature">
+                امکاناتی ثبت نشده
+            </span>`;
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    features.forEach(
+        function(feature){
+
+            container.innerHTML += `
+                <span class="feature">
+                    ${
+                        escapeHTML(
+                            featureNames[feature] ||
+                            feature
+                        )
+                    }
+                </span>
+            `;
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   OWNER
+   ===================================================== */
+
+function renderOwner(){
+
+    const owner =
+        property.owner || {};
+
+
+    setText(
+        "ownerName",
+        firstValue(
+            owner.name,
+            property.ownerName
+        )
+    );
+
+
+    setText(
+        "ownerPhone",
+        firstValue(
+            owner.phone,
+            property.ownerPhone
+        )
+    );
+
+}
+
+
+/* =====================================================
+   ADDRESS
+   ===================================================== */
+
+function renderAddress(){
+
+    setText(
+        "address",
+        getAddress(property)
+    );
+
+}
+
+
+/* =====================================================
+   DESCRIPTION
+   ===================================================== */
+
+function renderDescription(){
+
+    const description =
+        firstValue(
+            property.description,
+            property.notes,
+            property.details
+        );
+
+
+    setText(
+        "description",
+        description
+    );
+
+}
+
+
+/* =====================================================
+   GALLERY
+   ===================================================== */
+
+function renderGallery(){
+
+    const gallery =
+        document.getElementById(
+            "gallery"
+        );
+
+
+    const section =
+        document.getElementById(
+            "gallerySection"
+        );
+
+
+    const images =
+        getImages(property);
+
+
+    gallery.innerHTML = "";
+
+
+    if(!images.length){
+
+        section.classList.add(
+            "hidden"
+        );
+
+        return;
+
+    }
+
+
+    section.classList.remove(
+        "hidden"
+    );
+
+
+    images.forEach(
+        function(image,index){
+
+            gallery.innerHTML += `
+
+                <div
+                    class="gallery-item"
+                    onclick="openImage(${index})">
+
+                    <img
+                        src="${escapeHTML(image)}"
+                        alt="تصویر ملک">
+
+                </div>
+
+            `;
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   IMAGE MODAL
+   ===================================================== */
+
+function openImage(index){
+
+    const images =
+        getImages(property);
+
+
+    if(
+        !images[index]
+    ){
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "modalImage"
+    ).src =
+        images[index];
+
+
+    document.getElementById(
+        "imageModal"
+    ).classList.add(
+        "active"
+    );
+
+}
+
+
+function closeImage(){
+
+    document.getElementById(
+        "imageModal"
+    ).classList.remove(
+        "active"
+    );
+
+    document.getElementById(
+        "modalImage"
+    ).src = "";
+
+}
+
+
+/* =====================================================
+   EDIT
+   ===================================================== */
+
+function editCurrentProperty(){
+
+    if(!property){
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        "editProperty",
+        JSON.stringify(
+            property
+        )
+    );
+
+
+    window.location.href =
+        "add-property.html";
+
+}
+
+
+/* =====================================================
+   LOGOUT
+   ===================================================== */
+
+function logout(){
+
+    localStorage.removeItem(
+        "currentUser"
+    );
+
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =====================================================
+   INITIALIZE
+   ===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        property =
+            loadProperty();
+
+
+        if(!property){
+
+            document
+                .getElementById(
+                    "emptyState"
+                )
+                .classList.remove(
+                    "hidden"
+                );
+
+            return;
+
+        }
+
+
+        document
+            .getElementById(
+                "detailsContent"
+            )
+            .classList.remove(
+                "hidden"
+            );
+
+
+        renderHeader();
+
+        renderBasicInfo();
+
+        renderTransaction();
+
+        renderPrice();
+
+        renderUnitDetails();
+
+        renderFeatures();
+
+        renderOwner();
+
+        renderAddress();
+
+        renderDescription();
+
+        renderGallery();
+
+    }
+);
+
+
+/* =====================================================
+   ESC CLOSE MODAL
+   ===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key === "Escape"
+        ){
+
+            closeImage();
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>

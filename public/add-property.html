@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ثبت ملک | سامانه تخصصی املاک کلبه سبز</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+
+:root{
+    --primary:#1f5f46;
+    --primary-dark:#163f30;
+    --gold:#c8a44d;
+    --light:#f6f7f9;
+    --border:#e5e7eb;
+    --danger:#d43b3b;
+    --success:#28a745;
+    --text:#222;
+    --radius:16px;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:tahoma,sans-serif;
+    background:#f4f6f8;
+    color:var(--text);
+}
+
+.main-content{
+
+    margin-right:260px;
+    padding:30px;
+
+}
+
+.page-header{
+
+    background:#fff;
+    border-radius:var(--radius);
+    padding:25px;
+    margin-bottom:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.05);
+
+}
+
+.page-header h1{
+
+    font-size:28px;
+    margin-bottom:8px;
+
+}
+
+.page-header p{
+
+    color:#666;
+
+}
+
+.file-code{
+
+    margin-top:20px;
+    background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+    color:#fff;
+    padding:18px;
+    border-radius:14px;
+    font-size:15px;
+
+}
+
+.file-code strong{
+
+    color:var(--gold);
+    font-size:18px;
+
+}
+
+.form-section{
+
+    background:#fff;
+    border-radius:var(--radius);
+    padding:25px;
+    margin-bottom:22px;
+    box-shadow:0 8px 20px rgba(0,0,0,.05);
+
+}
+
+.section-title{
+
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:25px;
+    padding-bottom:12px;
+    border-bottom:2px solid #eee;
+
+}
+
+.form-grid{
+
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:18px;
+
+}
+
+.form-group{
+
+    display:flex;
+    flex-direction:column;
+
+}
+
+.form-group label{
+
+    margin-bottom:8px;
+    font-weight:bold;
+
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+
+    padding:12px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    outline:none;
+    transition:.3s;
+
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+
+    border-color:var(--gold);
+    box-shadow:0 0 0 4px rgba(200,164,77,.15);
+
+}
+
+.full{
+
+    grid-column:1/-1;
+
+}
+
+.hidden{
+
+    display:none;
+
+}
+
+.required{
+
+    color:red;
+
+}
+
+.features-grid{
+
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+    gap:12px;
+
+}
+
+.feature{
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:12px;
+    cursor:pointer;
+    transition:.3s;
+
+}
+
+.feature:hover{
+
+    border-color:var(--gold);
+
+}
+
+.preview{
+
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+    gap:15px;
+    margin-top:15px;
+
+}
+
+.preview img{
+
+    width:100%;
+    height:140px;
+    object-fit:cover;
+    border-radius:12px;
+
+}
+
+.save-btn{
+
+    background:var(--primary);
+    color:#fff;
+    border:none;
+    padding:15px 30px;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:16px;
+
+}
+
+.save-btn:hover{
+
+    background:var(--primary-dark);
+
+}
+
+.cancel-btn{
+
+    display:inline-block;
+    margin-right:10px;
+    background:#eee;
+    color:#333;
+    text-decoration:none;
+    padding:15px 30px;
+    border-radius:12px;
+
+}
+
+@media(max-width:900px){
+
+.main-content{
+
+margin-right:0;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+    <!-- =========================
+    SIDEBAR
+========================= -->
+
+<div class="sidebar">
+
+    <div>
+        <img
+        src="file_000000006740820a810ef460bf5ae223.png"
+        alt="کلبه سبز"
+        style="width:80px;height:80px;object-fit:cover;border-radius:15px;"
+    >
+    </div>
+
+  <nav>
+
+      <a href="dashboard.html">
+          🏠 داشبورد
+      </a>
+
+      <a href="add-property.html" class="active">
+          ➕ ثبت ملک
+      </a>
+
+      <a href="properties.html">
+          📂 فایل‌های ملکی
+      </a>
+
+      <a href="customers.html">
+          👥 مشتریان
+      </a>
+
+      <a href="reports.html">
+          📊 گزارشات
+      </a>
+
+      <a href="users.html" id="usersMenu">
+          👤 مدیریت کاربران
+      </a>
+
+      <a href="settings.html">
+          ⚙️ تنظیمات
+      </a>
+
+  </nav>
+
+  <button
+      class="logout-btn"
+      onclick="logout()">
+
+      🚪 خروج
+
+  </button>
+
+</div>
+
+
+<!-- =========================
+    MAIN
+========================= -->
+
+<main class="main-content">
+
+<div class="page-header">
+
+  <h1 id="pageTitle">
+
+      ثبت فایل ملکی جدید
+
+  </h1>
+
+  <p>
+
+      لطفاً اطلاعات ملک را با دقت وارد نمایید.
+
+  </p>
+
+  <div class="file-code">
+
+      کد فایل :
+
+      <strong id="fileCode">
+
+          در حال تولید...
+
+      </strong>
+
+  </div>
+
+</div>
+
+
+
+<form id="propertyForm">
+
+
+
+<!-- =========================
+    اطلاعات اصلی
+========================= -->
+
+<section class="form-section">
+
+<h2 class="section-title">
+
+اطلاعات اصلی ملک
+
+</h2>
+
+
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>
+
+نوع معامله
+
+<span class="required">*</span>
+
+</label>
+
+<select id="transactionType" required>
+
+<option value="">انتخاب کنید</option>
+
+<option value="فروش">
+
+فروش
+
+</option>
+
+<option value="رهن و اجاره">
+
+رهن و اجاره
+
+</option>
+
+<option value="پیش فروش">
+
+پیش فروش
+
+</option>
+
+</select>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+
+نوع ملک
+
+<span class="required">*</span>
+
+</label>
+
+<select id="propertyType" required>
+
+<option value="">انتخاب کنید</option>
+
+<option value="آپارتمان">آپارتمان</option>
+<option value="حیاط مسکونی">حیاط مسکونی</option>
+<option value="ویلایی">ویلایی</option>
+<option value="تجاری">تجاری</option>
+<option value="اداری">اداری</option>
+<option value="مغازه">مغازه</option>
+<option value="دفتر کار">دفتر کار</option>
+<option value="زمین">زمین</option>
+<option value="قطعه خالی">قطعه خالی</option>
+<option value="باغ">باغ</option>
+<option value="باغچه">باغچه</option>
+<option value="سوله">سوله</option>
+<option value="کارخانه">کارخانه</option>
+
+</select>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+
+نام منطقه
+
+<span class="required">*</span>
+
+</label>
+
+<input
+type="text"
+id="region"
+placeholder="مثلاً مرزداران"
+required>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+
+متراژ
+
+<span class="required">*</span>
+
+</label>
+
+<input
+type="number"
+id="area"
+required>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+
+تعداد خواب
+
+</label>
+
+<select id="rooms">
+
+<option value="">انتخاب کنید</option>
+<option>بدون خواب</option>
+<option>1 خواب</option>
+<option>2 خواب</option>
+<option>3 خواب</option>
+<option>4 خواب</option>
+<option>5 خواب و بیشتر</option>
+
+</select>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+
+طبقه
+
+</label>
+
+<input
+type="text"
+id="floor"
+placeholder="مثلاً ۳ از ۵">
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+
+جهت واحد
+
+</label>
+
+<select id="direction">
+
+<option value="">انتخاب کنید</option>
+
+<option>شمالی</option>
+<option>جنوبی</option>
+<option>شرقی</option>
+<option>غربی</option>
+<option>شمالی جنوبی</option>
+<option>شرقی غربی</option>
+<option>دو نبش</option>
+<option>سه نبش</option>
+
+</select>
+
+</div>
+<!-- =========================
+      وضعیت ساختمان
+========================= -->
+
+<div class="form-group">
+
+    <label>
+    
+    وضعیت ساختمان
+    
+    </label>
+    
+    <select id="buildingStatus">
+    
+    <option value="">انتخاب کنید</option>
+    
+    <option>کلنگی</option>
+    <option>قابل سکونت</option>
+    <option>نیاز به بازسازی</option>
+    <option>نوساز</option>
+    <option>صفر بدون نصبیات</option>
+    <option>صفر فول نصبیات</option>
+    
+    </select>
+    
+    </div>
+    
+    
+    
+    <div class="form-group">
+    
+    <label>
+    
+    نوع سند
+    
+    </label>
+    
+    <select id="documentType">
+    
+    <option value="">انتخاب کنید</option>
+    
+    <option>شش دانگ</option>
+    <option>قولنامه‌ای</option>
+    <option>وکالتی</option>
+    <option>سرقفلی</option>
+    <option>قراردادی</option>
+    <option>مالکیت تام</option>
+    
+    </select>
+    
+    </div>
+    
+    
+    
+    <div class="form-group">
+    
+    <label>
+    
+    سال ساخت
+    
+    </label>
+    
+    <input
+    type="number"
+    id="buildYear"
+    min="1300"
+    max="1500"
+    placeholder="1404">
+    
+    </div>
+    
+    
+    
+    <div class="form-group">
+    
+    <label>
+    
+    تعداد واحد در طبقه
+    
+    </label>
+    
+    <input
+    type="number"
+    id="unitsPerFloor"
+    min="1">
+    
+    </div>
+    
+    
+    
+    <!-- عرصه و اعیان -->
+    
+    <div
+    class="form-group hidden"
+    id="landAreaGroup">
+    
+    <label>
+    
+    متراژ عرصه
+    
+    </label>
+    
+    <input
+    type="number"
+    id="landArea"
+    placeholder="مثلاً 250">
+    
+    </div>
+    
+    
+    
+    <div
+    class="form-group hidden"
+    id="buildingAreaGroup">
+    
+    <label>
+    
+    متراژ اعیان
+    
+    </label>
+    
+    <input
+    type="number"
+    id="buildingArea"
+    placeholder="مثلاً 180">
+    
+    </div>
+    
+    
+    </div>
+    
+    </section>
+    
+    
+    
+    
+    <!-- =========================
+          اطلاعات مالی
+    ========================= -->
+    
+    <section class="form-section">
+    
+    <h2 class="section-title">
+    
+    اطلاعات مالی
+    
+    </h2>
+    
+    <div class="form-grid">
+    
+    
+    <div class="form-group">
+    
+    <label>
+    
+    قیمت فروش
+    
+    </label>
+    
+    <input
+    type="number"
+    id="price"
+    placeholder="تومان">
+    
+    </div>
+    
+    
+    
+    <div class="form-group">
+    
+    <label>
+    
+    مبلغ رهن
+    
+    </label>
+    
+    <input
+    type="number"
+    id="deposit"
+    placeholder="تومان">
+    
+    </div>
+    
+    
+    
+    <div class="form-group">
+    
+    <label>
+    
+    مبلغ اجاره
+    
+    </label>
+    
+    <input
+    type="number"
+    id="rent"
+    placeholder="تومان">
+    
+    </div>
+    
+    </div>
+    
+    </section>
+    
+    
+    
+    
+    <!-- =========================
+          مشخصات واحد
+    ========================= -->
+    
+    <section class="form-section">
+    
+    <h2 class="section-title">
+    
+    مشخصات واحد
+    
+    </h2>
+    
+    <div class="form-grid">
+    
+    
+    <div class="form-group">
+    
+    <label>
+    
+    کف
+    
+    </label>
+    
+    <input
+    type="text"
+    id="floorMaterial"
+    placeholder="مثلاً سرامیک">
+    
+    </div>
+    
+    
+    
+    <div class="form-group">
+    
+    <label>
+    
+    سیستم گرمایش
+    
+    </label>
+    
+    <select id="heatingType">
+    
+    <option value="">انتخاب کنید</option>
+    
+    <option>پکیج</option>
+    <option>شوفاژ</option>
+    <option>گرمایش از کف</option>
+    <option>بخاری</option>
+    
+    </select>
+    
+    </div>
+    
+    
+    
+    <div class="form-group">
+    
+    <label>
+    
+    سیستم سرمایش
+    
+    </label>
+    
+    <select id="coolingType">
+    
+    <option value="">انتخاب کنید</option>
+    
+    <option>کولر آبی</option>
+    <option>کولر گازی</option>
+    <option>چیلر</option>
+    <option>مرکزی</option>
+    
+    </select>
+    
+    </div>
+    
+    </div>
+    
+    </section>
+    <!-- =========================
+      امکانات ملک
+========================= -->
+
+<section class="form-section">
+
+    <h2 class="section-title">
+    
+    امکانات و مشاعات
+    
+    </h2>
+    
+    <div class="features-grid">
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="آسانسور"> آسانسور</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="پارکینگ"> پارکینگ</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="انباری"> انباری</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="بالکن"> بالکن</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="تراس"> تراس</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="استخر"> استخر</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="سونا"> سونا</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="جکوزی"> جکوزی</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="سالن ورزشی"> سالن ورزشی</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="لابی"> لابی</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="لابی من"> لابی من</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="نگهبانی"> نگهبانی</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="دوربین مداربسته"> دوربین مداربسته</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="آیفون تصویری"> آیفون تصویری</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="درب ضد سرقت"> درب ضد سرقت</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="پنجره دوجداره"> پنجره دوجداره</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="کابینت MDF"> کابینت MDF</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="کابینت هایگلاس"> کابینت هایگلاس</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="کمد دیواری"> کمد دیواری</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="پکیج"> پکیج</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="رادیاتور"> رادیاتور</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="گرمایش از کف"> گرمایش از کف</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="کولر گازی"> کولر گازی</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="هود"> هود</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="گاز رومیزی"> گاز رومیزی</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="نورگیر عالی"> نورگیر عالی</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="فول امکانات"> فول امکانات</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="ویو ابدی"> ویو ابدی</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="روف گاردن"> روف گاردن</label>
+    
+    <label class="feature"><input type="checkbox" class="feature-item" value="حیاط اختصاصی"> حیاط اختصاصی</label>
+    
+    </div>
+    
+    </section>
+    
+    
+    
+    <!-- =========================
+          اطلاعات مالک
+    ========================= -->
+    
+    <section class="form-section">
+    
+    <h2 class="section-title">
+    
+    اطلاعات مالک
+    
+    </h2>
+    
+    <div class="form-grid">
+    
+    <div class="form-group">
+    
+    <label>
+    
+    نام مالک
+    
+    </label>
+    
+    <input
+    type="text"
+    id="ownerName">
+    
+    </div>
+    
+    
+    
+    <div class="form-group">
+    
+    <label>
+    
+    شماره تماس
+    
+    </label>
+    
+    <input
+    type="tel"
+    id="ownerPhone">
+    
+    </div>
+    
+    </div>
+    
+    </section>
+    
+    
+    
+    <!-- =========================
+          تصاویر
+    ========================= -->
+    
+    <section class="form-section">
+    
+    <h2 class="section-title">
+    
+    تصاویر ملک
+    
+    </h2>
+    
+    <div class="form-group">
+    
+    <input
+    type="file"
+    id="propertyImages"
+    multiple
+    accept="image/*">
+    
+    </div>
+    
+    <div
+    id="imagePreview"
+    class="preview">
+    
+    </div>
+    
+    </section>
+    <!-- =========================
+      آدرس ملک
+========================= -->
+
+<section class="form-section">
+
+    <h2 class="section-title">
+    
+    آدرس ملک
+    
+    </h2>
+    
+    <div class="form-group full">
+    
+    <label>
+    
+    آدرس کامل
+    
+    </label>
+    
+    <textarea
+    id="propertyAddress"
+    rows="4"
+    placeholder="آدرس کامل ملک را وارد کنید...">
+    
+    </textarea>
+    
+    </div>
+    
+    </section>
+    
+    
+    
+    
+    <!-- =========================
+          توضیحات
+    ========================= -->
+    
+    <section class="form-section">
+    
+    <h2 class="section-title">
+    
+    توضیحات تکمیلی
+    
+    </h2>
+    
+    <div class="form-group full">
+    
+    <textarea
+    
+    id="description"
+    
+    rows="8"
+    
+    placeholder="توضیحات کامل ملک...">
+    
+    </textarea>
+    
+    </div>
+    
+    </section>
+    
+    
+    
+    
+    <!-- =========================
+          دکمه ها
+    ========================= -->
+    
+    <section class="form-section">
+    
+    <div class="form-actions">
+    
+    <button
+    
+    type="submit"
+    
+    class="save-btn"
+    
+    id="saveBtn">
+    
+    💾 ثبت ملک
+    
+    </button>
+    
+    
+    
+    <a
+    
+    href="properties.html"
+    
+    class="cancel-btn">
+    
+    انصراف
+    
+    </a>
+    
+    </div>
+    
+    </section>
+    
+    
+    </form>
+    
+    </main>
+    
+    
+    
+    <script src="js/app.js"></script>
+    
+    <script>
+    
+    "use strict";
+    
+    let selectedImages=[];
+    
+    let editingProperty=null;
+    
+    
+    
+    /*=============================
+        تولید کد فایل
+    =============================*/
+    
+    function createCode(){
+    
+    return "KS-"+Date.now();
+    
+    }
+    
+    
+    
+    /*=============================
+        دریافت مقدار
+    =============================*/
+    
+    function val(id){
+    
+    const e=document.getElementById(id);
+    
+    return e?e.value.trim():"";
+    
+    }
+    
+    
+    
+    /*=============================
+        نمایش عرصه و اعیان
+    =============================*/
+    
+    function updatePropertyFields(){
+    
+    const type=val("propertyType");
+    
+    const land=document.getElementById("landAreaGroup");
+    
+    const building=document.getElementById("buildingAreaGroup");
+    
+    if(type==="حیاط مسکونی"){
+    
+    land.classList.remove("hidden");
+    
+    building.classList.remove("hidden");
+    
+    }else{
+    
+    land.classList.add("hidden");
+    
+    building.classList.add("hidden");
+    
+    document.getElementById("landArea").value="";
+    
+    document.getElementById("buildingArea").value="";
+    
+    }
+    
+    }
+    
+    
+    
+    /*=============================
+        بارگذاری اولیه
+    =============================*/
+    
+    document.addEventListener("DOMContentLoaded",()=>{
+    
+    document.getElementById("fileCode").textContent=createCode();
+    
+    document.getElementById("propertyType").addEventListener(
+    
+    "change",
+    
+    updatePropertyFields
+    
+    );
+    
+    updatePropertyFields();
+    
+    setupImages();
+    
+    loadEditingProperty();
+    
+    });
+    
+    
+    
+    /*=============================
+          تصاویر
+    =============================*/
+    
+    function setupImages(){
+    
+    const input=document.getElementById("propertyImages");
+    
+    input.addEventListener("change",(e)=>{
+    
+    Array.from(e.target.files).forEach(file=>{
+    
+    const reader=new FileReader();
+    
+    reader.onload=function(ev){
+    
+    selectedImages.push(ev.target.result);
+    
+    renderImages();
+    
+    };
+    
+    reader.readAsDataURL(file);
+    
+    });
+    
+    });
+    
+    }
+    
+    
+    
+    function renderImages(){
+    
+    const box=document.getElementById("imagePreview");
+    
+    box.innerHTML="";
+    
+    selectedImages.forEach((img,index)=>{
+    
+    box.innerHTML+=`
+    
+    <div class="preview-item">
+    
+    <img src="${img}">
+    
+    <button
+    
+    type="button"
+    
+    class="remove-image"
+    
+    onclick="removeImage(${index})">
+    
+    ×
+    
+    </button>
+    
+    </div>
+    
+    `;
+    
+    });
+    
+    }
+    
+    
+    
+    function removeImage(index){
+    
+    selectedImages.splice(index,1);
+    
+    renderImages();
+    
+    }
+    /*==================================
+      بارگذاری اطلاعات ویرایش
+==================================*/
+
+function loadEditingProperty(){
+
+try{
+
+editingProperty=JSON.parse(
+
+localStorage.getItem("editProperty")
+
+);
+
+}catch{
+
+editingProperty=null;
+
+}
+
+if(!editingProperty){
+
+return;
+
+}
+
+document.getElementById("pageTitle").textContent="ویرایش ملک";
+
+document.getElementById("saveBtn").innerHTML="💾 ذخیره تغییرات";
+
+document.getElementById("fileCode").textContent=
+
+editingProperty.code;
+
+const ids=[
+
+"transactionType",
+"propertyType",
+"region",
+"area",
+"rooms",
+"floor",
+"direction",
+"buildingStatus",
+"documentType",
+"buildYear",
+"unitsPerFloor",
+"landArea",
+"buildingArea",
+"price",
+"deposit",
+"rent",
+"floorMaterial",
+"heatingType",
+"coolingType",
+"propertyAddress",
+"description"
+
+];
+
+ids.forEach(id=>{
+
+if(document.getElementById(id))
+
+document.getElementById(id).value=
+
+editingProperty[id]||"";
+
+});
+
+document.getElementById("ownerName").value=
+
+editingProperty.owner?.name||"";
+
+document.getElementById("ownerPhone").value=
+
+editingProperty.owner?.phone||"";
+
+selectedImages=
+
+editingProperty.images||[];
+
+renderImages();
+
+updatePropertyFields();
+
+if(editingProperty.features){
+
+document
+
+.querySelectorAll(".feature-item")
+
+.forEach(item=>{
+
+item.checked=
+
+editingProperty.features.includes(
+
+item.value
+
+);
+
+});
+
+}
+
+}
+
+
+
+/*==================================
+      اعتبارسنجی
+==================================*/
+
+function validateForm(){
+
+if(!val("transactionType")){
+
+alert("نوع معامله را انتخاب کنید.");
+
+return false;
+
+}
+
+if(!val("propertyType")){
+
+alert("نوع ملک را انتخاب کنید.");
+
+return false;
+
+}
+
+if(!val("region")){
+
+alert("نام منطقه را وارد کنید.");
+
+return false;
+
+}
+
+if(!val("area")){
+
+alert("متراژ را وارد کنید.");
+
+return false;
+
+}
+
+return true;
+
+}
+
+
+
+/*==================================
+      دریافت امکانات
+==================================*/
+
+function getFeatures(){
+
+let features=[];
+
+document
+
+.querySelectorAll(".feature-item:checked")
+
+.forEach(item=>{
+
+features.push(item.value);
+
+});
+
+return features;
+
+}
+
+
+
+/*==================================
+      ساخت شیء ملک
+==================================*/
+
+function buildPropertyObject(){
+
+return{
+
+id:
+
+editingProperty?
+
+editingProperty.id:
+
+"property-"+Date.now(),
+
+code:
+
+editingProperty?
+
+editingProperty.code:
+
+createCode(),
+
+transactionType:val("transactionType"),
+
+propertyType:val("propertyType"),
+
+region:val("region"),
+
+area:val("area"),
+
+rooms:val("rooms"),
+
+floor:val("floor"),
+
+direction:val("direction"),
+
+buildingStatus:val("buildingStatus"),
+
+documentType:val("documentType"),
+
+buildYear:val("buildYear"),
+
+unitsPerFloor:val("unitsPerFloor"),
+
+landArea:
+
+val("propertyType")==="حیاط مسکونی"
+
+?val("landArea")
+
+:"",
+
+buildingArea:
+
+val("propertyType")==="حیاط مسکونی"
+
+?val("buildingArea")
+
+:"",
+
+price:val("price"),
+
+deposit:val("deposit"),
+
+rent:val("rent"),
+
+floorMaterial:val("floorMaterial"),
+
+heatingType:val("heatingType"),
+
+coolingType:val("coolingType"),
+
+features:getFeatures(),
+
+owner:{
+
+name:val("ownerName"),
+
+phone:val("ownerPhone")
+
+},
+
+images:selectedImages,
+
+propertyAddress:
+
+val("propertyAddress"),
+
+description:
+
+val("description"),
+
+createdBy:
+
+editingProperty?
+
+editingProperty.createdBy:
+
+getCurrentUserName(),
+
+createdAt:
+
+editingProperty?
+
+editingProperty.createdAt:
+
+new Date()
+
+.toLocaleDateString("fa-IR")
+
+};
+
+}
+/*==================================
+        ثبت نهایی
+==================================*/
+
+document
+.getElementById("propertyForm")
+.addEventListener(
+
+"submit",
+
+async function(e){
+
+e.preventDefault();
+
+if(!validateForm()){
+
+return;
+
+}
+
+const property=
+
+buildPropertyObject();
+
+try{
+
+const response=
+
+await fetch(
+
+"/api/properties",
+
+{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":
+
+"application/json"
+
+},
+
+body:JSON.stringify(property)
+
+}
+
+);
+
+const result=
+
+await response.json();
+
+if(!response.ok){
+
+throw new Error(
+
+result.message||
+
+"خطا در ثبت اطلاعات"
+
+);
+
+}
+
+localStorage.removeItem(
+
+"editProperty"
+
+);
+
+localStorage.removeItem(
+
+"editingProperty"
+
+);
+
+alert(
+
+editingProperty
+
+?
+
+"اطلاعات ملک با موفقیت ویرایش شد."
+
+:
+
+"ملک با موفقیت ثبت شد."
+
+);
+
+window.location.href=
+
+"properties.html";
+
+}catch(error){
+
+console.error(error);
+
+alert(
+
+"خطا در ارتباط با سرور\n\n"
+
++
+
+error.message
+
+);
+
+}
+
+}
+
+);
+
+
+
+/*==================================
+      خروج از سامانه
+==================================*/
+
+function logout(){
+
+localStorage.removeItem(
+
+"currentUser"
+
+);
+
+window.location.href=
+
+"index.html";
+
+}
+
+</script>
+
+</body>
+
+</html>

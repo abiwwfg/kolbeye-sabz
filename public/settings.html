@@ -1,0 +1,3051 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07110d">
+  <title>تنظیمات | سامانه تخصصی املاک کلبه سبز</title>
+
+  <style>
+    :root {
+      --bg: #07110d;
+      --bg2: #0b1712;
+      --panel: #101f18;
+      --panel2: #13271f;
+      --border: rgba(212,175,55,.18);
+
+      --gold: #d4af37;
+      --gold-light: #f0d77a;
+
+      --text: #f7f5ed;
+      --muted: #aab5ae;
+
+      --green: #1e6b4a;
+      --green-light: #2d8b62;
+
+      --danger: #d9534f;
+
+      --radius: 20px;
+      --shadow: 0 20px 50px rgba(0,0,0,.28);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family:
+        Tahoma,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+      background:
+        radial-gradient(
+          circle at 85% 0%,
+          rgba(212,175,55,.08),
+          transparent 28%
+        ),
+        radial-gradient(
+          circle at 10% 100%,
+          rgba(45,139,98,.09),
+          transparent 30%
+        ),
+        var(--bg);
+
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* =========================
+       APP
+    ========================= */
+
+    .app {
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* =========================
+       SIDEBAR
+    ========================= */
+
+    .sidebar {
+      width: 270px;
+
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+
+      z-index: 100;
+
+      padding: 22px 16px;
+
+      background:
+        linear-gradient(
+          180deg,
+          #0c1913,
+          #07100c
+        );
+
+      border-left: 1px solid var(--border);
+
+      box-shadow: var(--shadow);
+
+      overflow-y: auto;
+
+      transition: .25s ease;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+
+      gap: 12px;
+
+      padding:
+        12px
+        10px
+        22px;
+
+      margin-bottom: 18px;
+
+      border-bottom:
+        1px solid
+        rgba(255,255,255,.07);
+    }
+
+    .brand-logo {
+      width: 48px;
+      height: 48px;
+
+      border-radius: 15px;
+
+      display: grid;
+      place-items: center;
+
+      background:
+        linear-gradient(
+          145deg,
+          var(--gold),
+          #8d6d13
+        );
+
+      color: #101006;
+
+      font-size: 25px;
+
+      box-shadow:
+        0 10px 25px
+        rgba(212,175,55,.15);
+    }
+
+    .brand h1 {
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .brand span {
+      display: block;
+
+      color: var(--gold-light);
+
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .nav-title {
+      color: #6f7d75;
+
+      font-size: 11px;
+
+      margin:
+        18px
+        12px
+        8px;
+    }
+
+    .nav a {
+      display: flex;
+      align-items: center;
+
+      gap: 11px;
+
+      color: #cbd2ce;
+
+      text-decoration: none;
+
+      padding: 12px 13px;
+
+      border-radius: 13px;
+
+      margin: 5px 0;
+
+      transition: .2s;
+
+      font-size: 13px;
+    }
+
+    .nav a:hover {
+      background: rgba(255,255,255,.05);
+      color: #fff;
+    }
+
+    .nav a.active {
+      background:
+        linear-gradient(
+          90deg,
+          rgba(212,175,55,.15),
+          rgba(212,175,55,.04)
+        );
+
+      color: var(--gold-light);
+
+      border:
+        1px solid
+        rgba(212,175,55,.12);
+    }
+
+    .nav-icon {
+      width: 24px;
+      text-align: center;
+      font-size: 17px;
+    }
+
+    .sidebar-footer {
+      margin-top: 24px;
+
+      padding: 14px;
+
+      border:
+        1px solid
+        rgba(255,255,255,.07);
+
+      border-radius: 16px;
+
+      background:
+        rgba(255,255,255,.025);
+    }
+
+    .user-mini {
+      display: flex;
+      align-items: center;
+
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+
+      border-radius: 50%;
+
+      display: grid;
+      place-items: center;
+
+      background:
+        linear-gradient(
+          145deg,
+          var(--green-light),
+          #12452f
+        );
+
+      color: #fff;
+
+      font-weight: bold;
+    }
+
+    .user-mini strong {
+      font-size: 12px;
+    }
+
+    .user-mini small {
+      display: block;
+
+      color: var(--muted);
+
+      margin-top: 4px;
+
+      font-size: 10px;
+    }
+
+    .logout {
+      width: 100%;
+
+      margin-top: 12px;
+
+      border:
+        1px solid
+        rgba(217,83,79,.2);
+
+      background:
+        rgba(217,83,79,.07);
+
+      color: #efaaa7;
+
+      padding: 10px;
+
+      border-radius: 11px;
+    }
+
+    .logout:hover {
+      background:
+        rgba(217,83,79,.13);
+    }
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    .main {
+      width: calc(100% - 270px);
+
+      margin-right: 270px;
+
+      padding: 28px;
+    }
+
+    .topbar {
+      display: flex;
+
+      justify-content: space-between;
+      align-items: center;
+
+      gap: 20px;
+
+      margin-bottom: 25px;
+    }
+
+    .topbar h2 {
+      font-size: 25px;
+
+      margin-bottom: 7px;
+    }
+
+    .topbar p {
+      color: var(--muted);
+
+      font-size: 13px;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 9px;
+    }
+
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+
+      border-radius: 13px;
+
+      border:
+        1px solid
+        var(--border);
+
+      background: var(--panel);
+
+      color: #fff;
+
+      font-size: 18px;
+    }
+
+    .icon-btn:hover {
+      border-color:
+        rgba(212,175,55,.45);
+    }
+
+    /* =========================
+       MOBILE MENU
+    ========================= */
+
+    .mobile-menu {
+      display: none;
+
+      width: 42px;
+      height: 42px;
+
+      border-radius: 12px;
+
+      border:
+        1px solid
+        var(--border);
+
+      background: var(--panel);
+
+      color: #fff;
+
+      font-size: 19px;
+    }
+
+    /* =========================
+       HERO
+    ========================= */
+
+    .hero {
+      border:
+        1px solid
+        var(--border);
+
+      background:
+        linear-gradient(
+          110deg,
+          rgba(212,175,55,.10),
+          transparent 42%
+        ),
+        linear-gradient(
+          135deg,
+          var(--panel2),
+          var(--panel)
+        );
+
+      border-radius: var(--radius);
+
+      padding: 25px;
+
+      margin-bottom: 20px;
+
+      box-shadow: var(--shadow);
+    }
+
+    .hero-row {
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 20px;
+    }
+
+    .hero h3 {
+      font-size: 18px;
+
+      margin-bottom: 8px;
+    }
+
+    .hero p {
+      color: var(--muted);
+
+      font-size: 12px;
+
+      line-height: 2;
+    }
+
+    .status {
+      white-space: nowrap;
+
+      color: #a9e4c6;
+
+      background:
+        rgba(45,139,98,.12);
+
+      border:
+        1px solid
+        rgba(45,139,98,.25);
+
+      border-radius: 999px;
+
+      padding: 9px 13px;
+
+      font-size: 11px;
+    }
+
+    /* =========================
+       GRID
+    ========================= */
+
+    .grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          2,
+          minmax(0,1fr)
+        );
+
+      gap: 18px;
+    }
+
+    .card {
+      background:
+        linear-gradient(
+          145deg,
+          rgba(19,39,31,.96),
+          rgba(12,27,21,.96)
+        );
+
+      border:
+        1px solid
+        rgba(255,255,255,.07);
+
+      border-radius: var(--radius);
+
+      padding: 21px;
+
+      box-shadow:
+        0 12px 35px
+        rgba(0,0,0,.16);
+    }
+
+    .card.full {
+      grid-column: 1 / -1;
+    }
+
+    .card-head {
+      display: flex;
+
+      align-items: center;
+
+      gap: 12px;
+
+      padding-bottom: 16px;
+
+      margin-bottom: 17px;
+
+      border-bottom:
+        1px solid
+        rgba(255,255,255,.06);
+    }
+
+    .card-icon {
+      width: 43px;
+      height: 43px;
+
+      border-radius: 13px;
+
+      display: grid;
+      place-items: center;
+
+      background:
+        rgba(212,175,55,.10);
+
+      border:
+        1px solid
+        rgba(212,175,55,.16);
+
+      color: var(--gold-light);
+
+      font-size: 19px;
+    }
+
+    .card h3 {
+      font-size: 15px;
+    }
+
+    .card-head p {
+      font-size: 10px;
+
+      color: var(--muted);
+
+      margin-top: 5px;
+    }
+
+    /* =========================
+       FORMS
+    ========================= */
+
+    .form-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          2,
+          minmax(0,1fr)
+        );
+
+      gap: 15px;
+    }
+
+    .field {
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 7px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 11px;
+
+      color: #cfd6d2;
+    }
+
+    input,
+    select {
+      width: 100%;
+
+      border:
+        1px solid
+        rgba(255,255,255,.09);
+
+      outline: none;
+
+      background: #0a1711;
+
+      color: #f5f5f0;
+
+      padding: 12px 13px;
+
+      border-radius: 12px;
+
+      transition: .2s;
+    }
+
+    input:focus,
+    select:focus {
+      border-color:
+        rgba(212,175,55,.55);
+
+      box-shadow:
+        0 0 0 3px
+        rgba(212,175,55,.06);
+    }
+
+    input::placeholder {
+      color: #69756e;
+    }
+
+    /* =========================
+       SWITCH
+    ========================= */
+
+    .setting-row {
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 20px;
+
+      padding: 13px 0;
+
+      border-bottom:
+        1px solid
+        rgba(255,255,255,.055);
+    }
+
+    .setting-row:last-child {
+      border-bottom: 0;
+    }
+
+    .setting-info strong {
+      display: block;
+
+      font-size: 12px;
+
+      margin-bottom: 5px;
+    }
+
+    .setting-info span {
+      display: block;
+
+      color: var(--muted);
+
+      font-size: 10px;
+
+      line-height: 1.8;
+    }
+
+    .switch {
+      position: relative;
+
+      width: 48px;
+      height: 27px;
+
+      flex: 0 0 auto;
+    }
+
+    .switch input {
+      display: none;
+    }
+
+    .slider {
+      position: absolute;
+
+      inset: 0;
+
+      background: #26342d;
+
+      border:
+        1px solid
+        rgba(255,255,255,.08);
+
+      border-radius: 99px;
+
+      transition: .2s;
+    }
+
+    .slider::before {
+      content: "";
+
+      position: absolute;
+
+      width: 21px;
+      height: 21px;
+
+      top: 2px;
+      right: 24px;
+
+      background: #c4cbc7;
+
+      border-radius: 50%;
+
+      transition: .2s;
+    }
+
+    .switch input:checked + .slider {
+      background: #806a20;
+
+      border-color:
+        rgba(212,175,55,.55);
+    }
+
+    .switch input:checked + .slider::before {
+      transform:
+        translateX(-21px);
+
+      background: #ffe68c;
+    }
+
+    /* =========================
+       THEME
+    ========================= */
+
+    .theme-options {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3,1fr);
+
+      gap: 10px;
+    }
+
+    .theme-option input {
+      display: none;
+    }
+
+    .theme-box {
+      border:
+        1px solid
+        rgba(255,255,255,.08);
+
+      border-radius: 13px;
+
+      padding: 13px 8px;
+
+      text-align: center;
+
+      background: #0a1711;
+
+      color: #bfc7c2;
+
+      cursor: pointer;
+
+      font-size: 11px;
+
+      transition: .2s;
+    }
+
+    .theme-preview {
+      height: 34px;
+
+      border-radius: 8px;
+
+      margin-bottom: 9px;
+
+      border:
+        1px solid
+        rgba(255,255,255,.08);
+    }
+
+    .theme-dark {
+      background: #07110d;
+    }
+
+    .theme-green {
+      background:
+        linear-gradient(
+          135deg,
+          #0e2a1d,
+          #1e6b4a
+        );
+    }
+
+    .theme-gold {
+      background:
+        linear-gradient(
+          135deg,
+          #6e5918,
+          #d4af37
+        );
+    }
+
+    .theme-option input:checked + .theme-box {
+      border-color: var(--gold);
+
+      color: var(--gold-light);
+
+      box-shadow:
+        0 0 0 2px
+        rgba(212,175,55,.08);
+    }
+
+    /* =========================
+       SECURITY
+    ========================= */
+
+    .security-note {
+      padding: 12px;
+
+      border-radius: 12px;
+
+      background:
+        rgba(45,139,98,.07);
+
+      border:
+        1px solid
+        rgba(45,139,98,.14);
+
+      color: #a9d8c0;
+
+      font-size: 10px;
+
+      line-height: 2;
+
+      margin-bottom: 15px;
+    }
+
+    /* =========================
+       BACKUP
+    ========================= */
+
+    .backup-box {
+      display: grid;
+
+      grid-template-columns:
+        1fr auto;
+
+      align-items: center;
+
+      gap: 15px;
+
+      padding: 15px;
+
+      background: #0a1711;
+
+      border:
+        1px solid
+        rgba(255,255,255,.07);
+
+      border-radius: 14px;
+    }
+
+    .backup-box strong {
+      font-size: 12px;
+    }
+
+    .backup-box p {
+      font-size: 10px;
+
+      color: var(--muted);
+
+      margin-top: 6px;
+
+      line-height: 1.8;
+    }
+
+    /* =========================
+       BUTTONS
+    ========================= */
+
+    .actions {
+      display: flex;
+
+      justify-content: flex-end;
+
+      gap: 10px;
+
+      margin-top: 20px;
+    }
+
+    .btn {
+      border: 0;
+
+      border-radius: 12px;
+
+      padding: 12px 20px;
+
+      font-size: 12px;
+
+      transition: .2s;
+    }
+
+    .btn-primary {
+      color: #171207;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--gold-light),
+          var(--gold)
+        );
+
+      box-shadow:
+        0 10px 24px
+        rgba(212,175,55,.12);
+    }
+
+    .btn-primary:hover {
+      transform:
+        translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #17251f;
+
+      border:
+        1px solid
+        rgba(255,255,255,.08);
+
+      color: #d4dbd7;
+    }
+
+    .btn-secondary:hover {
+      background: #1d3028;
+    }
+
+    .btn-danger {
+      background:
+        rgba(217,83,79,.08);
+
+      color: #efaaa7;
+
+      border:
+        1px solid
+        rgba(217,83,79,.2);
+    }
+
+    .btn-danger:hover {
+      background:
+        rgba(217,83,79,.14);
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    .footer {
+      text-align: center;
+
+      color: #65726b;
+
+      font-size: 10px;
+
+      padding:
+        25px 0
+        8px;
+    }
+
+    /* =========================
+       TOAST
+    ========================= */
+
+    .toast {
+      position: fixed;
+
+      left: 25px;
+      bottom: 25px;
+
+      z-index: 500;
+
+      min-width: 260px;
+
+      max-width: 90vw;
+
+      padding: 13px 16px;
+
+      border-radius: 13px;
+
+      background: #10241a;
+
+      border:
+        1px solid
+        rgba(212,175,55,.3);
+
+      color: #f7e8a9;
+
+      box-shadow: var(--shadow);
+
+      transform:
+        translateY(130px);
+
+      opacity: 0;
+
+      transition: .3s;
+
+      font-size: 11px;
+    }
+
+    .toast.show {
+      transform:
+        translateY(0);
+
+      opacity: 1;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 1000px) {
+
+      .sidebar {
+        width: 235px;
+      }
+
+      .main {
+        width: calc(100% - 235px);
+
+        margin-right: 235px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card.full {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 760px) {
+
+      .sidebar {
+        transform:
+          translateX(110%);
+
+        width: 280px;
+      }
+
+      .sidebar.open {
+        transform:
+          translateX(0);
+      }
+
+      .main {
+        width: 100%;
+
+        margin-right: 0;
+
+        padding: 17px;
+      }
+
+      .mobile-menu {
+        display: block;
+      }
+
+      .topbar {
+        align-items: flex-start;
+      }
+
+      .topbar h2 {
+        font-size: 21px;
+      }
+
+      .hero-row {
+        align-items: flex-start;
+
+        flex-direction: column;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .field.full {
+        grid-column: auto;
+      }
+
+      .theme-options {
+        grid-template-columns: 1fr;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+
+      .actions .btn {
+        width: 100%;
+      }
+
+      .backup-box {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app">
+
+    <!-- =========================
+         SIDEBAR
+    ========================= -->
+
+    <aside class="sidebar" id="sidebar">
+
+      <div class="brand">
+
+        <div>
+            <img
+            src="file_000000006740820a810ef460bf5ae223.png"
+            alt="کلبه سبز"
+            style="width:80px;height:80px;object-fit:cover;border-radius:15px;"
+        >
+        </div>
+        
+        <div>
+          <h1>
+            کلبه سبز
+          </h1>
+
+          <span>
+            سامانه تخصصی املاک
+          </span>
+        </div>
+
+      </div>
+
+
+      <div class="nav-title">
+        منوی اصلی
+      </div>
+
+
+      <nav class="nav">
+
+        <a href="dashboard.html">
+          <span class="nav-icon">🏠</span>
+          داشبورد
+        </a>
+
+        <a href="add-property.html">
+          <span class="nav-icon">➕</span>
+          ثبت ملک
+        </a>
+
+        <a href="properties.html">
+          <span class="nav-icon">🏘️</span>
+          فایل‌های ملکی
+        </a>
+
+        <a href="customers.html">
+          <span class="nav-icon">👥</span>
+          مشتریان
+        </a>
+
+        <a href="users.html">
+          <span class="nav-icon">👤</span>
+          مشاوران
+        </a>
+
+        <a href="reports.html">
+          <span class="nav-icon">📊</span>
+          گزارش‌ها
+        </a>
+
+      </nav>
+
+
+      <div class="nav-title">
+        مدیریت سامانه
+      </div>
+
+
+      <nav class="nav">
+
+        <a
+          href="settings.html"
+          class="active"
+        >
+          <span class="nav-icon">⚙️</span>
+          تنظیمات
+        </a>
+
+      </nav>
+
+
+      <div class="sidebar-footer">
+
+        <div class="user-mini">
+
+          <div
+            class="avatar"
+            id="sideAvatar"
+          >
+            ا
+          </div>
+
+          <div>
+
+            <strong id="sideName">
+              ابوالفضل
+            </strong>
+
+            <small id="sideRole">
+              مدیر سامانه
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <button
+          class="logout"
+          id="logoutBtn"
+        >
+          خروج از حساب
+        </button>
+
+      </div>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN
+    ========================= -->
+
+    <main class="main">
+
+      <!-- TOPBAR -->
+
+      <header class="topbar">
+
+        <div
+          style="
+            display:flex;
+            align-items:flex-start;
+            gap:10px;
+          "
+        >
+
+          <button
+            class="mobile-menu"
+            id="menuBtn"
+          >
+            ☰
+          </button>
+
+
+          <div>
+
+            <h2>
+              تنظیمات سامانه
+            </h2>
+
+            <p>
+              مدیریت حساب کاربری، ظاهر سامانه، اعلان‌ها و تنظیمات امنیتی
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="top-actions">
+
+          <button
+            class="icon-btn"
+            title="بازگشت به داشبورد"
+            onclick="location.href='dashboard.html'"
+          >
+            ⌂
+          </button>
+
+        </div>
+
+      </header>
+
+
+      <!-- HERO -->
+
+      <section class="hero">
+
+        <div class="hero-row">
+
+          <div>
+
+            <h3>
+              مرکز تنظیمات کلبه سبز 🌿
+            </h3>
+
+            <p>
+              از این قسمت می‌توانید اطلاعات حساب، ظاهر سامانه،
+              اعلان‌ها، تنظیمات عمومی و امنیت حساب را مدیریت کنید.
+            </p>
+
+          </div>
+
+
+          <div class="status">
+            ● سامانه فعال
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           CONTENT GRID
+      ========================= -->
+
+      <div class="grid">
+
+
+        <!-- =========================
+             PROFILE
+        ========================= -->
+
+        <section class="card">
+
+          <div class="card-head">
+
+            <div class="card-icon">
+              👤
+            </div>
+
+            <div>
+
+              <h3>
+                اطلاعات حساب کاربری
+              </h3>
+
+              <p>
+                مشخصات نمایشی حساب مدیر یا مشاور
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="form-grid">
+
+            <div class="field">
+
+              <label for="fullName">
+                نام و نام خانوادگی
+              </label>
+
+              <input
+                id="fullName"
+                type="text"
+                placeholder="مثلاً ابوالفضل قربان‌نژاد"
+              >
+
+            </div>
+
+
+            <div class="field">
+
+              <label for="role">
+                سمت
+              </label>
+
+              <input
+                id="role"
+                type="text"
+                placeholder="مدیر سامانه"
+              >
+
+            </div>
+
+
+            <div class="field">
+
+              <label for="phone">
+                شماره تماس
+              </label>
+
+              <input
+                id="phone"
+                type="tel"
+                placeholder="09xxxxxxxxx"
+              >
+
+            </div>
+
+
+            <div class="field">
+
+              <label for="email">
+                ایمیل
+              </label>
+
+              <input
+                id="email"
+                type="email"
+                placeholder="example@email.com"
+              >
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- =========================
+             APPEARANCE
+        ========================= -->
+
+        <section class="card">
+
+          <div class="card-head">
+
+            <div class="card-icon">
+              🎨
+            </div>
+
+            <div>
+
+              <h3>
+                ظاهر سامانه
+              </h3>
+
+              <p>
+                شخصی‌سازی نمایش پنل مدیریت
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <label
+            style="
+              display:block;
+              margin-bottom:10px;
+            "
+          >
+            تم سامانه
+          </label>
+
+
+          <div class="theme-options">
+
+
+            <label class="theme-option">
+
+              <input
+                type="radio"
+                name="theme"
+                value="dark"
+                checked
+              >
+
+              <div class="theme-box">
+
+                <div
+                  class="theme-preview theme-dark"
+                ></div>
+
+                تیره
+
+              </div>
+
+            </label>
+
+
+            <label class="theme-option">
+
+              <input
+                type="radio"
+                name="theme"
+                value="green"
+              >
+
+              <div class="theme-box">
+
+                <div
+                  class="theme-preview theme-green"
+                ></div>
+
+                سبز
+
+              </div>
+
+            </label>
+
+
+            <label class="theme-option">
+
+              <input
+                type="radio"
+                name="theme"
+                value="gold"
+              >
+
+              <div class="theme-box">
+
+                <div
+                  class="theme-preview theme-gold"
+                ></div>
+
+                طلایی
+
+              </div>
+
+            </label>
+
+          </div>
+
+
+          <div
+            class="setting-row"
+            style="margin-top:12px"
+          >
+
+            <div class="setting-info">
+
+              <strong>
+                نمایش انیمیشن‌ها
+              </strong>
+
+              <span>
+                حرکت‌های نرم در پنل فعال باشد.
+              </span>
+
+            </div>
+
+
+            <label class="switch">
+
+              <input
+                type="checkbox"
+                id="animations"
+                checked
+              >
+
+              <span class="slider"></span>
+
+            </label>
+
+          </div>
+
+        </section>
+
+
+        <!-- =========================
+             NOTIFICATIONS
+        ========================= -->
+
+        <section class="card">
+
+          <div class="card-head">
+
+            <div class="card-icon">
+              🔔
+            </div>
+
+            <div>
+
+              <h3>
+                اعلان‌ها
+              </h3>
+
+              <p>
+                مدیریت پیام‌های سیستم
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="setting-row">
+
+            <div class="setting-info">
+
+              <strong>
+                اعلان ثبت ملک جدید
+              </strong>
+
+              <span>
+                هنگام ثبت فایل ملکی جدید پیام نمایش داده شود.
+              </span>
+
+            </div>
+
+
+            <label class="switch">
+
+              <input
+                type="checkbox"
+                id="notifyProperty"
+                checked
+              >
+
+              <span class="slider"></span>
+
+            </label>
+
+          </div>
+
+
+          <div class="setting-row">
+
+            <div class="setting-info">
+
+              <strong>
+                اعلان مشتری جدید
+              </strong>
+
+              <span>
+                ثبت مشتری جدید با اعلان اطلاع‌رسانی شود.
+              </span>
+
+            </div>
+
+
+            <label class="switch">
+
+              <input
+                type="checkbox"
+                id="notifyCustomer"
+                checked
+              >
+
+              <span class="slider"></span>
+
+            </label>
+
+          </div>
+
+
+          <div class="setting-row">
+
+            <div class="setting-info">
+
+              <strong>
+                اعلان تغییرات سامانه
+              </strong>
+
+              <span>
+                پیام‌های مهم مدیریتی نمایش داده شوند.
+              </span>
+
+            </div>
+
+
+            <label class="switch">
+
+              <input
+                type="checkbox"
+                id="notifySystem"
+                checked
+              >
+
+              <span class="slider"></span>
+
+            </label>
+
+          </div>
+
+        </section>
+
+
+        <!-- =========================
+             SYSTEM
+        ========================= -->
+
+        <section class="card">
+
+          <div class="card-head">
+
+            <div class="card-icon">
+              ⚙️
+            </div>
+
+            <div>
+
+              <h3>
+                تنظیمات عمومی
+              </h3>
+
+              <p>
+                تنظیمات پایه سامانه املاک
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="form-grid">
+
+
+            <div class="field">
+
+              <label for="agencyName">
+                نام مجموعه
+              </label>
+
+              <input
+                id="agencyName"
+                type="text"
+                value="کلبه سبز"
+              >
+
+            </div>
+
+
+            <div class="field">
+
+              <label for="currency">
+                واحد قیمت
+              </label>
+
+              <select id="currency">
+
+                <option value="تومان">
+                  تومان
+                </option>
+
+                <option value="ریال">
+                  ریال
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <div class="field">
+
+              <label for="defaultDeal">
+                نوع معامله پیش‌فرض
+              </label>
+
+              <select id="defaultDeal">
+
+                <option value="فروش">
+                  فروش
+                </option>
+
+                <option value="رهن">
+                  رهن
+                </option>
+
+                <option value="اجاره">
+                  اجاره
+                </option>
+
+                <option value="رهن و اجاره">
+                  رهن و اجاره
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <div class="field">
+
+              <label for="defaultView">
+                نمایش فایل‌ها
+              </label>
+
+              <select id="defaultView">
+
+                <option value="cards">
+                  کارت‌ها
+                </option>
+
+                <option value="table">
+                  جدول
+                </option>
+
+              </select>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="setting-row"
+            style="margin-top:10px"
+          >
+
+            <div class="setting-info">
+
+              <strong>
+                تولید خودکار کد ملک
+              </strong>
+
+              <span>
+                برای هر فایل جدید یک کد اختصاصی مانند KS-... ساخته شود.
+              </span>
+
+            </div>
+
+
+            <label class="switch">
+
+              <input
+                type="checkbox"
+                id="autoCode"
+                checked
+              >
+
+              <span class="slider"></span>
+
+            </label>
+
+          </div>
+
+        </section>
+
+
+        <!-- =========================
+             SECURITY
+        ========================= -->
+
+        <section class="card">
+
+          <div class="card-head">
+
+            <div class="card-icon">
+              🔐
+            </div>
+
+            <div>
+
+              <h3>
+                امنیت حساب
+              </h3>
+
+              <p>
+                مدیریت رمز عبور و ورود به سامانه
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="security-note">
+
+            برای امنیت بیشتر، رمز عبور خود را دوره‌ای تغییر دهید
+            و آن را در اختیار سایر افراد قرار ندهید.
+
+          </div>
+
+
+          <div class="form-grid">
+
+
+            <div class="field full">
+
+              <label for="currentPassword">
+                رمز عبور فعلی
+              </label>
+
+              <input
+                id="currentPassword"
+                type="password"
+                placeholder="رمز عبور فعلی"
+              >
+
+            </div>
+
+
+            <div class="field">
+
+              <label for="newPassword">
+                رمز عبور جدید
+              </label>
+
+              <input
+                id="newPassword"
+                type="password"
+                placeholder="حداقل 6 کاراکتر"
+              >
+
+            </div>
+
+
+            <div class="field">
+
+              <label for="confirmPassword">
+                تکرار رمز عبور جدید
+              </label>
+
+              <input
+                id="confirmPassword"
+                type="password"
+                placeholder="تکرار رمز عبور"
+              >
+
+            </div>
+
+          </div>
+
+
+          <div class="actions">
+
+            <button
+              class="btn btn-secondary"
+              id="changePasswordBtn"
+            >
+              تغییر رمز عبور
+            </button>
+
+          </div>
+
+        </section>
+
+
+        <!-- =========================
+             BACKUP
+        ========================= -->
+
+        <section class="card">
+
+          <div class="card-head">
+
+            <div class="card-icon">
+              💾
+            </div>
+
+            <div>
+
+              <h3>
+                پشتیبان‌گیری
+              </h3>
+
+              <p>
+                مدیریت اطلاعات ذخیره‌شده در مرورگر
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="backup-box">
+
+            <div>
+
+              <strong>
+                نسخه پشتیبان اطلاعات
+              </strong>
+
+              <p>
+                اطلاعات کاربران، فایل‌های ملکی و تنظیمات
+                ذخیره‌شده در LocalStorage را به صورت فایل JSON دریافت کنید.
+              </p>
+
+            </div>
+
+
+            <button
+              class="btn btn-secondary"
+              id="backupBtn"
+            >
+              دریافت پشتیبان
+            </button>
+
+          </div>
+
+
+          <div
+            class="backup-box"
+            style="margin-top:10px"
+          >
+
+            <div>
+
+              <strong>
+                پاک‌سازی تنظیمات این صفحه
+              </strong>
+
+              <p>
+                فقط تنظیمات settings.html حذف می‌شود
+                و سایر اطلاعات سامانه دست‌نخورده باقی می‌ماند.
+              </p>
+
+            </div>
+
+
+            <button
+              class="btn btn-danger"
+              id="resetSettingsBtn"
+            >
+              بازنشانی
+            </button>
+
+          </div>
+
+        </section>
+
+
+        <!-- =========================
+             SAVE
+        ========================= -->
+
+        <section class="card full">
+
+          <div class="card-head">
+
+            <div class="card-icon">
+              💾
+            </div>
+
+            <div>
+
+              <h3>
+                ذخیره تنظیمات
+              </h3>
+
+              <p>
+                پس از اعمال تغییرات، دکمه ذخیره را بزنید.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="actions"
+            style="margin-top:0"
+          >
+
+            <button
+              class="btn btn-secondary"
+              id="cancelBtn"
+            >
+              بازگردانی تغییرات
+            </button>
+
+
+            <button
+              class="btn btn-primary"
+              id="saveBtn"
+            >
+              ✓ ذخیره تنظیمات
+            </button>
+
+          </div>
+
+        </section>
+
+
+      </div>
+
+
+      <div class="footer">
+
+        سامانه تخصصی املاک کلبه سبز 🌿
+
+        <br>
+
+        نسخه حرفه‌ای تنظیمات سامانه
+
+      </div>
+
+    </main>
+
+  </div>
+
+
+  <!-- TOAST -->
+
+  <div
+    class="toast"
+    id="toast"
+  ></div>
+
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================= -->
+
+  <script>
+
+    /*
+      ==========================================
+      SETTINGS STORAGE
+      ==========================================
+    */
+
+    const SETTINGS_KEY =
+      "kolbeyeSabzSettings";
+
+
+    const defaults = {
+
+      fullName: "",
+
+      role: "مدیر سامانه",
+
+      phone: "",
+
+      email: "",
+
+      theme: "dark",
+
+      animations: true,
+
+      notifyProperty: true,
+
+      notifyCustomer: true,
+
+      notifySystem: true,
+
+      agencyName: "کلبه سبز",
+
+      currency: "تومان",
+
+      defaultDeal: "فروش",
+
+      defaultView: "cards",
+
+      autoCode: true
+
+    };
+
+
+    /*
+      ==========================================
+      ELEMENT HELPER
+      ==========================================
+    */
+
+    function $(id) {
+
+      return document.getElementById(id);
+
+    }
+
+
+    /*
+      ==========================================
+      TOAST
+      ==========================================
+    */
+
+    function showToast(message) {
+
+      const toast =
+        $("toast");
+
+      toast.textContent =
+        message;
+
+      toast.classList.add("show");
+
+      clearTimeout(
+        window.__toastTimer
+      );
+
+      window.__toastTimer =
+        setTimeout(
+          function() {
+
+            toast.classList.remove(
+              "show"
+            );
+
+          },
+          2800
+        );
+
+    }
+
+
+    /*
+      ==========================================
+      LOAD SETTINGS
+      ==========================================
+    */
+
+    function loadSettings() {
+
+      let saved = {};
+
+      try {
+
+        saved =
+          JSON.parse(
+            localStorage.getItem(
+              SETTINGS_KEY
+            ) || "{}"
+          );
+
+      } catch(error) {
+
+        saved = {};
+
+      }
+
+
+      const settings = {
+
+        ...defaults,
+
+        ...saved
+
+      };
+
+
+      $("fullName").value =
+        settings.fullName || "";
+
+
+      $("role").value =
+        settings.role ||
+        defaults.role;
+
+
+      $("phone").value =
+        settings.phone || "";
+
+
+      $("email").value =
+        settings.email || "";
+
+
+      $("agencyName").value =
+        settings.agencyName ||
+        defaults.agencyName;
+
+
+      $("currency").value =
+        settings.currency ||
+        defaults.currency;
+
+
+      $("defaultDeal").value =
+        settings.defaultDeal ||
+        defaults.defaultDeal;
+
+
+      $("defaultView").value =
+        settings.defaultView ||
+        defaults.defaultView;
+
+
+      $("animations").checked =
+        Boolean(settings.animations);
+
+
+      $("notifyProperty").checked =
+        Boolean(
+          settings.notifyProperty
+        );
+
+
+      $("notifyCustomer").checked =
+        Boolean(
+          settings.notifyCustomer
+        );
+
+
+      $("notifySystem").checked =
+        Boolean(
+          settings.notifySystem
+        );
+
+
+      $("autoCode").checked =
+        Boolean(
+          settings.autoCode
+        );
+
+
+      const theme =
+        document.querySelector(
+          'input[name="theme"][value="' +
+          settings.theme +
+          '"]'
+        );
+
+
+      if(theme) {
+
+        theme.checked = true;
+
+      }
+
+
+      updateUserPreview(
+        settings
+      );
+
+    }
+
+
+    /*
+      ==========================================
+      COLLECT SETTINGS
+      ==========================================
+    */
+
+    function collectSettings() {
+
+      return {
+
+        fullName:
+          $("fullName")
+            .value
+            .trim(),
+
+        role:
+          $("role")
+            .value
+            .trim(),
+
+        phone:
+          $("phone")
+            .value
+            .trim(),
+
+        email:
+          $("email")
+            .value
+            .trim(),
+
+        theme:
+          document.querySelector(
+            'input[name="theme"]:checked'
+          )?.value || "dark",
+
+        animations:
+          $("animations").checked,
+
+        notifyProperty:
+          $("notifyProperty").checked,
+
+        notifyCustomer:
+          $("notifyCustomer").checked,
+
+        notifySystem:
+          $("notifySystem").checked,
+
+        agencyName:
+          $("agencyName")
+            .value
+            .trim() ||
+          "کلبه سبز",
+
+        currency:
+          $("currency").value,
+
+        defaultDeal:
+          $("defaultDeal").value,
+
+        defaultView:
+          $("defaultView").value,
+
+        autoCode:
+          $("autoCode").checked
+
+      };
+
+    }
+
+
+    /*
+      ==========================================
+      SAVE SETTINGS
+      ==========================================
+    */
+
+    function saveSettings(
+      showMessage = true
+    ) {
+
+      const settings =
+        collectSettings();
+
+
+      /*
+        Validate email
+      */
+
+      if(
+        settings.email &&
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
+          .test(settings.email)
+      ) {
+
+        showToast(
+          "فرمت ایمیل صحیح نیست."
+        );
+
+        return false;
+
+      }
+
+
+      /*
+        Save settings
+      */
+
+      localStorage.setItem(
+
+        SETTINGS_KEY,
+
+        JSON.stringify(
+          settings
+        )
+
+      );
+
+
+      /*
+        Sync current user
+      */
+
+      try {
+
+        const currentUser =
+          JSON.parse(
+            localStorage.getItem(
+              "currentUser"
+            ) || "null"
+          );
+
+
+        if(currentUser) {
+
+          if(settings.fullName) {
+
+            currentUser.name =
+              settings.fullName;
+
+          }
+
+
+          if(settings.role) {
+
+            currentUser.role =
+              settings.role;
+
+          }
+
+
+          localStorage.setItem(
+
+            "currentUser",
+
+            JSON.stringify(
+              currentUser
+            )
+
+          );
+
+        }
+
+      } catch(error) {}
+
+
+      updateUserPreview(
+        settings
+      );
+
+
+      if(showMessage) {
+
+        showToast(
+          "تنظیمات با موفقیت ذخیره شد ✓"
+        );
+
+      }
+
+
+      return true;
+
+    }
+
+
+    /*
+      ==========================================
+      USER PREVIEW
+      ==========================================
+    */
+
+    function updateUserPreview(
+      settings
+    ) {
+
+      const name =
+        settings.fullName ||
+        "ابوالفضل";
+
+
+      $("sideName")
+        .textContent =
+        name;
+
+
+      $("sideRole")
+        .textContent =
+        settings.role ||
+        "مدیر سامانه";
+
+
+      const firstLetter =
+        name
+          .trim()
+          .charAt(0);
+
+
+      $("sideAvatar")
+        .textContent =
+        firstLetter ||
+        "ا";
+
+    }
+
+
+    /*
+      ==========================================
+      BACKUP
+      ==========================================
+    */
+
+    function backupData() {
+
+      const data = {
+
+        exportedAt:
+          new Date()
+            .toISOString(),
+
+        project:
+          "سامانه تخصصی املاک کلبه سبز",
+
+        localStorage: {}
+
+      };
+
+
+      for(
+        let i = 0;
+        i < localStorage.length;
+        i++
+      ) {
+
+        const key =
+          localStorage.key(i);
+
+
+        data.localStorage[key] =
+          localStorage.getItem(key);
+
+      }
+
+
+      const blob =
+        new Blob(
+
+          [
+            JSON.stringify(
+              data,
+              null,
+              2
+            )
+          ],
+
+          {
+            type:
+              "application/json;charset=utf-8"
+          }
+
+        );
+
+
+      const url =
+        URL.createObjectURL(
+          blob
+        );
+
+
+      const link =
+        document.createElement(
+          "a"
+        );
+
+
+      link.href =
+        url;
+
+
+      link.download =
+        "kolbeye-sabz-backup-" +
+        new Date()
+          .toISOString()
+          .slice(0,10) +
+        ".json";
+
+
+      document.body.appendChild(
+        link
+      );
+
+
+      link.click();
+
+
+      link.remove();
+
+
+      URL.revokeObjectURL(
+        url
+      );
+
+
+      showToast(
+        "فایل پشتیبان آماده شد ✓"
+      );
+
+    }
+
+
+    /*
+      ==========================================
+      RESET SETTINGS
+      ==========================================
+    */
+
+    function resetSettings() {
+
+      const confirmed =
+        confirm(
+          "فقط تنظیمات این صفحه به حالت پیش‌فرض برگردد؟"
+        );
+
+
+      if(!confirmed) {
+
+        return;
+
+      }
+
+
+      localStorage.removeItem(
+        SETTINGS_KEY
+      );
+
+
+      loadSettings();
+
+
+      showToast(
+        "تنظیمات بازنشانی شد."
+      );
+
+    }
+
+
+    /*
+      ==========================================
+      CHANGE PASSWORD
+      ==========================================
+    */
+
+    function changePassword() {
+
+      const current =
+        $("currentPassword")
+          .value;
+
+
+      const next =
+        $("newPassword")
+          .value;
+
+
+      const confirmPassword =
+        $("confirmPassword")
+          .value;
+
+
+      if(
+        !current ||
+        !next ||
+        !confirmPassword
+      ) {
+
+        showToast(
+          "لطفاً هر سه فیلد رمز عبور را تکمیل کنید."
+        );
+
+        return;
+
+      }
+
+
+      if(next.length < 6) {
+
+        showToast(
+          "رمز عبور جدید باید حداقل ۶ کاراکتر باشد."
+        );
+
+        return;
+
+      }
+
+
+      if(
+        next !== confirmPassword
+      ) {
+
+        showToast(
+          "تکرار رمز عبور با رمز جدید یکسان نیست."
+        );
+
+        return;
+
+      }
+
+
+      /*
+        LocalStorage version
+      */
+
+      try {
+
+        const users =
+          JSON.parse(
+            localStorage.getItem(
+              "users"
+            ) || "[]"
+          );
+
+
+        const currentUser =
+          JSON.parse(
+            localStorage.getItem(
+              "currentUser"
+            ) || "null"
+          );
+
+
+        if(
+          currentUser &&
+          Array.isArray(users)
+        ) {
+
+          const index =
+            users.findIndex(
+              function(user) {
+
+                return (
+
+                  user.username ===
+                    currentUser.username
+
+                  ||
+
+                  user.email ===
+                    currentUser.email
+
+                );
+
+              }
+            );
+
+
+          if(index !== -1) {
+
+            /*
+              اگر رمز قبلی در سیستم ذخیره شده باشد
+              بررسی می‌شود.
+            */
+
+            if(
+              users[index].password &&
+              users[index].password !== current
+            ) {
+
+              showToast(
+                "رمز عبور فعلی صحیح نیست."
+              );
+
+              return;
+
+            }
+
+
+            users[index].password =
+              next;
+
+
+            localStorage.setItem(
+
+              "users",
+
+              JSON.stringify(
+                users
+              )
+
+            );
+
+          }
+
+        }
+
+      } catch(error) {}
+
+
+      $("currentPassword")
+        .value = "";
+
+
+      $("newPassword")
+        .value = "";
+
+
+      $("confirmPassword")
+        .value = "";
+
+
+      showToast(
+        "رمز عبور با موفقیت تغییر کرد ✓"
+      );
+
+    }
+
+
+    /*
+      ==========================================
+      SAVE BUTTON
+      ==========================================
+    */
+
+    $("saveBtn")
+      .addEventListener(
+        "click",
+        function() {
+
+          saveSettings(true);
+
+        }
+      );
+
+
+    /*
+      ==========================================
+      CANCEL
+      ==========================================
+    */
+
+    $("cancelBtn")
+      .addEventListener(
+        "click",
+        function() {
+
+          loadSettings();
+
+          showToast(
+            "آخرین تغییرات ذخیره‌نشده بازگردانی شد."
+          );
+
+        }
+      );
+
+
+    /*
+      ==========================================
+      BACKUP
+      ==========================================
+    */
+
+    $("backupBtn")
+      .addEventListener(
+        "click",
+        backupData
+      );
+
+
+    /*
+      ==========================================
+      RESET
+      ==========================================
+    */
+
+    $("resetSettingsBtn")
+      .addEventListener(
+        "click",
+        resetSettings
+      );
+
+
+    /*
+      ==========================================
+      CHANGE PASSWORD
+      ==========================================
+    */
+
+    $("changePasswordBtn")
+      .addEventListener(
+        "click",
+        changePassword
+      );
+
+
+    /*
+      ==========================================
+      MOBILE MENU
+      ==========================================
+    */
+
+    $("menuBtn")
+      .addEventListener(
+        "click",
+        function() {
+
+          $("sidebar")
+            .classList
+            .toggle("open");
+
+        }
+      );
+
+
+    /*
+      ==========================================
+      LOGOUT
+      ==========================================
+    */
+
+    $("logoutBtn")
+      .addEventListener(
+        "click",
+        function() {
+
+          const confirmed =
+            confirm(
+              "آیا می‌خواهید از حساب خارج شوید؟"
+            );
+
+
+          if(!confirmed) {
+
+            return;
+
+          }
+
+
+          localStorage.removeItem(
+            "currentUser"
+          );
+
+
+          location.href =
+            "index.html";
+
+        }
+      );
+
+
+    /*
+      ==========================================
+      CLOSE MOBILE MENU
+      ==========================================
+    */
+
+    document
+      .querySelectorAll(
+        ".nav a"
+      )
+      .forEach(
+        function(link) {
+
+          link.addEventListener(
+            "click",
+            function() {
+
+              $("sidebar")
+                .classList
+                .remove("open");
+
+            }
+          );
+
+        }
+      );
+
+
+    /*
+      ==========================================
+      THEME SELECTION
+      ==========================================
+    */
+
+    document
+      .querySelectorAll(
+        'input[name="theme"]'
+      )
+      .forEach(
+        function(radio) {
+
+          radio.addEventListener(
+            "change",
+            function() {
+
+              document.documentElement
+                .dataset.theme =
+                radio.value;
+
+            }
+          );
+
+        }
+      );
+
+
+    /*
+      ==========================================
+      LOAD ON START
+      ==========================================
+    */
+
+    loadSettings();
+
+  </script>
+
+</body>
+</html>

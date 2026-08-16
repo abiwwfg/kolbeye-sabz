@@ -1,0 +1,4410 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>مشتریان | سامانه تخصصی املاک کلبه سبز</title>
+
+<link rel="stylesheet"
+      href="css/style.css">
+
+<style>
+
+/* =====================================================
+   ROOT
+===================================================== */
+
+:root{
+
+    --green-dark:#10231b;
+    --green:#19382a;
+
+    --gold:#c8a653;
+    --gold-light:#e3ca7b;
+
+    --cream:#f7f5ef;
+    --white:#fff;
+
+    --text:#26332b;
+    --muted:#7d857f;
+
+    --border:#e8e4d9;
+
+    --red:#b94c4c;
+
+    --shadow:
+        0 10px 30px rgba(30,40,33,.06);
+
+}
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+*{
+
+    box-sizing:border-box;
+
+}
+
+
+body{
+
+    margin:0;
+
+    font-family:
+        Tahoma,
+        Arial,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #faf9f5,
+            #f0eee7
+        );
+
+    color:var(--text);
+
+}
+
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.sidebar{
+
+    position:fixed;
+
+    top:20px;
+    right:20px;
+
+    width:235px;
+
+    height:
+        calc(100vh - 40px);
+
+    padding:22px 15px;
+
+    border-radius:24px;
+
+    background:
+        linear-gradient(
+            160deg,
+            #10231b,
+            #193629
+        );
+
+    box-shadow:
+        0 20px 55px
+        rgba(16,35,27,.20);
+
+    z-index:1000;
+
+}
+
+
+.brand{
+
+    text-align:center;
+
+    padding-bottom:20px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.08);
+
+}
+
+
+.brand-logo{
+
+    width:55px;
+    height:55px;
+
+    margin:
+        auto auto 9px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--gold),
+            var(--gold-light)
+        );
+
+    font-size:26px;
+
+}
+
+
+.brand h2{
+
+    margin:0;
+
+    color:#fff;
+
+    font-size:17px;
+
+}
+
+
+.brand span{
+
+    display:block;
+
+    margin-top:6px;
+
+    color:
+        rgba(255,255,255,.45);
+
+    font-size:10px;
+
+}
+
+
+.menu-title{
+
+    margin:
+        18px 12px 8px;
+
+    color:
+        rgba(255,255,255,.35);
+
+    font-size:10px;
+
+}
+
+
+.sidebar a,
+.sidebar button{
+
+    width:100%;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:12px;
+
+    margin-bottom:6px;
+
+    border:0;
+
+    border-radius:12px;
+
+    background:transparent;
+
+    color:
+        rgba(255,255,255,.72);
+
+    text-decoration:none;
+
+    font-family:inherit;
+
+    font-size:12px;
+
+    cursor:pointer;
+
+    text-align:right;
+
+    transition:.25s;
+
+}
+
+
+.sidebar a:hover,
+.sidebar a.active{
+
+    color:
+        var(--gold-light);
+
+    background:
+        rgba(200,166,83,.13);
+
+}
+
+
+.sidebar a.active{
+
+    border-right:
+        3px solid
+        var(--gold);
+
+}
+
+
+.sidebar button{
+
+    margin-top:20px;
+
+    color:#e5aaa5;
+
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.main-content{
+
+    margin-right:275px;
+
+    padding:
+        30px
+        35px
+        50px;
+
+}
+
+
+.header{
+
+    margin-bottom:25px;
+
+}
+
+
+.header h1{
+
+    margin:0;
+
+    color:
+        var(--green-dark);
+
+    font-size:25px;
+
+}
+
+
+.header p{
+
+    margin:
+        8px 0 0;
+
+    color:
+        var(--muted);
+
+    font-size:11px;
+
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+.stats{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:14px;
+
+    margin-bottom:20px;
+
+}
+
+
+.stat{
+
+    background:#fff;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:17px;
+
+    padding:17px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(30,40,33,.05);
+
+}
+
+
+.stat-title{
+
+    color:
+        var(--muted);
+
+    font-size:9px;
+
+    margin-bottom:8px;
+
+}
+
+
+.stat-value{
+
+    color:
+        var(--green-dark);
+
+    font-size:22px;
+
+    font-weight:bold;
+
+}
+
+
+/* =====================================================
+   TOOLBAR
+===================================================== */
+
+.toolbar{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    margin-bottom:18px;
+
+    flex-wrap:wrap;
+
+}
+
+
+.search-box{
+
+    flex:1;
+
+    min-width:220px;
+
+}
+
+
+.search-box input{
+
+    width:100%;
+
+    padding:
+        13px 15px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:13px;
+
+    outline:none;
+
+    background:#fff;
+
+    font-family:inherit;
+
+    font-size:11px;
+
+}
+
+
+.search-box input:focus{
+
+    border-color:
+        var(--gold);
+
+}
+
+
+.add-btn{
+
+    border:0;
+
+    padding:
+        13px 20px;
+
+    border-radius:13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--gold),
+            var(--gold-light)
+        );
+
+    color:#fff;
+
+    font-family:inherit;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+}
+
+
+/* =====================================================
+   TABLE CARD
+===================================================== */
+
+.table-card{
+
+    background:#fff;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:20px;
+
+    padding:20px;
+
+    box-shadow:var(--shadow);
+
+}
+
+
+.table-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:15px;
+
+}
+
+
+.table-header h2{
+
+    margin:0;
+
+    color:
+        var(--green-dark);
+
+    font-size:14px;
+
+}
+
+
+.table-header span{
+
+    font-size:9px;
+
+    color:
+        var(--muted);
+
+}
+
+
+.table-wrap{
+
+    overflow-x:auto;
+
+}
+
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+
+th{
+
+    padding:11px;
+
+    text-align:right;
+
+    background:#faf9f5;
+
+    color:
+        var(--muted);
+
+    font-size:9px;
+
+    font-weight:normal;
+
+}
+
+
+td{
+
+    padding:
+        12px 11px;
+
+    border-bottom:
+        1px solid
+        #efede7;
+
+    font-size:10px;
+
+    color:
+        var(--green-dark);
+
+}
+
+
+.customer-name{
+
+    font-weight:bold;
+
+}
+
+
+.customer-phone{
+
+    color:
+        var(--muted);
+
+    direction:ltr;
+
+    text-align:right;
+
+    margin-top:3px;
+
+}
+
+
+.badge{
+
+    display:inline-block;
+
+    padding:
+        5px 8px;
+
+    border-radius:8px;
+
+    font-size:8px;
+
+}
+
+
+.badge-buy{
+
+    color:#856c20;
+
+    background:#f5efdc;
+
+}
+
+
+.badge-rent{
+
+    color:#35624c;
+
+    background:#e9f2ec;
+
+}
+
+
+.badge-both{
+
+    color:#67528b;
+
+    background:#eee9f7;
+
+}
+
+
+.badge-active{
+
+    color:#287046;
+
+    background:#e8f5ed;
+
+}
+
+
+.actions{
+
+    display:flex;
+
+    gap:6px;
+
+    flex-wrap:wrap;
+
+}
+
+
+.action-btn{
+
+    border:0;
+
+    border-radius:8px;
+
+    padding:
+        7px 9px;
+
+    cursor:pointer;
+
+    font-family:inherit;
+
+    font-size:8px;
+
+}
+
+
+.edit-btn{
+
+    background:#f5efdc;
+
+    color:#856c20;
+
+}
+
+
+.delete-btn{
+
+    background:#f8e9e9;
+
+    color:#a34646;
+
+}
+
+
+.link-btn{
+
+    background:#e8f1eb;
+
+    color:#315d43;
+
+}
+
+
+.link-count{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    min-width:22px;
+
+    height:22px;
+
+    margin-right:5px;
+
+    padding:
+        0 6px;
+
+    border-radius:20px;
+
+    background:
+        #19382a;
+
+    color:#e3ca7b;
+
+    font-size:9px;
+
+    font-weight:bold;
+
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.modal{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+        rgba(10,20,15,.55);
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+
+    z-index:3000;
+
+}
+
+
+.modal.show{
+
+    display:flex;
+
+}
+
+
+.modal-box{
+
+    width:100%;
+
+    max-width:650px;
+
+    max-height:90vh;
+
+    overflow-y:auto;
+
+    background:#fff;
+
+    border-radius:22px;
+
+    padding:25px;
+
+    box-shadow:
+        0 25px 70px
+        rgba(0,0,0,.20);
+
+}
+
+
+.modal-title{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+}
+
+
+.modal-title h2{
+
+    margin:0;
+
+    color:
+        var(--green-dark);
+
+    font-size:17px;
+
+}
+
+
+.close-btn{
+
+    border:0;
+
+    width:32px;
+
+    height:32px;
+
+    border-radius:10px;
+
+    background:#f2f0ea;
+
+    cursor:pointer;
+
+    font-size:17px;
+
+}
+
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.form-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:14px;
+
+}
+
+
+.form-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:7px;
+
+}
+
+
+.form-group.full{
+
+    grid-column:1/-1;
+
+}
+
+
+.form-group label{
+
+    font-size:10px;
+
+    color:#59625c;
+
+    font-weight:bold;
+
+}
+
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+
+    width:100%;
+
+    padding:11px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:10px;
+
+    outline:none;
+
+    font-family:inherit;
+
+    font-size:11px;
+
+}
+
+
+.form-group textarea{
+
+    min-height:100px;
+
+    resize:vertical;
+
+}
+
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+
+    border-color:
+        var(--gold);
+
+}
+
+
+.modal-actions{
+
+    display:flex;
+
+    gap:9px;
+
+    margin-top:20px;
+
+}
+
+
+.save-btn{
+
+    border:0;
+
+    padding:
+        11px 20px;
+
+    border-radius:10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--gold),
+            var(--gold-light)
+        );
+
+    color:#fff;
+
+    font-family:inherit;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+}
+
+
+.cancel-btn{
+
+    border:0;
+
+    padding:
+        11px 20px;
+
+    border-radius:10px;
+
+    background:#eee;
+
+    color:#555;
+
+    font-family:inherit;
+
+    cursor:pointer;
+
+}
+
+
+/* =====================================================
+   PROPERTY LINK MODAL
+===================================================== */
+
+.link-modal-box{
+
+    max-width:900px;
+
+}
+
+
+.link-header-info{
+
+    background:
+        linear-gradient(
+            135deg,
+            #f8f5e9,
+            #fff
+        );
+
+    border:
+        1px solid
+        #eadcae;
+
+    border-radius:15px;
+
+    padding:15px;
+
+    margin-bottom:15px;
+
+}
+
+
+.link-header-info strong{
+
+    color:
+        var(--green-dark);
+
+}
+
+
+.link-search{
+
+    margin-bottom:15px;
+
+}
+
+
+.link-search input{
+
+    width:100%;
+
+    padding:12px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:11px;
+
+    font-family:inherit;
+
+    outline:none;
+
+}
+
+
+.link-search input:focus{
+
+    border-color:
+        var(--gold);
+
+}
+
+
+.property-list{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:10px;
+
+    max-height:430px;
+
+    overflow-y:auto;
+
+    padding:3px;
+
+}
+
+
+.property-select-card{
+
+    position:relative;
+
+    display:block;
+
+    padding:14px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:15px;
+
+    background:#fff;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+
+.property-select-card:hover{
+
+    border-color:
+        var(--gold);
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+.property-select-card.selected{
+
+    border-color:
+        var(--gold);
+
+    background:
+        #fffaf0;
+
+    box-shadow:
+        0 5px 18px
+        rgba(200,166,83,.12);
+
+}
+
+
+.property-select-card input{
+
+    position:absolute;
+
+    top:14px;
+
+    left:14px;
+
+    width:17px;
+
+    height:17px;
+
+    accent-color:
+        var(--green);
+
+}
+
+
+.property-code{
+
+    font-size:9px;
+
+    color:
+        var(--gold);
+
+    font-weight:bold;
+
+    margin-bottom:7px;
+
+}
+
+
+.property-name{
+
+    color:
+        var(--green-dark);
+
+    font-weight:bold;
+
+    font-size:12px;
+
+    margin-bottom:7px;
+
+}
+
+
+.property-info{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:5px;
+
+}
+
+
+.property-info span{
+
+    padding:
+        5px 7px;
+
+    border-radius:7px;
+
+    background:#f5f4ef;
+
+    color:#687069;
+
+    font-size:8px;
+
+}
+
+
+.property-deal{
+
+    margin-top:9px;
+
+    color:
+        #80631b;
+
+    font-size:9px;
+
+    font-weight:bold;
+
+}
+
+
+.no-properties{
+
+    grid-column:1/-1;
+
+    text-align:center;
+
+    padding:40px;
+
+    color:
+        var(--muted);
+
+    background:#faf9f5;
+
+    border-radius:15px;
+
+}
+
+
+.link-footer{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-top:15px;
+
+    padding-top:15px;
+
+    border-top:
+        1px solid
+        var(--border);
+
+}
+
+
+.selected-count{
+
+    color:
+        var(--muted);
+
+    font-size:10px;
+
+}
+
+
+.selected-count strong{
+
+    color:
+        var(--green-dark);
+
+}
+
+
+.link-save-btn{
+
+    border:0;
+
+    padding:
+        11px 20px;
+
+    border-radius:10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--green),
+            #315d47
+        );
+
+    color:#fff;
+
+    font-family:inherit;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+}
+
+
+/* =====================================================
+   LINKED PROPERTY LIST
+===================================================== */
+
+.linked-properties{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:5px;
+
+    margin-top:6px;
+
+}
+
+
+.linked-property-tag{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:4px;
+
+    padding:
+        5px 7px;
+
+    border-radius:7px;
+
+    background:
+        #edf3ee;
+
+    color:
+        #315d43;
+
+    font-size:8px;
+
+}
+
+
+.linked-property-tag button{
+
+    border:0;
+
+    background:transparent;
+
+    color:#a34646;
+
+    cursor:pointer;
+
+    font-size:10px;
+
+    padding:0;
+
+}
+
+
+.empty{
+
+    text-align:center;
+
+    padding:40px;
+
+    color:
+        var(--muted);
+
+    font-size:10px;
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:1100px){
+
+    .stats{
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+}
+
+
+@media(max-width:900px){
+
+    .sidebar{
+
+        position:relative;
+
+        top:auto;
+        right:auto;
+
+        width:
+            calc(100% - 30px);
+
+        height:auto;
+
+        margin:15px;
+
+    }
+
+
+    .main-content{
+
+        margin-right:0;
+
+        padding:15px;
+
+    }
+
+}
+
+
+@media(max-width:700px){
+
+    .property-list{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+
+@media(max-width:600px){
+
+    .stats{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .form-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .form-group.full{
+
+        grid-column:auto;
+
+    }
+
+
+    .link-footer{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+
+    .link-save-btn{
+
+        width:100%;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar">
+
+    <div class="brand">
+
+        <div>
+            <img
+            src="file_000000006740820a810ef460bf5ae223.png"
+            alt="کلبه سبز"
+            style="width:80px;height:80px;object-fit:cover;border-radius:15px;"
+        >
+        </div>
+        
+        <h2>
+            کلبه سبز
+        </h2>
+
+        <span>
+            سامانه تخصصی املاک
+        </span>
+
+    </div>
+
+
+    <div class="menu-title">
+        منوی اصلی
+    </div>
+
+
+    <a href="dashboard.html">
+        🏠 داشبورد
+    </a>
+
+
+    <a href="add-property.html">
+        ➕ ثبت ملک
+    </a>
+
+
+    <a href="properties.html">
+        📁 فایل‌های ملکی
+    </a>
+
+
+    <a href="customers.html"
+       class="active">
+        👥 مشتریان
+    </a>
+
+
+    <div class="menu-title">
+        مدیریت
+    </div>
+
+
+    <a href="reports.html">
+        📊 گزارش‌ها
+    </a>
+
+
+    <a href="users.html">
+        👤 مدیریت کاربران
+    </a>
+
+
+    <a href="settings.html">
+        ⚙️ تنظیمات
+    </a>
+
+
+    <button
+        type="button"
+        onclick="logout()">
+
+        🚪 خروج از حساب
+
+    </button>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="main-content">
+
+
+    <header class="header">
+
+        <h1>
+            مدیریت مشتریان
+        </h1>
+
+        <p>
+            ثبت، پیگیری و مدیریت مشتریان سامانه کلبه سبز
+        </p>
+
+    </header>
+
+
+    <!-- =================================================
+         STATS
+    ================================================= -->
+
+    <section class="stats">
+
+
+        <div class="stat">
+
+            <div class="stat-title">
+                کل مشتریان
+            </div>
+
+            <div
+                class="stat-value"
+                id="totalCustomers">
+
+                ۰
+
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-title">
+                خریداران
+            </div>
+
+            <div
+                class="stat-value"
+                id="buyers">
+
+                ۰
+
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-title">
+                مستأجران
+            </div>
+
+            <div
+                class="stat-value"
+                id="renters">
+
+                ۰
+
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-title">
+                مشتریان فعال
+            </div>
+
+            <div
+                class="stat-value"
+                id="activeCustomers">
+
+                ۰
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =================================================
+         TOOLBAR
+    ================================================= -->
+
+    <section class="toolbar">
+
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="جست‌وجوی نام، شماره تماس یا منطقه...">
+
+        </div>
+
+
+        <button
+            type="button"
+            class="add-btn"
+            onclick="openCustomerModal()">
+
+            + ثبت مشتری جدید
+
+        </button>
+
+
+    </section>
+
+
+    <!-- =================================================
+         TABLE
+    ================================================= -->
+
+    <section class="table-card">
+
+
+        <div class="table-header">
+
+            <h2>
+                فهرست مشتریان
+            </h2>
+
+            <span id="customerCount">
+                ۰ مشتری
+            </span>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            مشتری
+                        </th>
+
+                        <th>
+                            تماس
+                        </th>
+
+                        <th>
+                            نوع مشتری
+                        </th>
+
+                        <th>
+                            نوع ملک
+                        </th>
+
+                        <th>
+                            منطقه
+                        </th>
+
+                        <th>
+                            بودجه
+                        </th>
+
+                        <th>
+                            فایل‌های مرتبط
+                        </th>
+
+                        <th>
+                            وضعیت
+                        </th>
+
+                        <th>
+                            عملیات
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="customersTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<!-- =====================================================
+     CUSTOMER MODAL
+===================================================== -->
+
+<div
+    class="modal"
+    id="customerModal">
+
+
+    <div class="modal-box">
+
+
+        <div class="modal-title">
+
+            <h2 id="modalTitle">
+                ثبت مشتری جدید
+            </h2>
+
+
+            <button
+                type="button"
+                class="close-btn"
+                onclick="closeCustomerModal()">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form id="customerForm">
+
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label>
+                        نام و نام خانوادگی *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="customerName"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        شماره تماس *
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="customerPhone"
+                        placeholder="09xxxxxxxxx"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        نوع مشتری
+                    </label>
+
+                    <select id="customerType">
+
+                        <option value="خریدار">
+                            خریدار
+                        </option>
+
+                        <option value="مستاجر">
+                            مستأجر
+                        </option>
+
+                        <option value="سرمایه‌گذار">
+                            سرمایه‌گذار
+                        </option>
+
+                        <option value="مالک">
+                            مالک
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        نوع معامله
+                    </label>
+
+                    <select id="dealType">
+
+                        <option value="فروش">
+                            فروش
+                        </option>
+
+                        <option value="رهن و اجاره">
+                            رهن و اجاره
+                        </option>
+
+                        <option value="پیش فروش">
+                            پیش فروش
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        نوع ملک موردنظر
+                    </label>
+
+                    <select id="propertyType">
+
+                        <option value="">
+                            انتخاب کنید
+                        </option>
+
+                        <option value="حیاط مسکونی">
+                            حیاط مسکونی
+                        </option>
+
+                        <option value="آپارتمان">
+                            آپارتمان
+                        </option>
+
+                        <option value="تجاری">
+                            تجاری
+                        </option>
+
+                        <option value="قطعه خالی">
+                            قطعه خالی
+                        </option>
+
+                        <option value="پیش فروش">
+                            پیش فروش
+                        </option>
+
+                        <option value="ویلا و باغ">
+                            ویلا و باغ
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        منطقه موردنظر
+                    </label>
+
+                    <input
+                        type="text"
+                        id="region"
+                        placeholder="مثلاً مرزداران">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        حداقل بودجه
+                    </label>
+
+                    <input
+                        type="number"
+                        id="minBudget"
+                        min="0"
+                        placeholder="تومان">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        حداکثر بودجه
+                    </label>
+
+                    <input
+                        type="number"
+                        id="maxBudget"
+                        min="0"
+                        placeholder="تومان">
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label>
+                        توضیحات و نیاز مشتری
+                    </label>
+
+                    <textarea
+                        id="description"
+                        placeholder="مثلاً آپارتمان دو خواب، نورگیر، آسانسور و پارکینگ..."></textarea>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="modal-actions">
+
+
+                <button
+                    type="submit"
+                    class="save-btn">
+
+                    ذخیره مشتری
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    onclick="closeCustomerModal()">
+
+                    انصراف
+
+                </button>
+
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     LINK PROPERTY MODAL
+===================================================== -->
+
+<div
+    class="modal"
+    id="linkPropertyModal">
+
+
+    <div class="modal-box link-modal-box">
+
+
+        <div class="modal-title">
+
+            <h2>
+                اتصال فایل به مشتری
+            </h2>
+
+
+            <button
+                type="button"
+                class="close-btn"
+                onclick="closeLinkModal()">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <div
+            class="link-header-info"
+            id="linkCustomerInfo">
+
+        </div>
+
+
+        <div class="link-search">
+
+            <input
+                type="text"
+                id="propertyLinkSearch"
+                placeholder="جست‌وجوی کد فایل، منطقه، نوع ملک یا متراژ...">
+
+        </div>
+
+
+        <div
+            class="property-list"
+            id="propertyLinkList">
+
+        </div>
+
+
+        <div class="link-footer">
+
+
+            <div
+                class="selected-count"
+                id="selectedPropertyCount">
+
+                ۰ فایل انتخاب شده
+
+            </div>
+
+
+            <button
+                type="button"
+                class="link-save-btn"
+                onclick="savePropertyLinks()">
+
+                💾 ذخیره ارتباط‌ها
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+"use strict";
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let customers = [];
+
+let properties = [];
+
+let propertyLinks = [];
+
+let editingCustomerId = null;
+
+let linkingCustomerId = null;
+
+
+/* =====================================================
+   STORAGE KEYS
+===================================================== */
+
+const CUSTOMERS_KEY =
+    "customers";
+
+const PROPERTIES_KEY =
+    "properties";
+
+const LINKS_KEY =
+    "customerPropertyLinks";
+
+
+/* =====================================================
+   INIT
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        loadCustomers();
+
+        loadProperties();
+
+        loadPropertyLinks();
+
+        renderCustomers();
+
+        updateStats();
+
+        setupSearch();
+
+        setupPropertySearch();
+
+    }
+);
+
+
+/* =====================================================
+   LOAD CUSTOMERS
+===================================================== */
+
+function loadCustomers(){
+
+    try{
+
+        const stored =
+            JSON.parse(
+                localStorage.getItem(
+                    CUSTOMERS_KEY
+                )
+            );
+
+        customers =
+            Array.isArray(stored)
+                ? stored
+                : [];
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        customers = [];
+
+    }
+
+}
+
+
+/* =====================================================
+   LOAD PROPERTIES
+===================================================== */
+
+function loadProperties(){
+
+    try{
+
+        const stored =
+            JSON.parse(
+                localStorage.getItem(
+                    PROPERTIES_KEY
+                )
+            );
+
+        properties =
+            Array.isArray(stored)
+                ? stored
+                : [];
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        properties = [];
+
+    }
+
+}
+
+
+/* =====================================================
+   LOAD LINKS
+===================================================== */
+
+function loadPropertyLinks(){
+
+    try{
+
+        const stored =
+            JSON.parse(
+                localStorage.getItem(
+                    LINKS_KEY
+                )
+            );
+
+        propertyLinks =
+            Array.isArray(stored)
+                ? stored
+                : [];
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        propertyLinks = [];
+
+    }
+
+}
+
+
+/* =====================================================
+   SAVE CUSTOMERS
+===================================================== */
+
+function saveCustomers(){
+
+    localStorage.setItem(
+        CUSTOMERS_KEY,
+        JSON.stringify(
+            customers
+        )
+    );
+
+}
+
+
+/* =====================================================
+   SAVE LINKS
+===================================================== */
+
+function savePropertyLinksStorage(){
+
+    localStorage.setItem(
+        LINKS_KEY,
+        JSON.stringify(
+            propertyLinks
+        )
+    );
+
+}
+
+
+/* =====================================================
+   RENDER CUSTOMERS
+===================================================== */
+
+function renderCustomers(){
+
+    const tbody =
+        document.getElementById(
+            "customersTable"
+        );
+
+
+    const search =
+        document.getElementById(
+            "searchInput"
+        )
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const filtered =
+        customers.filter(
+            function(customer){
+
+                return (
+
+                    String(
+                        customer.name || ""
+                    )
+                    .toLowerCase()
+                    .includes(search)
+
+                    ||
+
+                    String(
+                        customer.phone || ""
+                    )
+                    .includes(search)
+
+                    ||
+
+                    String(
+                        customer.region || ""
+                    )
+                    .toLowerCase()
+                    .includes(search)
+
+                );
+
+            }
+        );
+
+
+    document.getElementById(
+        "customerCount"
+    ).textContent =
+        filtered.length
+        .toLocaleString("fa-IR")
+        +
+        " مشتری";
+
+
+    if(!filtered.length){
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="9"
+                    class="empty">
+
+                    هنوز مشتری‌ای ثبت نشده است.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML = "";
+
+
+    filtered.forEach(
+        function(customer){
+
+            let badgeClass =
+                "badge-buy";
+
+
+            if(
+                customer.customerType ===
+                "مستاجر"
+            ){
+
+                badgeClass =
+                    "badge-rent";
+
+            }
+
+
+            if(
+                customer.customerType ===
+                "سرمایه‌گذار"
+            ){
+
+                badgeClass =
+                    "badge-both";
+
+            }
+
+
+            const budget =
+                formatBudget(
+                    customer.minBudget,
+                    customer.maxBudget
+                );
+
+
+            const linked =
+                getCustomerLinks(
+                    customer.id
+                );
+
+
+            const linkedCount =
+                linked.length;
+
+
+            const linkedTags =
+                getLinkedPropertyTags(
+                    linked
+                );
+
+
+            tbody.innerHTML += `
+
+                <tr>
+
+
+                    <td>
+
+                        <div class="customer-name">
+
+                            ${escapeHTML(
+                                customer.name || "-"
+                            )}
+
+                        </div>
+
+                    </td>
+
+
+                    <td>
+
+                        <div class="customer-phone">
+
+                            ${escapeHTML(
+                                customer.phone || "-"
+                            )}
+
+                        </div>
+
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            class="badge ${badgeClass}">
+
+                            ${escapeHTML(
+                                customer.customerType || "-"
+                            )}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        ${escapeHTML(
+                            customer.propertyType || "-"
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        ${escapeHTML(
+                            customer.region || "-"
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        ${budget}
+
+                    </td>
+
+
+                    <td>
+
+                        <button
+                            type="button"
+                            class="action-btn link-btn"
+                            onclick="openLinkModal('${escapeJS(customer.id)}')">
+
+                            🔗 مدیریت فایل
+
+                            <span class="link-count">
+
+                                ${linkedCount.toLocaleString("fa-IR")}
+
+                            </span>
+
+                        </button>
+
+
+                        ${
+                            linkedTags
+                                ? linkedTags
+                                : ""
+                        }
+
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            class="badge badge-active">
+
+                            فعال
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <div class="actions">
+
+
+                            <button
+                                type="button"
+                                class="action-btn edit-btn"
+                                onclick="editCustomer('${escapeJS(customer.id)}')">
+
+                                ویرایش
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="action-btn delete-btn"
+                                onclick="deleteCustomer('${escapeJS(customer.id)}')">
+
+                                حذف
+
+                            </button>
+
+
+                        </div>
+
+                    </td>
+
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   LINKED PROPERTY TAGS
+===================================================== */
+
+function getLinkedPropertyTags(
+    links
+){
+
+    if(!links.length){
+
+        return "";
+
+    }
+
+
+    const visible =
+        links.slice(
+            0,
+            3
+        );
+
+
+    let html =
+        `<div class="linked-properties">`;
+
+
+    visible.forEach(
+        function(link){
+
+            const property =
+                findProperty(
+                    link.propertyId
+                );
+
+
+            if(!property){
+
+                return;
+
+            }
+
+
+            html += `
+
+                <span class="linked-property-tag">
+
+                    ${escapeHTML(
+                        getPropertyCode(property)
+                    )}
+
+                    <button
+                        type="button"
+                        title="حذف ارتباط"
+                        onclick="removePropertyLink(
+                            '${escapeJS(link.customerId)}',
+                            '${escapeJS(link.propertyId)}'
+                        )">
+
+                        ×
+
+                    </button>
+
+                </span>
+
+            `;
+
+        }
+    );
+
+
+    if(
+        links.length > 3
+    ){
+
+        html += `
+
+            <span class="linked-property-tag">
+
+                +${(
+                    links.length - 3
+                ).toLocaleString("fa-IR")}
+
+            </span>
+
+        `;
+
+    }
+
+
+    html += `</div>`;
+
+
+    return html;
+
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+function updateStats(){
+
+    const total =
+        customers.length;
+
+
+    const buyers =
+        customers.filter(
+            function(customer){
+
+                return (
+                    customer.customerType ===
+                    "خریدار"
+                );
+
+            }
+        ).length;
+
+
+    const renters =
+        customers.filter(
+            function(customer){
+
+                return (
+                    customer.customerType ===
+                    "مستاجر"
+                );
+
+            }
+        ).length;
+
+
+    const active =
+        customers.length;
+
+
+    document.getElementById(
+        "totalCustomers"
+    ).textContent =
+        total.toLocaleString("fa-IR");
+
+
+    document.getElementById(
+        "buyers"
+    ).textContent =
+        buyers.toLocaleString("fa-IR");
+
+
+    document.getElementById(
+        "renters"
+    ).textContent =
+        renters.toLocaleString("fa-IR");
+
+
+    document.getElementById(
+        "activeCustomers"
+    ).textContent =
+        active.toLocaleString("fa-IR");
+
+}
+
+
+/* =====================================================
+   OPEN CUSTOMER MODAL
+===================================================== */
+
+function openCustomerModal(
+    id = null
+){
+
+    editingCustomerId =
+        id;
+
+
+    const modal =
+        document.getElementById(
+            "customerModal"
+        );
+
+
+    document.getElementById(
+        "customerForm"
+    ).reset();
+
+
+    if(id){
+
+        const customer =
+            customers.find(
+                function(item){
+
+                    return String(
+                        item.id
+                    )
+                    ===
+                    String(id);
+
+                }
+            );
+
+
+        if(!customer){
+
+            return;
+
+        }
+
+
+        document.getElementById(
+            "modalTitle"
+        ).textContent =
+            "ویرایش مشتری";
+
+
+        setValue(
+            "customerName",
+            customer.name
+        );
+
+
+        setValue(
+            "customerPhone",
+            customer.phone
+        );
+
+
+        setValue(
+            "customerType",
+            customer.customerType
+        );
+
+
+        setValue(
+            "dealType",
+            customer.dealType
+        );
+
+
+        setValue(
+            "propertyType",
+            customer.propertyType
+        );
+
+
+        setValue(
+            "region",
+            customer.region
+        );
+
+
+        setValue(
+            "minBudget",
+            customer.minBudget
+        );
+
+
+        setValue(
+            "maxBudget",
+            customer.maxBudget
+        );
+
+
+        setValue(
+            "description",
+            customer.description
+        );
+
+    }
+    else{
+
+        document.getElementById(
+            "modalTitle"
+        ).textContent =
+            "ثبت مشتری جدید";
+
+    }
+
+
+    modal.classList.add(
+        "show"
+    );
+
+}
+
+
+/* =====================================================
+   CLOSE CUSTOMER MODAL
+===================================================== */
+
+function closeCustomerModal(){
+
+    editingCustomerId =
+        null;
+
+
+    document.getElementById(
+        "customerModal"
+    )
+    .classList.remove(
+        "show"
+    );
+
+}
+
+
+/* =====================================================
+   CUSTOMER FORM
+===================================================== */
+
+document.getElementById(
+    "customerForm"
+)
+.addEventListener(
+    "submit",
+    function(event){
+
+        event.preventDefault();
+
+
+        const name =
+            document.getElementById(
+                "customerName"
+            )
+            .value
+            .trim();
+
+
+        const phone =
+            document.getElementById(
+                "customerPhone"
+            )
+            .value
+            .trim();
+
+
+        const customerType =
+            document.getElementById(
+                "customerType"
+            )
+            .value;
+
+
+        const dealType =
+            document.getElementById(
+                "dealType"
+            )
+            .value;
+
+
+        const propertyType =
+            document.getElementById(
+                "propertyType"
+            )
+            .value;
+
+
+        const region =
+            document.getElementById(
+                "region"
+            )
+            .value
+            .trim();
+
+
+        const minBudget =
+            document.getElementById(
+                "minBudget"
+            )
+            .value;
+
+
+        const maxBudget =
+            document.getElementById(
+                "maxBudget"
+            )
+            .value;
+
+
+        const description =
+            document.getElementById(
+                "description"
+            )
+            .value
+            .trim();
+
+
+        if(!name){
+
+            alert(
+                "نام مشتری را وارد کنید."
+            );
+
+            return;
+
+        }
+
+
+        if(!phone){
+
+            alert(
+                "شماره تماس مشتری را وارد کنید."
+            );
+
+            return;
+
+        }
+
+
+        if(
+            minBudget &&
+            maxBudget &&
+            Number(minBudget) >
+            Number(maxBudget)
+        ){
+
+            alert(
+                "حداقل بودجه نمی‌تواند بیشتر از حداکثر بودجه باشد."
+            );
+
+            return;
+
+        }
+
+
+        const oldCustomer =
+            editingCustomerId
+                ? customers.find(
+                    function(item){
+
+                        return String(
+                            item.id
+                        )
+                        ===
+                        String(
+                            editingCustomerId
+                        );
+
+                    }
+                )
+                : null;
+
+
+        const customer = {
+
+            id:
+                editingCustomerId
+                    ?
+                    editingCustomerId
+                    :
+                    "customer-" +
+                    Date.now(),
+
+            name:name,
+
+            phone:phone,
+
+            customerType:
+                customerType,
+
+            dealType:
+                dealType,
+
+            propertyType:
+                propertyType,
+
+            region:
+                region,
+
+            minBudget:
+                minBudget,
+
+            maxBudget:
+                maxBudget,
+
+            description:
+                description,
+
+            createdAt:
+                oldCustomer &&
+                oldCustomer.createdAt
+                    ?
+                    oldCustomer.createdAt
+                    :
+                    new Date()
+                        .toLocaleDateString(
+                            "fa-IR"
+                        )
+
+        };
+
+
+        if(editingCustomerId){
+
+            const index =
+                customers.findIndex(
+                    function(item){
+
+                        return String(
+                            item.id
+                        )
+                        ===
+                        String(
+                            editingCustomerId
+                        );
+
+                    }
+                );
+
+
+            if(index !== -1){
+
+                customers[index] =
+                    customer;
+
+            }
+
+        }
+        else{
+
+            customers.push(
+                customer
+            );
+
+        }
+
+
+        saveCustomers();
+
+        renderCustomers();
+
+        updateStats();
+
+        closeCustomerModal();
+
+
+        alert(
+            editingCustomerId
+                ?
+                "اطلاعات مشتری با موفقیت ویرایش شد."
+                :
+                "مشتری با موفقیت ثبت شد."
+        );
+
+    }
+);
+
+
+/* =====================================================
+   EDIT
+===================================================== */
+
+function editCustomer(id){
+
+    openCustomerModal(
+        id
+    );
+
+}
+
+
+/* =====================================================
+   DELETE
+===================================================== */
+
+function deleteCustomer(id){
+
+    const customer =
+        customers.find(
+            function(item){
+
+                return String(
+                    item.id
+                )
+                ===
+                String(id);
+
+            }
+        );
+
+
+    if(!customer){
+
+        return;
+
+    }
+
+
+    const confirmed =
+        confirm(
+            "آیا از حذف مشتری «" +
+            customer.name +
+            "» مطمئن هستید؟"
+        );
+
+
+    if(!confirmed){
+
+        return;
+
+    }
+
+
+    customers =
+        customers.filter(
+            function(item){
+
+                return String(
+                    item.id
+                )
+                !==
+                String(id);
+
+            }
+        );
+
+
+    /* حذف ارتباط‌های این مشتری */
+
+    propertyLinks =
+        propertyLinks.filter(
+            function(link){
+
+                return String(
+                    link.customerId
+                )
+                !==
+                String(id);
+
+            }
+        );
+
+
+    saveCustomers();
+
+    savePropertyLinksStorage();
+
+    renderCustomers();
+
+    updateStats();
+
+}
+
+
+/* =====================================================
+   OPEN LINK MODAL
+===================================================== */
+
+function openLinkModal(
+    customerId
+){
+
+    linkingCustomerId =
+        customerId;
+
+
+    const customer =
+        findCustomer(
+            customerId
+        );
+
+
+    if(!customer){
+
+        alert(
+            "مشتری پیدا نشد."
+        );
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "linkCustomerInfo"
+    ).innerHTML = `
+
+        <strong>
+            👤 ${escapeHTML(customer.name)}
+        </strong>
+
+        <br>
+
+        <span style="font-size:9px;color:#777;">
+
+            📞 ${escapeHTML(customer.phone || "-")}
+
+            &nbsp;&nbsp;
+
+            📍 ${escapeHTML(customer.region || "منطقه مشخص نشده")}
+
+        </span>
+
+    `;
+
+
+    document.getElementById(
+        "propertyLinkSearch"
+    ).value = "";
+
+
+    renderPropertyLinkList();
+
+
+    document.getElementById(
+        "linkPropertyModal"
+    )
+    .classList.add(
+        "show"
+    );
+
+}
+
+
+/* =====================================================
+   CLOSE LINK MODAL
+===================================================== */
+
+function closeLinkModal(){
+
+    linkingCustomerId =
+        null;
+
+
+    document.getElementById(
+        "linkPropertyModal"
+    )
+    .classList.remove(
+        "show"
+    );
+
+}
+
+
+/* =====================================================
+   RENDER PROPERTY LIST
+===================================================== */
+
+function renderPropertyLinkList(){
+
+    const container =
+        document.getElementById(
+            "propertyLinkList"
+        );
+
+
+    const search =
+        document.getElementById(
+            "propertyLinkSearch"
+        )
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const customerLinks =
+        linkingCustomerId
+            ?
+            getCustomerLinks(
+                linkingCustomerId
+            )
+            :
+            [];
+
+
+    const selectedIds =
+        customerLinks.map(
+            function(link){
+
+                return String(
+                    link.propertyId
+                );
+
+            }
+        );
+
+
+    const filtered =
+        properties.filter(
+            function(property){
+
+                const searchable =
+                    [
+
+                        getPropertyCode(
+                            property
+                        ),
+
+                        getPropertyType(
+                            property
+                        ),
+
+                        getRegion(
+                            property
+                        ),
+
+                        getArea(
+                            property
+                        ),
+
+                        getTransaction(
+                            property
+                        )
+
+                    ]
+                    .join(" ")
+                    .toLowerCase();
+
+
+                return (
+                    !search ||
+                    searchable.includes(
+                        search
+                    )
+                );
+
+            }
+        );
+
+
+    if(!filtered.length){
+
+        container.innerHTML = `
+
+            <div class="no-properties">
+
+                📁
+
+                <br><br>
+
+                ${
+                    properties.length
+                        ?
+                        "فایلی با عبارت جست‌وجوشده پیدا نشد."
+                        :
+                        "هنوز هیچ فایل ملکی در سامانه ثبت نشده است."
+                }
+
+            </div>
+
+        `;
+
+
+        updateSelectedCount();
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    filtered.forEach(
+        function(property){
+
+            const propertyId =
+                getPropertyId(
+                    property
+                );
+
+
+            const selected =
+                selectedIds.includes(
+                    String(propertyId)
+                );
+
+
+            const propertyType =
+                getPropertyType(
+                    property
+                );
+
+
+            const transaction =
+                getTransaction(
+                    property
+                );
+
+
+            const region =
+                getRegion(
+                    property
+                );
+
+
+            const area =
+                getArea(
+                    property
+                );
+
+
+            container.innerHTML += `
+
+                <label
+                    class="property-select-card ${
+                        selected
+                            ? "selected"
+                            : ""
+                    }">
+
+
+                    <input
+                        type="checkbox"
+                        class="property-checkbox"
+                        value="${escapeHTML(propertyId)}"
+                        ${selected ? "checked" : ""}
+                        onchange="updatePropertyCard(this);updateSelectedCount();">
+
+
+                    <div class="property-code">
+
+                        کد:
+                        ${escapeHTML(
+                            getPropertyCode(
+                                property
+                            )
+                        )}
+
+                    </div>
+
+
+                    <div class="property-name">
+
+                        ${escapeHTML(
+                            propertyType ||
+                            "ملک"
+                        )}
+
+                        ${
+                            area
+                                ?
+                                " - " +
+                                escapeHTML(area) +
+                                " متر"
+                                :
+                                ""
+                        }
+
+                    </div>
+
+
+                    <div class="property-info">
+
+
+                        <span>
+
+                            📍
+                            ${escapeHTML(
+                                region ||
+                                "منطقه نامشخص"
+                            )}
+
+                        </span>
+
+
+                        ${
+                            area
+                                ?
+                                `
+                                <span>
+
+                                    📐
+                                    ${escapeHTML(area)}
+                                    متر
+
+                                </span>
+                                `
+                                :
+                                ""
+                        }
+
+
+                        ${
+                            property.floor
+                                ?
+                                `
+                                <span>
+
+                                    طبقه
+                                    ${escapeHTML(property.floor)}
+
+                                </span>
+                                `
+                                :
+                                ""
+                        }
+
+                    </div>
+
+
+                    ${
+                        transaction
+                            ?
+                            `
+                            <div class="property-deal">
+
+                                🏷️
+                                ${escapeHTML(transaction)}
+
+                            </div>
+                            `
+                            :
+                            ""
+                    }
+
+
+                </label>
+
+            `;
+
+        }
+    );
+
+
+    updateSelectedCount();
+
+}
+
+
+/* =====================================================
+   UPDATE CARD
+===================================================== */
+
+function updatePropertyCard(
+    checkbox
+){
+
+    const card =
+        checkbox.closest(
+            ".property-select-card"
+        );
+
+
+    if(!card){
+
+        return;
+
+    }
+
+
+    if(
+        checkbox.checked
+    ){
+
+        card.classList.add(
+            "selected"
+        );
+
+    }
+    else{
+
+        card.classList.remove(
+            "selected"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   UPDATE SELECTED COUNT
+===================================================== */
+
+function updateSelectedCount(){
+
+    const checkboxes =
+        document.querySelectorAll(
+            ".property-checkbox:checked"
+        );
+
+
+    document.getElementById(
+        "selectedPropertyCount"
+    ).innerHTML = `
+
+        <strong>
+            ${checkboxes.length.toLocaleString("fa-IR")}
+        </strong>
+
+        فایل انتخاب شده
+
+    `;
+
+}
+
+
+/* =====================================================
+   SAVE PROPERTY LINKS
+===================================================== */
+
+function savePropertyLinks(){
+
+    if(!linkingCustomerId){
+
+        return;
+
+    }
+
+
+    const checkboxes =
+        document.querySelectorAll(
+            ".property-checkbox"
+        );
+
+
+    const selectedIds =
+        Array.from(
+            checkboxes
+        )
+        .filter(
+            function(checkbox){
+
+                return checkbox.checked;
+
+            }
+        )
+        .map(
+            function(checkbox){
+
+                return String(
+                    checkbox.value
+                );
+
+            }
+        );
+
+
+    /* حذف ارتباط‌های قبلی مشتری */
+
+    propertyLinks =
+        propertyLinks.filter(
+            function(link){
+
+                return String(
+                    link.customerId
+                )
+                !==
+                String(
+                    linkingCustomerId
+                );
+
+            }
+        );
+
+
+    /* ساخت ارتباط‌های جدید */
+
+    selectedIds.forEach(
+        function(propertyId){
+
+            propertyLinks.push({
+
+                id:
+                    "link-" +
+                    Date.now() +
+                    "-" +
+                    Math.random()
+                        .toString(36)
+                        .substring(2,8),
+
+                customerId:
+                    linkingCustomerId,
+
+                propertyId:
+                    propertyId,
+
+                linkedAt:
+                    new Date()
+                        .toLocaleDateString(
+                            "fa-IR"
+                        ),
+
+                linkedBy:
+                    getCurrentUserName()
+
+            });
+
+        }
+    );
+
+
+    savePropertyLinksStorage();
+
+    renderCustomers();
+
+    closeLinkModal();
+
+
+    alert(
+        "فایل‌های مشتری با موفقیت به‌روزرسانی شدند."
+    );
+
+}
+
+
+/* =====================================================
+   REMOVE SINGLE LINK
+===================================================== */
+
+function removePropertyLink(
+    customerId,
+    propertyId
+){
+
+    const confirmed =
+        confirm(
+            "آیا می‌خواهید این فایل از مشتری جدا شود؟"
+        );
+
+
+    if(!confirmed){
+
+        return;
+
+    }
+
+
+    propertyLinks =
+        propertyLinks.filter(
+            function(link){
+
+                return !(
+                    String(
+                        link.customerId
+                    )
+                    ===
+                    String(
+                        customerId
+                    )
+
+                    &&
+
+                    String(
+                        link.propertyId
+                    )
+                    ===
+                    String(
+                        propertyId
+                    )
+                );
+
+            }
+        );
+
+
+    savePropertyLinksStorage();
+
+    renderCustomers();
+
+}
+
+
+/* =====================================================
+   GET CUSTOMER LINKS
+===================================================== */
+
+function getCustomerLinks(
+    customerId
+){
+
+    return propertyLinks.filter(
+        function(link){
+
+            return String(
+                link.customerId
+            )
+            ===
+            String(
+                customerId
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   FIND CUSTOMER
+===================================================== */
+
+function findCustomer(
+    id
+){
+
+    return customers.find(
+        function(customer){
+
+            return String(
+                customer.id
+            )
+            ===
+            String(id);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   FIND PROPERTY
+===================================================== */
+
+function findProperty(
+    id
+){
+
+    return properties.find(
+        function(property){
+
+            return String(
+                getPropertyId(property)
+            )
+            ===
+            String(id);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   PROPERTY ID
+===================================================== */
+
+function getPropertyId(
+    property
+){
+
+    return (
+        property.id ||
+        property.code ||
+        property.propertyCode ||
+        ""
+    );
+
+}
+
+
+/* =====================================================
+   PROPERTY CODE
+===================================================== */
+
+function getPropertyCode(
+    property
+){
+
+    return (
+        property.code ||
+        property.propertyCode ||
+        property.id ||
+        "بدون کد"
+    );
+
+}
+
+
+/* =====================================================
+   PROPERTY TYPE
+===================================================== */
+
+function getPropertyType(
+    property
+){
+
+    return (
+        property.propertyType ||
+        property.typeOfProperty ||
+        property.propertyTypeName ||
+        ""
+    );
+
+}
+
+
+/* =====================================================
+   TRANSACTION
+===================================================== */
+
+function getTransaction(
+    property
+){
+
+    return String(
+        property.transactionType ||
+        property.dealType ||
+        property.transaction ||
+        ""
+    ).trim();
+
+}
+
+
+/* =====================================================
+   REGION
+===================================================== */
+
+function getRegion(
+    property
+){
+
+    return (
+        property.region ||
+        property.areaName ||
+        property.district ||
+        property.zone ||
+        ""
+    );
+
+}
+
+
+/* =====================================================
+   AREA
+===================================================== */
+
+function getArea(
+    property
+){
+
+    return (
+        property.area ||
+        property.metraj ||
+        property.meterage ||
+        property.meter ||
+        ""
+    );
+
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+function setupSearch(){
+
+    document.getElementById(
+        "searchInput"
+    )
+    .addEventListener(
+        "input",
+        function(){
+
+            renderCustomers();
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   PROPERTY SEARCH
+===================================================== */
+
+function setupPropertySearch(){
+
+    document.getElementById(
+        "propertyLinkSearch"
+    )
+    .addEventListener(
+        "input",
+        function(){
+
+            renderPropertyLinkList();
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   CURRENT USER
+===================================================== */
+
+function getCurrentUserName(){
+
+    try{
+
+        const user =
+            JSON.parse(
+                localStorage.getItem(
+                    "currentUser"
+                )
+            );
+
+
+        if(
+            typeof user ===
+            "string"
+        ){
+
+            return user;
+
+        }
+
+
+        if(
+            user &&
+            user.name
+        ){
+
+            return user.name;
+
+        }
+
+
+        if(
+            user &&
+            user.fullName
+        ){
+
+            return user.fullName;
+
+        }
+
+    }
+    catch(error){
+
+        console.error(error);
+
+    }
+
+
+    return "سیستم";
+
+}
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function setValue(
+    id,
+    value
+){
+
+    const element =
+        document.getElementById(
+            id
+        );
+
+
+    if(!element){
+
+        return;
+
+    }
+
+
+    if(
+        value === undefined ||
+        value === null
+    ){
+
+        return;
+
+    }
+
+
+    element.value =
+        value;
+
+}
+
+
+/* =====================================================
+   FORMAT BUDGET
+===================================================== */
+
+function formatBudget(
+    min,
+    max
+){
+
+    const minimum =
+        Number(
+            min || 0
+        );
+
+
+    const maximum =
+        Number(
+            max || 0
+        );
+
+
+    if(
+        !minimum &&
+        !maximum
+    ){
+
+        return "-";
+
+    }
+
+
+    if(
+        minimum &&
+        maximum
+    ){
+
+        return (
+
+            formatNumber(
+                minimum
+            )
+
+            +
+
+            " تا "
+
+            +
+
+            formatNumber(
+                maximum
+            )
+
+        );
+
+    }
+
+
+    if(minimum){
+
+        return (
+
+            "از "
+
+            +
+
+            formatNumber(
+                minimum
+            )
+
+        );
+
+    }
+
+
+    return (
+
+        "تا "
+
+        +
+
+        formatNumber(
+            maximum
+        )
+
+    );
+
+}
+
+
+/* =====================================================
+   FORMAT NUMBER
+===================================================== */
+
+function formatNumber(
+    number
+){
+
+    return Number(
+        number
+    )
+    .toLocaleString(
+        "fa-IR"
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(
+    value
+){
+
+    if(
+        value === undefined ||
+        value === null
+    ){
+
+        return "";
+
+    }
+
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   ESCAPE JS
+===================================================== */
+
+function escapeJS(
+    value
+){
+
+    return String(
+        value || ""
+    )
+
+    .replace(
+        /\\/g,
+        "\\\\"
+    )
+
+    .replace(
+        /'/g,
+        "\\'"
+    );
+
+}
+
+
+/* =====================================================
+   MODAL OUTSIDE CLICK
+===================================================== */
+
+document.addEventListener(
+    "click",
+    function(event){
+
+        const customerModal =
+            document.getElementById(
+                "customerModal"
+            );
+
+
+        const linkModal =
+            document.getElementById(
+                "linkPropertyModal"
+            );
+
+
+        if(
+            event.target ===
+            customerModal
+        ){
+
+            closeCustomerModal();
+
+        }
+
+
+        if(
+            event.target ===
+            linkModal
+        ){
+
+            closeLinkModal();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   ESC KEY
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key ===
+            "Escape"
+        ){
+
+            closeCustomerModal();
+
+            closeLinkModal();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+    localStorage.removeItem(
+        "currentUser"
+    );
+
+
+    window.location.href =
+        "index.html";
+
+}
+
+</script>
+
+</body>
+
+</html>

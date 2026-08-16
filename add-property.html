@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ثبت ملک | سامانه تخصصی املاک کلبه سبز</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Tahoma, Arial, sans-serif;
+            background: #f5f6f8;
+            color: #222;
+        }
+
+        .main-content {
+            padding: 25px;
+            margin-right: 250px;
+        }
+
+        .header {
+            background: #fff;
+            padding: 22px;
+            border-radius: 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 18px rgba(0,0,0,.06);
+        }
+
+        .header h1 { margin: 0 0 8px; font-size: 24px; }
+        .header p { margin: 0; color: #777; font-size: 13px; }
+
+        .file-code {
+            background: #17231c;
+            color: #d6b35a;
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        .file-code strong { font-size: 14px; }
+
+        .form-section {
+            background: #fff;
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 18px rgba(0,0,0,.06);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-group.full { grid-column: 1 / -1; }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-family: inherit;
+            background: #fff;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #c7a54d;
+            box-shadow: 0 0 0 3px rgba(199,165,77,.12);
+        }
+
+        .form-group textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        .required { color: #b33; }
+
+        .conditional { display: none; }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .feature-check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f6f8f6;
+            border: 1px solid #e5e9e5;
+            border-radius: 10px;
+            padding: 11px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: .2s;
+        }
+
+        .feature-check:hover {
+            border-color: #c7a54d;
+            background: #faf8f0;
+        }
+
+        .feature-check input {
+            width: auto;
+            margin: 0;
+        }
+
+        .preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .preview-item {
+            position: relative;
+            height: 130px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #eee;
+            border: 1px solid #ddd;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .remove-image {
+            position: absolute;
+            top: 7px;
+            left: 7px;
+            border: none;
+            background: rgba(0,0,0,.72);
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            line-height: 30px;
+            padding: 0;
+        }
+
+        .remove-image:hover { background: #b33; }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .save-btn {
+            background: #c7a54d;
+            color: #fff;
+            border: none;
+            padding: 13px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            min-width: 150px;
+        }
+
+        .save-btn:hover { background: #b6943f; }
+
+        .save-btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        .cancel-btn {
+            background: #eee;
+            color: #444;
+            padding: 13px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+        }
+
+        .cancel-btn:hover { background: #ddd; }
+
+        .hint {
+            background: #faf5e7;
+            border: 1px solid #e3d19a;
+            color: #765d19;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-top: 15px;
+            line-height: 1.8;
+        }
+
+        .image-count {
+            margin-top: 10px;
+            color: #777;
+            font-size: 12px;
+        }
+
+        .empty-images {
+            grid-column: 1 / -1;
+            margin-top: 0;
+            padding: 20px;
+            text-align: center;
+            color: #999;
+            border: 1px dashed #ddd;
+            border-radius: 12px;
+            font-size: 13px;
+        }
+
+        .error-box {
+            display: none;
+            background: #fff1f1;
+            color: #9b2222;
+            border: 1px solid #efb0b0;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            line-height: 1.8;
+            font-size: 13px;
+        }
+
+        @media (max-width: 900px) {
+            .main-content { margin-right: 0; }
+        }
+
+        @media (max-width: 700px) {
+            .main-content { padding: 15px; }
+            .form-section { padding: 17px; }
+            .header h1 { font-size: 20px; }
+            .form-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>🌿 کلبه سبز</h2>
+
+    <a href="dashboard.html">🏠 داشبورد</a>
+    <a href="add-property.html" class="active">➕ ثبت ملک</a>
+    <a href="properties.html">📁 فایل‌های ملکی</a>
+    <a href="customers.html">👥 مشتریان</a>
+    <a href="reports.html">📊 گزارش‌ها</a>
+    <a id="usersMenu" href="users.html">👤 مدیریت کاربران</a>
+    <a href="settings.html">⚙️ تنظیمات</a>
+
+    <button type="button" id="logoutBtn">🚪 خروج</button>
+</div>
+
+<div class="main-content">
+
+    <div class="header">
+        <h1 id="pageTitle">ثبت ملک جدید</h1>
+        <p>اطلاعات ملک را با دقت وارد کنید.</p>
+    </div>
+
+    <div id="errorBox" class="error-box"></div>
+
+    <form id="propertyForm" novalidate>
+
+        <div class="file-code">
+            کد فایل:
+            <strong id="fileCode">در حال تولید...</strong>
+        </div>
+
+        <div class="form-section">
+            <div class="section-title">اطلاعات اصلی ملک</div>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>نوع معامله <span class="required">*</span></label>
+                    <select id="transactionType" required>
+                        <option value="">انتخاب کنید</option>
+                        <option value="فروش">فروش</option>
+                        <option value="رهن و اجاره">رهن و اجاره</option>
+                        <option value="پیش فروش">پیش فروش</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>نوع ملک <span class="required">*</span></label>
+                    <select id="propertyType" required>
+                        <option value="">انتخاب کنید</option>
+                        <option value="حیاط مسکونی">حیاط مسکونی</option>
+                        <option value="آپارتمان">آپارتمان</option>
+                        <option value="تجاری">تجاری</option>
+                        <option value="قطعه خالی">قطعه خالی</option>
+                        <option value="پیش فروش">پیش فروش</option>
+                        <option value="ویلا و باغ">ویلا و باغ</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>نام منطقه <span class="required">*</span></label>
+                    <input type="text" id="region" placeholder="مثلاً مرزداران" required>
+                </div>
+
+                <div class="form-group">
+                    <label>نام محله</label>
+                    <input type="text" id="neighborhood" placeholder="مثلاً کوی ولیعصر">
+                </div>
+
+                <div class="form-group">
+                    <label>متراژ <span class="required">*</span></label>
+                    <input type="number" id="area" min="1" step="any" placeholder="مثلاً 130" required>
+                </div>
+
+                <div class="form-group">
+                    <label>تعداد خواب</label>
+                    <select id="rooms">
+                        <option value="">انتخاب کنید</option>
+                        <option value="بدون خواب">بدون خواب</option>
+                        <option value="1 خواب">1 خواب</option>
+                        <option value="2 خواب">2 خواب</option>
+                        <option value="3 خواب">3 خواب</option>
+                        <option value="4 خواب">4 خواب</option>
+                        <option value="5 خواب و بیشتر">5 خواب و بیشتر</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>طبقه</label>
+                    <input type="text" id="floor" placeholder="مثلاً 4 از 6">
+                </div>
+
+                <div class="form-group">
+                    <label>جهت واحد</label>
+                    <select id="direction">
+                        <option value="">انتخاب کنید</option>
+                        <option value="شمالی">شمالی</option>
+                        <option value="جنوبی">جنوبی</option>
+                        <option value="شرقی">شرقی</option>
+                        <option value="غربی">غربی</option>
+                        <option value="شمالی شرقی">شمالی شرقی</option>
+                        <option value="شمالی غربی">شمالی غربی</option>
+                        <option value="جنوبی شرقی">جنوبی شرقی</option>
+                        <option value="جنوبی غربی">جنوبی غربی</option>
+                        <option value="دو نبش">دو نبش</option>
+                        <option value="سه نبش">سه نبش</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>وضعیت ساختمان</label>
+                    <select id="buildingStatus">
+                        <option value="">انتخاب کنید</option>
+                        <option value="کلنگی">کلنگی</option>
+                        <option value="قابل نشیمن">قابل نشیمن</option>
+                        <option value="نیاز به بازسازی">نیاز به بازسازی</option>
+                        <option value="صفر بدون نصبیات">صفر بدون نصبیات</option>
+                        <option value="صفر فول نصبیات">صفر فول نصبیات</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>نوع سند</label>
+                    <select id="documentType">
+                        <option value="">انتخاب کنید</option>
+                        <option value="۶ دانگ">۶ دانگ</option>
+                        <option value="قرارداد">قرارداد</option>
+                        <option value="وکالتی">وکالتی</option>
+                        <option value="قولنامه ای">قولنامه ای</option>
+                        <option value="سرقفلی">سرقفلی</option>
+                        <option value="مالکیت تام">مالکیت تام</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>سال ساخت</label>
+                    <input type="number" id="buildYear" min="1300" max="1500" placeholder="مثلاً 1403">
+                </div>
+
+                <div class="form-group">
+                    <label>تعداد واحد در طبقه</label>
+                    <input type="number" id="unitsPerFloor" min="1" placeholder="مثلاً 2">
+                </div>
+
+                <div class="form-group conditional" id="landAreaGroup">
+                    <label>متراژ عرصه</label>
+                    <input type="number" id="landArea" min="1" step="any" placeholder="مثلاً 250">
+                </div>
+
+                <div class="form-group conditional" id="buildingAreaGroup">
+                    <label>متراژ اعیان</label>
+                    <input type="number" id="buildingArea" min="1" step="any" placeholder="مثلاً 180">
+                </div>
+
+            </div>
+
+            <div class="hint">
+                فقط در صورتی که نوع ملک «حیاط مسکونی» باشد، فیلدهای متراژ عرصه و اعیان نمایش داده می‌شوند.
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="section-title">اطلاعات مالی</div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>قیمت فروش</label>
+                    <input type="number" id="price" min="0" step="any" placeholder="تومان">
+                </div>
+
+                <div class="form-group">
+                    <label>مبلغ رهن</label>
+                    <input type="number" id="deposit" min="0" step="any" placeholder="تومان">
+                </div>
+
+                <div class="form-group">
+                    <label>مبلغ اجاره</label>
+                    <input type="number" id="rent" min="0" step="any" placeholder="تومان">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="section-title">مشخصات واحد</div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>کف</label>
+                    <input type="text" id="floorMaterial" placeholder="مثلاً سرامیک">
+                </div>
+
+                <div class="form-group">
+                    <label>سیستم گرمایش</label>
+                    <select id="heatingType">
+                        <option value="">انتخاب کنید</option>
+                        <option value="پکیج">پکیج</option>
+                        <option value="شوفاژ">شوفاژ</option>
+                        <option value="گرمایش از کف">گرمایش از کف</option>
+                        <option value="بخاری">بخاری</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>سیستم سرمایش</label>
+                    <select id="coolingType">
+                        <option value="">انتخاب کنید</option>
+                        <option value="کولر گازی">کولر گازی</option>
+                        <option value="کولر آبی">کولر آبی</option>
+                        <option value="چیلر">چیلر</option>
+                        <option value="مرکزی">مرکزی</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="section-title">امکانات و مشاعات</div>
+
+            <div class="features-grid">
+                <label class="feature-check"><input type="checkbox" value="elevator" class="feature"> آسانسور</label>
+                <label class="feature-check"><input type="checkbox" value="parking" class="feature"> پارکینگ</label>
+                <label class="feature-check"><input type="checkbox" value="storage" class="feature"> انباری</label>
+                <label class="feature-check"><input type="checkbox" value="balcony" class="feature"> بالکن</label>
+                <label class="feature-check"><input type="checkbox" value="terrace" class="feature"> تراس</label>
+                <label class="feature-check"><input type="checkbox" value="pool" class="feature"> استخر</label>
+                <label class="feature-check"><input type="checkbox" value="sauna" class="feature"> سونا</label>
+                <label class="feature-check"><input type="checkbox" value="jacuzzi" class="feature"> جکوزی</label>
+                <label class="feature-check"><input type="checkbox" value="gym" class="feature"> سالن ورزشی</label>
+                <label class="feature-check"><input type="checkbox" value="closet" class="feature"> کمد دیواری</label>
+                <label class="feature-check"><input type="checkbox" value="cabinet" class="feature"> کابینت MDF</label>
+                <label class="feature-check"><input type="checkbox" value="highGlossCabinet" class="feature"> کابینت هایگلاس</label>
+                <label class="feature-check"><input type="checkbox" value="package" class="feature"> پکیج</label>
+                <label class="feature-check"><input type="checkbox" value="radiator" class="feature"> رادیاتور</label>
+                <label class="feature-check"><input type="checkbox" value="floorHeating" class="feature"> گرمایش از کف</label>
+                <label class="feature-check"><input type="checkbox" value="airCondition" class="feature"> کولر گازی</label>
+                <label class="feature-check"><input type="checkbox" value="doubleGlass" class="feature"> پنجره دوجداره</label>
+                <label class="feature-check"><input type="checkbox" value="securityDoor" class="feature"> درب ضد سرقت</label>
+                <label class="feature-check"><input type="checkbox" value="intercom" class="feature"> آیفون تصویری</label>
+                <label class="feature-check"><input type="checkbox" value="roofGarden" class="feature"> روف گاردن</label>
+                <label class="feature-check"><input type="checkbox" value="camera" class="feature"> دوربین مداربسته</label>
+                <label class="feature-check"><input type="checkbox" value="guard" class="feature"> نگهبانی</label>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="section-title">اطلاعات مالک</div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>نام مالک</label>
+                    <input type="text" id="ownerName" placeholder="نام و نام خانوادگی">
+                </div>
+
+                <div class="form-group">
+                    <label>شماره تماس مالک</label>
+                    <input type="tel" id="ownerPhone" placeholder="09xxxxxxxxx">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="section-title">تصاویر ملک</div>
+
+            <div class="form-group">
+                <label>انتخاب تصاویر</label>
+                <input type="file" id="propertyImages" accept="image/*" multiple>
+            </div>
+
+            <div id="imagePreview" class="preview"></div>
+            <div id="imageCount" class="image-count"></div>
+        </div>
+
+        <div class="form-section">
+            <div class="section-title">آدرس ملک</div>
+
+            <div class="form-group">
+                <label>آدرس کامل ملک</label>
+                <textarea id="propertyAddress" placeholder="آدرس کامل ملک را وارد کنید..."></textarea>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="section-title">توضیحات</div>
+
+            <div class="form-group">
+                <label>توضیحات تکمیلی</label>
+                <textarea id="description" placeholder="توضیحات کامل ملک..."></textarea>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="form-actions">
+                <button type="submit" id="savePropertyBtn" class="save-btn">💾 ذخیره ملک</button>
+                <a href="properties.html" class="cancel-btn">انصراف</a>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script src="js/app.js"></script>
+
+<script>
+"use strict";
+
+(function () {
+
+    /*
+     * ==========================================================
+     * ثبت / ویرایش ملک
+     * نسخه بازنویسی‌شده
+     *
+     * نکات مهم:
+     * 1) ذخیره اصلی روی API سرور انجام می‌شود.
+     * 2) ویرایش با PUT انجام می‌شود.
+     * 3) احراز هویت با session/cookie سرور حفظ می‌شود.
+     * 4) localStorage فقط برای انتقال ملک انتخاب‌شده به فرم ویرایش
+     *    استفاده می‌شود.
+     * ==========================================================
+     */
+
+    var selectedImages = [];
+    var editingProperty = null;
+    var isSaving = false;
+
+    function $(id) {
+        return document.getElementById(id);
+    }
+
+    function getValue(id) {
+        var el = $(id);
+        if (!el) return "";
+        return String(el.value == null ? "" : el.value).trim();
+    }
+
+    function setValue(id, value) {
+        var el = $(id);
+        if (!el) return;
+
+        if (value === null || value === undefined) {
+            el.value = "";
+        } else {
+            el.value = String(value);
+        }
+    }
+
+    function showError(message) {
+        var box = $("errorBox");
+        if (!box) return;
+
+        box.textContent = message || "";
+        box.style.display = message ? "block" : "none";
+
+        if (message) {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+    }
+
+    function clearError() {
+        showError("");
+    }
+
+    function generateFileCode() {
+        var now = new Date();
+
+        var year = now.getFullYear();
+        var month = String(now.getMonth() + 1).padStart(2, "0");
+        var day = String(now.getDate()).padStart(2, "0");
+        var random = String(Date.now()).slice(-6);
+
+        return "KS-" + year + month + day + "-" + random;
+    }
+
+    function getEditData() {
+        var keys = ["editingProperty", "editProperty"];
+
+        for (var i = 0; i < keys.length; i++) {
+            try {
+                var raw = localStorage.getItem(keys[i]);
+
+                if (!raw) continue;
+
+                var data = JSON.parse(raw);
+
+                /*
+                 * properties.html فعلی، ملک را داخل
+                 * { index, property } قرار می‌دهد.
+                 */
+                if (data && data.property) {
+                    return data.property;
+                }
+
+                /*
+                 * اگر در نسخه دیگری خود ملک مستقیم ذخیره شده باشد.
+                 */
+                if (data && (
+                    data.id ||
+                    data.propertyId ||
+                    data.code ||
+                    data.propertyCode
+                )) {
+                    return data;
+                }
+
+            } catch (error) {
+                console.error("خطا در خواندن اطلاعات ویرایش:", error);
+            }
+        }
+
+        return null;
+    }
+
+    function getPropertyId(property) {
+        if (!property) return "";
+
+        return String(
+            property.id ||
+            property.propertyId ||
+            ""
+        ).trim();
+    }
+
+    function getPropertyCode(property) {
+        if (!property) return "";
+
+        return String(
+            property.code ||
+            property.propertyCode ||
+            ""
+        ).trim();
+    }
+
+    function normalizeFeatures(features) {
+        if (Array.isArray(features)) {
+            return features;
+        }
+
+        if (
+            features &&
+            typeof features === "object"
+        ) {
+            return Object.keys(features).filter(function (key) {
+                return Boolean(features[key]);
+            });
+        }
+
+        return [];
+    }
+
+    function updateYardFields() {
+        var isYard =
+            getValue("propertyType") === "حیاط مسکونی";
+
+        var landGroup = $("landAreaGroup");
+        var buildingGroup = $("buildingAreaGroup");
+
+        if (landGroup) {
+            landGroup.style.display =
+                isYard ? "flex" : "none";
+        }
+
+        if (buildingGroup) {
+            buildingGroup.style.display =
+                isYard ? "flex" : "none";
+        }
+
+        /*
+         * اگر نوع ملک حیاط مسکونی نباشد، عرصه و اعیان
+         * عمداً خالی ذخیره می‌شوند.
+         */
+        if (!isYard) {
+            setValue("landArea", "");
+            setValue("buildingArea", "");
+        }
+    }
+
+    function loadProperty(property) {
+
+        editingProperty = property || null;
+
+        $("pageTitle").textContent = "ویرایش ملک";
+
+        var code =
+            getPropertyCode(property) ||
+            generateFileCode();
+
+        $("fileCode").textContent = code;
+
+        setValue(
+            "transactionType",
+            property.transactionType ||
+            property.dealType ||
+            property.transaction
+        );
+
+        setValue(
+            "propertyType",
+            property.propertyType ||
+            property.type ||
+            property.typeOfProperty
+        );
+
+        setValue(
+            "region",
+            property.region ||
+            property.areaName ||
+            property.district ||
+            property.zone
+        );
+
+        setValue(
+            "neighborhood",
+            property.neighborhood ||
+            property.locality ||
+            property.mohalle
+        );
+
+        setValue(
+            "area",
+            property.area ||
+            property.metraj ||
+            property.meterage ||
+            property.meter ||
+            property.size
+        );
+
+        setValue(
+            "rooms",
+            property.rooms ||
+            property.bedrooms ||
+            property.room
+        );
+
+        setValue(
+            "floor",
+            property.floor ||
+            property.tabaghe
+        );
+
+        setValue(
+            "direction",
+            property.direction ||
+            property.unitDirection ||
+            property.jahat
+        );
+
+        setValue(
+            "buildingStatus",
+            property.buildingStatus
+        );
+
+        setValue(
+            "documentType",
+            property.documentType
+        );
+
+        setValue(
+            "buildYear",
+            property.buildYear ||
+            property.yearBuilt ||
+            property.sakhtYear
+        );
+
+        setValue(
+            "unitsPerFloor",
+            property.unitsPerFloor ||
+            property.unitsInFloor
+        );
+
+        setValue(
+            "landArea",
+            property.landArea ||
+            property.ersah ||
+            property.araz ||
+            property.aras
+        );
+
+        setValue(
+            "buildingArea",
+            property.buildingArea ||
+            property.builtArea ||
+            property.ayan
+        );
+
+        setValue(
+            "price",
+            property.price ||
+            property.salePrice ||
+            property.totalPrice ||
+            property.sellPrice
+        );
+
+        setValue(
+            "deposit",
+            property.deposit ||
+            property.rahn ||
+            property.rentDeposit
+        );
+
+        setValue(
+            "rent",
+            property.rent ||
+            property.ejare ||
+            property.monthlyRent
+        );
+
+        setValue(
+            "floorMaterial",
+            property.floorMaterial
+        );
+
+        setValue(
+            "heatingType",
+            property.heatingType
+        );
+
+        setValue(
+            "coolingType",
+            property.coolingType
+        );
+
+        var owner = {};
+
+        if (
+            property.owner &&
+            typeof property.owner === "object"
+        ) {
+            owner = property.owner;
+        }
+
+        setValue(
+            "ownerName",
+            property.ownerName ||
+            owner.name ||
+            ""
+        );
+
+        setValue(
+            "ownerPhone",
+            property.ownerPhone ||
+            owner.phone ||
+            ""
+        );
+
+        setValue(
+            "propertyAddress",
+            property.propertyAddress ||
+            property.address ||
+            property.locationAddress
+        );
+
+        setValue(
+            "description",
+            property.description
+        );
+
+        var features =
+            normalizeFeatures(property.features);
+
+        document
+            .querySelectorAll(".feature")
+            .forEach(function (checkbox) {
+                checkbox.checked =
+                    features.indexOf(checkbox.value) !== -1;
+            });
+
+        if (Array.isArray(property.images)) {
+            selectedImages =
+                property.images.slice();
+        } else if (Array.isArray(property.photos)) {
+            selectedImages =
+                property.photos.slice();
+        } else {
+            selectedImages = [];
+        }
+
+        updateYardFields();
+        renderImages();
+
+        $("savePropertyBtn").textContent =
+            "💾 ذخیره ویرایش";
+    }
+
+    function renderImages() {
+        var preview = $("imagePreview");
+        var imageCount = $("imageCount");
+
+        if (!preview) return;
+
+        preview.innerHTML = "";
+
+        if (!selectedImages.length) {
+
+            var empty = document.createElement("div");
+
+            empty.className = "empty-images";
+            empty.textContent =
+                "هنوز تصویری برای این ملک انتخاب نشده است.";
+
+            preview.appendChild(empty);
+
+        } else {
+
+            selectedImages.forEach(function (image, index) {
+
+                var item =
+                    document.createElement("div");
+
+                item.className = "preview-item";
+
+                var img =
+                    document.createElement("img");
+
+                img.src = image;
+                img.alt = "تصویر ملک " + (index + 1);
+
+                var remove =
+                    document.createElement("button");
+
+                remove.type = "button";
+                remove.className = "remove-image";
+                remove.textContent = "×";
+                remove.title = "حذف تصویر";
+
+                remove.addEventListener(
+                    "click",
+                    function () {
+                        selectedImages.splice(index, 1);
+                        renderImages();
+                    }
+                );
+
+                item.appendChild(img);
+                item.appendChild(remove);
+                preview.appendChild(item);
+            });
+        }
+
+        if (imageCount) {
+            imageCount.textContent =
+                selectedImages.length
+                    ? "تعداد تصاویر: " +
+                      selectedImages.length
+                    : "";
+        }
+    }
+
+    function setupImages() {
+
+        var input = $("propertyImages");
+
+        if (!input) return;
+
+        input.addEventListener(
+            "change",
+            function (event) {
+
+                var files =
+                    Array.from(
+                        event.target.files || []
+                    );
+
+                if (!files.length) return;
+
+                files.forEach(function (file) {
+
+                    if (
+                        !file.type ||
+                        file.type.indexOf("image/") !== 0
+                    ) {
+                        return;
+                    }
+
+                    /*
+                     * محدودیت منطقی برای جلوگیری از پر شدن
+                     * سریع properties.json / request body.
+                     */
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert(
+                            "تصویر «" +
+                            file.name +
+                            "» بیشتر از ۵ مگابایت است و اضافه نشد."
+                        );
+                        return;
+                    }
+
+                    var reader =
+                        new FileReader();
+
+                    reader.onload = function (e) {
+
+                        if (
+                            e.target &&
+                            e.target.result
+                        ) {
+                            selectedImages.push(
+                                e.target.result
+                            );
+
+                            renderImages();
+                        }
+                    };
+
+                    reader.onerror = function () {
+                        alert(
+                            "خواندن تصویر «" +
+                            file.name +
+                            "» ناموفق بود."
+                        );
+                    };
+
+                    reader.readAsDataURL(file);
+                });
+
+                /*
+                 * امکان انتخاب دوباره همان فایل را حفظ می‌کند.
+                 */
+                input.value = "";
+            }
+        );
+    }
+
+    function getSelectedFeatures() {
+
+        return Array
+            .from(
+                document.querySelectorAll(
+                    ".feature:checked"
+                )
+            )
+            .map(function (checkbox) {
+                return checkbox.value;
+            });
+    }
+
+    function getCurrentUserName() {
+
+        /*
+         * app.js پروژه همین کلید را استفاده می‌کند.
+         */
+        try {
+            var raw =
+                localStorage.getItem(
+                    "currentUser"
+                );
+
+            if (!raw) {
+                return "کاربر سامانه";
+            }
+
+            var user =
+                JSON.parse(raw);
+
+            if (typeof user === "string") {
+                return user;
+            }
+
+            return (
+                user.name ||
+                user.fullName ||
+                user.fullname ||
+                user.username ||
+                "کاربر سامانه"
+            );
+
+        } catch (error) {
+            return "کاربر سامانه";
+        }
+    }
+
+    function createPropertyObject() {
+
+        var propertyType =
+            getValue("propertyType");
+
+        var oldId =
+            getPropertyId(editingProperty);
+
+        var oldCode =
+            getPropertyCode(editingProperty);
+
+        return {
+
+            /*
+             * در حالت ویرایش ID قدیمی حفظ می‌شود.
+             * سرور نیز ID اصلی را حفظ می‌کند.
+             */
+            id: oldId || "",
+
+            /*
+             * در حالت ثبت، code از سمت فرم ساخته می‌شود.
+             * در حالت ویرایش، code قبلی حفظ می‌شود.
+             */
+            code:
+                oldCode ||
+                $("fileCode").textContent ||
+                generateFileCode(),
+
+            transactionType:
+                getValue("transactionType"),
+
+            propertyType:
+                propertyType,
+
+            region:
+                getValue("region"),
+
+            neighborhood:
+                getValue("neighborhood"),
+
+            area:
+                getValue("area"),
+
+            rooms:
+                getValue("rooms"),
+
+            floor:
+                getValue("floor"),
+
+            direction:
+                getValue("direction"),
+
+            buildingStatus:
+                getValue("buildingStatus"),
+
+            documentType:
+                getValue("documentType"),
+
+            buildYear:
+                getValue("buildYear"),
+
+            unitsPerFloor:
+                getValue("unitsPerFloor"),
+
+            landArea:
+                propertyType === "حیاط مسکونی"
+                    ? getValue("landArea")
+                    : "",
+
+            buildingArea:
+                propertyType === "حیاط مسکونی"
+                    ? getValue("buildingArea")
+                    : "",
+
+            price:
+                getValue("price"),
+
+            deposit:
+                getValue("deposit"),
+
+            rent:
+                getValue("rent"),
+
+            floorMaterial:
+                getValue("floorMaterial"),
+
+            heatingType:
+                getValue("heatingType"),
+
+            coolingType:
+                getValue("coolingType"),
+
+            features:
+                getSelectedFeatures(),
+
+            owner: {
+                name:
+                    getValue("ownerName"),
+                phone:
+                    getValue("ownerPhone")
+            },
+
+            ownerName:
+                getValue("ownerName"),
+
+            ownerPhone:
+                getValue("ownerPhone"),
+
+            images:
+                selectedImages.slice(),
+
+            propertyAddress:
+                getValue("propertyAddress"),
+
+            address:
+                getValue("propertyAddress"),
+
+            description:
+                getValue("description"),
+
+            /*
+             * در ویرایش تاریخ و ثبت‌کننده قبلی را
+             * از بین نمی‌بریم.
+             */
+            createdBy:
+                editingProperty
+                    ? (
+                        editingProperty.createdBy ||
+                        getCurrentUserName()
+                    )
+                    : getCurrentUserName(),
+
+            createdAt:
+                editingProperty
+                    ? editingProperty.createdAt
+                    : new Date().toLocaleString("fa-IR")
+        };
+    }
+
+    function toNumber(value) {
+
+        if (value === "") {
+            return null;
+        }
+
+        var normalized =
+            String(value)
+                .replace(/,/g, "")
+                .replace(/٬/g, "");
+
+        var number =
+            Number(normalized);
+
+        return Number.isFinite(number)
+            ? number
+            : NaN;
+    }
+
+    function validateNumberField(
+        id,
+        title,
+        minimum
+    ) {
+
+        var value =
+            getValue(id);
+
+        if (value === "") {
+            return true;
+        }
+
+        var number =
+            toNumber(value);
+
+        if (
+            Number.isNaN(number) ||
+            number < minimum
+        ) {
+            alert(
+                title +
+                " صحیح نیست."
+            );
+
+            var field = $(id);
+
+            if (field) {
+                field.focus();
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    function validateProperty() {
+
+        clearError();
+
+        var transactionType =
+            getValue("transactionType");
+
+        var propertyType =
+            getValue("propertyType");
+
+        var region =
+            getValue("region");
+
+        var area =
+            getValue("area");
+
+        if (!transactionType) {
+            alert("نوع معامله را انتخاب کنید.");
+            $("transactionType").focus();
+            return false;
+        }
+
+        if (!propertyType) {
+            alert("نوع ملک را انتخاب کنید.");
+            $("propertyType").focus();
+            return false;
+        }
+
+        if (!region) {
+            alert("نام منطقه را وارد کنید.");
+            $("region").focus();
+            return false;
+        }
+
+        var areaNumber =
+            toNumber(area);
+
+        if (
+            areaNumber === null ||
+            Number.isNaN(areaNumber) ||
+            areaNumber <= 0
+        ) {
+            alert(
+                "متراژ ملک باید بیشتر از صفر باشد."
+            );
+            $("area").focus();
+            return false;
+        }
+
+        if (
+            !validateNumberField(
+                "buildYear",
+                "سال ساخت",
+                1300
+            )
+        ) {
+            return false;
+        }
+
+        if (
+            !validateNumberField(
+                "unitsPerFloor",
+                "تعداد واحد در طبقه",
+                1
+            )
+        ) {
+            return false;
+        }
+
+        if (
+            !validateNumberField(
+                "landArea",
+                "متراژ عرصه",
+                1
+            )
+        ) {
+            return false;
+        }
+
+        if (
+            !validateNumberField(
+                "buildingArea",
+                "متراژ اعیان",
+                1
+            )
+        ) {
+            return false;
+        }
+
+        if (
+            !validateNumberField(
+                "price",
+                "قیمت فروش",
+                0
+            )
+        ) {
+            return false;
+        }
+
+        if (
+            !validateNumberField(
+                "deposit",
+                "مبلغ رهن",
+                0
+            )
+        ) {
+            return false;
+        }
+
+        if (
+            !validateNumberField(
+                "rent",
+                "مبلغ اجاره",
+                0
+            )
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    async function readResponse(response) {
+
+        var text =
+            await response.text();
+
+        if (!text) {
+            return {};
+        }
+
+        try {
+            return JSON.parse(text);
+        } catch (error) {
+
+            throw new Error(
+                "پاسخ معتبر از سرور دریافت نشد. " +
+                "کد پاسخ: " +
+                response.status
+            );
+        }
+    }
+
+    async function saveProperty() {
+
+        if (isSaving) {
+            return;
+        }
+
+        if (!validateProperty()) {
+            return;
+        }
+
+        var isEdit =
+            Boolean(editingProperty);
+
+        var propertyId =
+            getPropertyId(editingProperty);
+
+        if (
+            isEdit &&
+            !propertyId
+        ) {
+            alert(
+                "شناسه ملک برای ویرایش پیدا نشد.\n\n" +
+                "لطفاً از صفحه فایل‌های ملکی، " +
+                "دوباره گزینه «ویرایش» را بزنید."
+            );
+            return;
+        }
+
+        var property =
+            createPropertyObject();
+
+        var url =
+            isEdit
+                ? "/api/properties/" +
+                  encodeURIComponent(propertyId)
+                : "/api/properties";
+
+        var method =
+            isEdit
+                ? "PUT"
+                : "POST";
+
+        var button =
+            $("savePropertyBtn");
+
+        try {
+
+            isSaving = true;
+            clearError();
+
+            if (button) {
+                button.disabled = true;
+                button.textContent =
+                    isEdit
+                        ? "در حال ویرایش..."
+                        : "در حال ذخیره...";
+            }
+
+            /*
+             * credentials: same-origin
+             * برای ارسال cookie مربوط به session ضروری است.
+             */
+            var response =
+                await fetch(
+                    url,
+                    {
+                        method: method,
+
+                        credentials:
+                            "same-origin",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            "Accept":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify(
+                                property
+                            )
+                    }
+                );
+
+            var result =
+                await readResponse(
+                    response
+                );
+
+            if (
+                response.status === 401
+            ) {
+                throw new Error(
+                    "جلسه ورود شما منقضی شده است. " +
+                    "ابتدا دوباره وارد سامانه شوید."
+                );
+            }
+
+            if (
+                response.status === 403
+            ) {
+                throw new Error(
+                    "شما اجازه انجام این عملیات را ندارید."
+                );
+            }
+
+            if (!response.ok) {
+                throw new Error(
+                    result.message ||
+                    "خطا در ذخیره اطلاعات ملک. " +
+                    "کد پاسخ: " +
+                    response.status
+                );
+            }
+
+            if (
+                result &&
+                result.success === false
+            ) {
+                throw new Error(
+                    result.message ||
+                    "عملیات انجام نشد."
+                );
+            }
+
+            /*
+             * اگر سرور ملک نهایی را برگرداند، همان نسخه را
+             * برای صفحات بعدی نگه می‌داریم.
+             */
+            if (
+                result &&
+                result.property
+            ) {
+                try {
+                    localStorage.setItem(
+                        "selectedProperty",
+                        JSON.stringify(
+                            result.property
+                        )
+                    );
+                } catch (storageError) {
+                    console.warn(
+                        "ذخیره selectedProperty ممکن نبود:",
+                        storageError
+                    );
+                }
+            }
+
+            localStorage.removeItem(
+                "editingProperty"
+            );
+
+            localStorage.removeItem(
+                "editProperty"
+            );
+
+            alert(
+                isEdit
+                    ? "اطلاعات ملک با موفقیت ویرایش شد."
+                    : "ملک با موفقیت ثبت شد."
+            );
+
+            window.location.href =
+                "properties.html";
+
+        } catch (error) {
+
+            console.error(
+                "SAVE PROPERTY ERROR:",
+                error
+            );
+
+            isSaving = false;
+
+            if (button) {
+                button.disabled = false;
+                button.textContent =
+                    isEdit
+                        ? "💾 ذخیره ویرایش"
+                        : "💾 ذخیره ملک";
+            }
+
+            var message =
+                error &&
+                error.message
+                    ? error.message
+                    : "ارتباط با سرور برقرار نشد.";
+
+            showError(
+                "خطا در ذخیره ملک: " +
+                message
+            );
+
+            alert(
+                "خطا در ذخیره ملک:\n\n" +
+                message
+            );
+        }
+    }
+
+    function setupForm() {
+
+        var form =
+            $("propertyForm");
+
+        if (!form) return;
+
+        form.addEventListener(
+            "submit",
+            function (event) {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                saveProperty();
+            }
+        );
+    }
+
+    function setupYardFields() {
+
+        var propertyType =
+            $("propertyType");
+
+        if (!propertyType) return;
+
+        propertyType.addEventListener(
+            "change",
+            updateYardFields
+        );
+    }
+
+    function logout() {
+
+        /*
+         * تلاش برای خروج واقعی از session سرور.
+         * اگر route وجود نداشته باشد، localStorage هم پاک می‌شود.
+         */
+        fetch(
+            "/api/logout",
+            {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    "Accept":
+                        "application/json"
+                }
+            }
+        ).catch(function () {
+            // خروج محلی در ادامه انجام می‌شود.
+        }).finally(function () {
+
+            try {
+                localStorage.removeItem(
+                    "currentUser"
+                );
+
+                localStorage.removeItem(
+                    "selectedProperty"
+                );
+
+                localStorage.removeItem(
+                    "editingProperty"
+                );
+
+                localStorage.removeItem(
+                    "editProperty"
+                );
+            } catch (error) {}
+
+            window.location.href =
+                "index.html";
+        });
+    }
+
+    function setupLogout() {
+
+        var button =
+            $("logoutBtn");
+
+        if (!button) return;
+
+        button.addEventListener(
+            "click",
+            logout
+        );
+    }
+
+    function initialize() {
+
+        /*
+         * اول کد فایل را نشان می‌دهیم.
+         */
+        $("fileCode").textContent =
+            generateFileCode();
+
+        setupYardFields();
+        setupImages();
+        setupForm();
+        setupLogout();
+
+        /*
+         * در صورت وجود اطلاعات ویرایش، فرم پر می‌شود.
+         */
+        editingProperty =
+            getEditData();
+
+        if (editingProperty) {
+
+            loadProperty(
+                editingProperty
+            );
+
+        } else {
+
+            updateYardFields();
+            renderImages();
+
+            $("pageTitle").textContent =
+                "ثبت ملک جدید";
+
+            $("savePropertyBtn").textContent =
+                "💾 ذخیره ملک";
+        }
+    }
+
+    /*
+     * فقط یک بار اجرا می‌شود.
+     * app.js نیز listener خودش را دارد ولی به فرم ثبت ملک
+     * دست نمی‌زند؛ بنابراین submit دوباره‌کاری نمی‌شود.
+     */
+    if (
+        document.readyState ===
+        "loading"
+    ) {
+        document.addEventListener(
+            "DOMContentLoaded",
+            initialize,
+            { once: true }
+        );
+    } else {
+        initialize();
+    }
+
+})();
+</script>
+
+</body>
+</html>

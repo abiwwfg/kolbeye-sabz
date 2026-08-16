@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>اتصال مشتری به فایل | سامانه تخصصی املاک کلبه سبز</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Tahoma,Arial,sans-serif;
+    background:#f4f6f2;
+    color:#26352d;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+    width:250px;
+    position:fixed;
+    top:0;
+    right:0;
+    bottom:0;
+    background:#17231c;
+    color:white;
+    padding:25px 18px;
+    overflow-y:auto;
+    z-index:100;
+}
+
+.sidebar-logo{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.sidebar-logo img{
+    width:75px;
+    height:75px;
+    object-fit:cover;
+    border-radius:18px;
+    border:2px solid #c7a54d;
+}
+
+.sidebar h2{
+    text-align:center;
+    color:#d6b35a;
+    margin:10px 0 25px;
+    font-size:18px;
+}
+
+.sidebar a,
+.sidebar button{
+    display:block;
+    width:100%;
+    padding:13px 15px;
+    margin-bottom:8px;
+    border-radius:10px;
+    border:0;
+    background:transparent;
+    color:#e7eee9;
+    text-decoration:none;
+    text-align:right;
+    font-family:inherit;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.sidebar a:hover,
+.sidebar button:hover,
+.sidebar a.active{
+    background:#27392f;
+    color:#d6b35a;
+}
+
+.sidebar button{
+    margin-top:20px;
+    color:#ffb6b6;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main-content{
+    margin-right:250px;
+    padding:25px;
+}
+
+.header{
+    background:white;
+    border-radius:18px;
+    padding:22px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+    box-shadow:0 4px 20px rgba(0,0,0,.06);
+}
+
+.header h1{
+    margin:0 0 8px;
+    font-size:25px;
+}
+
+.header p{
+    margin:0;
+    color:#777;
+}
+
+.header-badge{
+    background:#faf5e7;
+    color:#80631b;
+    border:1px solid #e3d19a;
+    padding:10px 15px;
+    border-radius:12px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card{
+    background:white;
+    border-radius:18px;
+    padding:22px;
+    margin-bottom:20px;
+    box-shadow:0 4px 20px rgba(0,0,0,.06);
+}
+
+.card-title{
+    margin:0 0 18px;
+    font-size:18px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+.form-group label{
+    font-size:13px;
+    font-weight:bold;
+    color:#555;
+}
+
+.form-group select,
+.form-group input{
+    width:100%;
+    padding:13px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    font-family:inherit;
+    background:white;
+    outline:none;
+}
+
+.form-group select:focus,
+.form-group input:focus{
+    border-color:#c7a54d;
+    box-shadow:0 0 0 3px rgba(199,165,77,.12);
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.primary-btn{
+    border:0;
+    background:#c7a54d;
+    color:white;
+    padding:13px 20px;
+    border-radius:10px;
+    font-family:inherit;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.primary-btn:hover{
+    background:#b28f35;
+}
+
+.secondary-btn{
+    border:0;
+    background:#edf2ee;
+    color:#31563b;
+    padding:11px 16px;
+    border-radius:9px;
+    font-family:inherit;
+    cursor:pointer;
+}
+
+.danger-btn{
+    border:0;
+    background:#f8e7e7;
+    color:#9b3434;
+    padding:9px 13px;
+    border-radius:8px;
+    font-family:inherit;
+    cursor:pointer;
+}
+
+/* =========================
+   SEARCH
+========================= */
+
+.search-box{
+    position:relative;
+    margin-bottom:15px;
+}
+
+.search-box input{
+    width:100%;
+    padding:13px 15px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    font-family:inherit;
+}
+
+/* =========================
+   CONNECTION LIST
+========================= */
+
+.connection-list{
+    display:grid;
+    gap:12px;
+}
+
+.connection-item{
+    border:1px solid #e6e6e6;
+    border-radius:14px;
+    padding:17px;
+    display:grid;
+    grid-template-columns:1fr 1fr auto;
+    gap:15px;
+    align-items:center;
+    background:#fff;
+}
+
+.person-box,
+.property-box{
+    min-width:0;
+}
+
+.item-label{
+    font-size:11px;
+    color:#999;
+    margin-bottom:6px;
+}
+
+.item-value{
+    font-weight:bold;
+    color:#27352e;
+    word-break:break-word;
+}
+
+.item-sub{
+    font-size:11px;
+    color:#888;
+    margin-top:5px;
+}
+
+.connection-meta{
+    text-align:center;
+}
+
+.connection-date{
+    font-size:11px;
+    color:#999;
+    margin-bottom:8px;
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+    padding:45px 20px;
+    text-align:center;
+    color:#888;
+    border:1px dashed #ddd;
+    border-radius:15px;
+}
+
+.empty-icon{
+    font-size:40px;
+    margin-bottom:10px;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.stat{
+    background:white;
+    border-radius:16px;
+    padding:18px;
+    box-shadow:0 4px 18px rgba(0,0,0,.05);
+}
+
+.stat-label{
+    color:#888;
+    font-size:12px;
+    margin-bottom:8px;
+}
+
+.stat-value{
+    font-size:24px;
+    font-weight:bold;
+    color:#c7a54d;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+    position:fixed;
+    left:25px;
+    bottom:25px;
+    background:#17231c;
+    color:white;
+    padding:14px 18px;
+    border-radius:10px;
+    box-shadow:0 5px 25px rgba(0,0,0,.2);
+    opacity:0;
+    transform:translateY(20px);
+    pointer-events:none;
+    transition:.3s;
+    z-index:9999;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+
+    .sidebar{
+        width:210px;
+    }
+
+    .main-content{
+        margin-right:210px;
+    }
+
+    .connection-item{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .connection-meta{
+        text-align:right;
+    }
+
+}
+
+@media(max-width:700px){
+
+    .sidebar{
+        position:relative;
+        width:100%;
+        height:auto;
+    }
+
+    .main-content{
+        margin-right:0;
+        padding:15px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .connection-item{
+        grid-template-columns:1fr;
+    }
+
+    .header{
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<div class="sidebar">
+
+    <div class="sidebar-logo">
+
+        <img
+            src="file_000000006740820a810ef460bf5ae223.png"
+            alt="کلبه سبز">
+
+    </div>
+
+    <h2>🌿 کلبه سبز</h2>
+
+    <a href="dashboard.html">
+        🏠 داشبورد
+    </a>
+
+    <a href="add-property.html">
+        ➕ ثبت ملک
+    </a>
+
+    <a href="properties.html">
+        🏘 فایل‌های ملکی
+    </a>
+
+    <a href="customers.html">
+        👥 مشتریان
+    </a>
+
+    <a href="customer-property-links.html"
+       class="active">
+        🔗 اتصال مشتری به فایل
+    </a>
+
+    <a href="reports.html">
+        📊 گزارش‌ها
+    </a>
+
+    <a id="usersMenu"
+       href="users.html">
+        👤 مدیریت کاربران
+    </a>
+
+    <a href="settings.html">
+        ⚙️ تنظیمات
+    </a>
+
+    <button type="button"
+            onclick="logout()">
+
+        🚪 خروج
+
+    </button>
+
+</div>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="main-content">
+
+
+    <div class="header">
+
+        <div>
+
+            <h1>
+                🔗 اتصال مشتری به فایل
+            </h1>
+
+            <p>
+                فایل‌های مناسب هر مشتری را مدیریت و ثبت کنید
+            </p>
+
+        </div>
+
+        <div class="header-badge">
+            سامانه تخصصی املاک کلبه سبز
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         STATS
+    ========================= -->
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <div class="stat-label">
+                تعداد مشتریان
+            </div>
+
+            <div class="stat-value"
+                 id="customersCount">
+
+                ۰
+
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-label">
+                تعداد فایل‌ها
+            </div>
+
+            <div class="stat-value"
+                 id="propertiesCount">
+
+                ۰
+
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-label">
+                تعداد ارتباط‌ها
+            </div>
+
+            <div class="stat-value"
+                 id="connectionsCount">
+
+                ۰
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         CREATE CONNECTION
+    ========================= -->
+
+    <div class="card">
+
+        <h2 class="card-title">
+            ➕ ایجاد ارتباط جدید
+        </h2>
+
+
+        <div class="form-grid">
+
+
+            <div class="form-group">
+
+                <label>
+                    مشتری
+                </label>
+
+                <select id="customerSelect">
+
+                    <option value="">
+                        انتخاب مشتری...
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    فایل ملکی
+                </label>
+
+                <select id="propertySelect">
+
+                    <option value="">
+                        انتخاب فایل ملکی...
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group full">
+
+                <label>
+                    توضیحات ارتباط
+                </label>
+
+                <input
+                    id="connectionNote"
+                    type="text"
+                    placeholder="مثلاً: فایل مناسب بود و مشتری برای بازدید تماس گرفت">
+
+            </div>
+
+
+            <div class="form-group full">
+
+                <button
+                    type="button"
+                    class="primary-btn"
+                    onclick="createConnection()">
+
+                    🔗 ثبت ارتباط مشتری و فایل
+
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         CONNECTIONS
+    ========================= -->
+
+    <div class="card">
+
+        <h2 class="card-title">
+            📋 ارتباط‌های ثبت‌شده
+        </h2>
+
+
+        <div class="search-box">
+
+            <input
+                id="connectionSearch"
+                type="text"
+                placeholder="جستجو بین مشتری، فایل، منطقه یا کد فایل...">
+
+        </div>
+
+
+        <div
+            id="connectionList"
+            class="connection-list">
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<div id="toast"
+     class="toast">
+
+    انجام شد
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   STORAGE
+===================================================== */
+
+const CUSTOMERS_KEY = "customers";
+const PROPERTIES_KEY = "properties";
+const CONNECTIONS_KEY = "customerPropertyLinks";
+
+
+let customers = [];
+let properties = [];
+let connections = [];
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function loadArray(key){
+
+    try{
+
+        const data =
+            JSON.parse(
+                localStorage.getItem(key)
+            );
+
+        return Array.isArray(data)
+            ? data
+            : [];
+
+    }catch(error){
+
+        console.error(error);
+
+        return [];
+
+    }
+
+}
+
+
+function saveConnections(){
+
+    localStorage.setItem(
+        CONNECTIONS_KEY,
+        JSON.stringify(connections)
+    );
+
+}
+
+
+function escapeHTML(value){
+
+    if(
+        value === undefined ||
+        value === null
+    ){
+
+        return "";
+
+    }
+
+    return String(value)
+
+        .replace(/&/g,"&amp;")
+
+        .replace(/</g,"&lt;")
+
+        .replace(/>/g,"&gt;")
+
+        .replace(/"/g,"&quot;")
+
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =====================================================
+   CUSTOMER HELPERS
+===================================================== */
+
+function customerId(customer){
+
+    return String(
+        customer.id ??
+        customer.customerId ??
+        customer.code ??
+        customer.phone ??
+        ""
+    );
+
+}
+
+
+function customerName(customer){
+
+    return (
+        customer.name ??
+        customer.fullName ??
+        customer.customerName ??
+        customer.title ??
+        "مشتری بدون نام"
+    );
+
+}
+
+
+function customerPhone(customer){
+
+    return (
+        customer.phone ??
+        customer.mobile ??
+        customer.mobileNumber ??
+        ""
+    );
+
+}
+
+
+/* =====================================================
+   PROPERTY HELPERS
+===================================================== */
+
+function propertyId(property){
+
+    return String(
+        property.id ??
+        property.code ??
+        property.propertyCode ??
+        ""
+    );
+
+}
+
+
+function propertyCode(property){
+
+    return (
+        property.code ??
+        property.propertyCode ??
+        property.id ??
+        "بدون کد"
+    );
+
+}
+
+
+function propertyType(property){
+
+    return (
+        property.propertyType ??
+        property.typeOfProperty ??
+        property.propertyTypeName ??
+        "ملک"
+    );
+
+}
+
+
+function propertyRegion(property){
+
+    return (
+        property.region ??
+        property.areaName ??
+        property.district ??
+        property.zone ??
+        "منطقه نامشخص"
+    );
+
+}
+
+
+function propertyArea(property){
+
+    return (
+        property.area ??
+        property.metraj ??
+        property.meterage ??
+        property.meter ??
+        ""
+    );
+
+}
+
+
+/* =====================================================
+   LOAD DATA
+===================================================== */
+
+function loadData(){
+
+    customers =
+        loadArray(
+            CUSTOMERS_KEY
+        );
+
+
+    properties =
+        loadArray(
+            PROPERTIES_KEY
+        );
+
+
+    connections =
+        loadArray(
+            CONNECTIONS_KEY
+        );
+
+}
+
+
+/* =====================================================
+   FILL SELECTS
+===================================================== */
+
+function fillCustomerSelect(){
+
+    const select =
+        document.getElementById(
+            "customerSelect"
+        );
+
+
+    select.innerHTML = `
+
+        <option value="">
+            انتخاب مشتری...
+        </option>
+
+    `;
+
+
+    customers.forEach(
+        function(customer){
+
+            const id =
+                customerId(
+                    customer
+                );
+
+
+            if(!id){
+
+                return;
+
+            }
+
+
+            const name =
+                customerName(
+                    customer
+                );
+
+
+            const phone =
+                customerPhone(
+                    customer
+                );
+
+
+            select.innerHTML += `
+
+                <option value="${escapeHTML(id)}">
+
+                    ${escapeHTML(name)}
+
+                    ${
+                        phone
+                        ? " - " + escapeHTML(phone)
+                        : ""
+                    }
+
+                </option>
+
+            `;
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   PROPERTY SELECT
+===================================================== */
+
+function fillPropertySelect(){
+
+    const select =
+        document.getElementById(
+            "propertySelect"
+        );
+
+
+    select.innerHTML = `
+
+        <option value="">
+            انتخاب فایل ملکی...
+        </option>
+
+    `;
+
+
+    properties.forEach(
+        function(property){
+
+            const id =
+                propertyId(
+                    property
+                );
+
+
+            if(!id){
+
+                return;
+
+            }
+
+
+            select.innerHTML += `
+
+                <option value="${escapeHTML(id)}">
+
+                    ${escapeHTML(
+                        propertyCode(property)
+                    )}
+
+                    -
+
+                    ${escapeHTML(
+                        propertyType(property)
+                    )}
+
+                    -
+
+                    ${escapeHTML(
+                        propertyRegion(property)
+                    )}
+
+                    ${
+                        propertyArea(property)
+                        ? " - " +
+                          escapeHTML(
+                              propertyArea(property)
+                          ) +
+                          " متر"
+                        : ""
+                    }
+
+                </option>
+
+            `;
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   CREATE CONNECTION
+===================================================== */
+
+function createConnection(){
+
+    const customerSelect =
+        document.getElementById(
+            "customerSelect"
+        );
+
+
+    const propertySelect =
+        document.getElementById(
+            "propertySelect"
+        );
+
+
+    const noteInput =
+        document.getElementById(
+            "connectionNote"
+        );
+
+
+    const customerIdValue =
+        customerSelect.value;
+
+
+    const propertyIdValue =
+        propertySelect.value;
+
+
+    const note =
+        noteInput.value.trim();
+
+
+    if(!customerIdValue){
+
+        showToast(
+            "لطفاً مشتری را انتخاب کنید."
+        );
+
+        return;
+
+    }
+
+
+    if(!propertyIdValue){
+
+        showToast(
+            "لطفاً فایل ملکی را انتخاب کنید."
+        );
+
+        return;
+
+    }
+
+
+    const exists =
+        connections.some(
+            function(connection){
+
+                return (
+
+                    String(
+                        connection.customerId
+                    )
+                    ===
+                    String(
+                        customerIdValue
+                    )
+
+                    &&
+
+                    String(
+                        connection.propertyId
+                    )
+                    ===
+                    String(
+                        propertyIdValue
+                    )
+
+                );
+
+            }
+        );
+
+
+    if(exists){
+
+        showToast(
+            "این مشتری قبلاً به این فایل متصل شده است."
+        );
+
+        return;
+
+    }
+
+
+    const currentUser =
+        JSON.parse(
+            localStorage.getItem(
+                "currentUser"
+            ) || "null"
+        );
+
+
+    const connection = {
+
+        id:
+            "CPL-" +
+            Date.now(),
+
+        customerId:
+            customerIdValue,
+
+        propertyId:
+            propertyIdValue,
+
+        note:
+            note,
+
+        createdAt:
+            new Date().toLocaleString(
+                "fa-IR"
+            ),
+
+        createdBy:
+            currentUser?.name ||
+            currentUser?.fullName ||
+            currentUser?.username ||
+            "مدیر سامانه"
+
+    };
+
+
+    connections.unshift(
+        connection
+    );
+
+
+    saveConnections();
+
+
+    noteInput.value = "";
+
+    customerSelect.value = "";
+
+    propertySelect.value = "";
+
+
+    renderConnections();
+
+
+    updateStats();
+
+
+    showToast(
+        "ارتباط با موفقیت ثبت شد."
+    );
+
+}
+
+
+/* =====================================================
+   FIND CUSTOMER
+===================================================== */
+
+function findCustomer(id){
+
+    return customers.find(
+        function(customer){
+
+            return String(
+                customerId(customer)
+            )
+            ===
+            String(id);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   FIND PROPERTY
+===================================================== */
+
+function findProperty(id){
+
+    return properties.find(
+        function(property){
+
+            return String(
+                propertyId(property)
+            )
+            ===
+            String(id);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   RENDER CONNECTIONS
+===================================================== */
+
+function renderConnections(){
+
+    const container =
+        document.getElementById(
+            "connectionList"
+        );
+
+
+    const search =
+        document.getElementById(
+            "connectionSearch"
+        )
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const filtered =
+        connections.filter(
+            function(connection){
+
+                const customer =
+                    findCustomer(
+                        connection.customerId
+                    );
+
+
+                const property =
+                    findProperty(
+                        connection.propertyId
+                    );
+
+
+                const text =
+                    (
+
+                        customer
+                        ? customerName(customer)
+                        : ""
+
+                    )
+                    +
+
+                    " "
+
+                    +
+
+                    (
+
+                        customer
+                        ? customerPhone(customer)
+                        : ""
+
+                    )
+
+                    +
+
+                    " "
+
+                    +
+
+                    (
+
+                        property
+                        ? propertyCode(property)
+                        : ""
+
+                    )
+
+                    +
+
+                    " "
+
+                    +
+
+                    (
+
+                        property
+                        ? propertyRegion(property)
+                        : ""
+
+                    )
+
+                    +
+
+                    " "
+
+                    +
+
+                    (
+
+                        property
+                        ? propertyType(property)
+                        : ""
+
+                    )
+
+                    +
+
+                    " "
+
+                    +
+
+                    (
+                        connection.note || ""
+                    )
+
+                    .toLowerCase();
+
+
+                return (
+                    !search ||
+                    text.includes(search)
+                );
+
+            }
+        );
+
+
+    container.innerHTML = "";
+
+
+    if(!filtered.length){
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🔗
+                </div>
+
+                <strong>
+                    هنوز ارتباطی ثبت نشده است
+                </strong>
+
+                <p>
+                    ابتدا یک مشتری و یک فایل ملکی انتخاب کنید.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    filtered.forEach(
+        function(connection){
+
+            const customer =
+                findCustomer(
+                    connection.customerId
+                );
+
+
+            const property =
+                findProperty(
+                    connection.propertyId
+                );
+
+
+            const customerDisplay =
+                customer
+                ? customerName(customer)
+                : "مشتری حذف شده";
+
+
+            const customerPhoneDisplay =
+                customer
+                ? customerPhone(customer)
+                : "";
+
+
+            const propertyDisplay =
+                property
+                ? propertyType(property)
+                : "فایل حذف شده";
+
+
+            const regionDisplay =
+                property
+                ? propertyRegion(property)
+                : "";
+
+
+            const codeDisplay =
+                property
+                ? propertyCode(property)
+                : connection.propertyId;
+
+
+            container.innerHTML += `
+
+                <div class="connection-item">
+
+
+                    <div class="person-box">
+
+                        <div class="item-label">
+                            👤 مشتری
+                        </div>
+
+                        <div class="item-value">
+
+                            ${escapeHTML(
+                                customerDisplay
+                            )}
+
+                        </div>
+
+                        ${
+                            customerPhoneDisplay
+
+                            ?
+
+                            `
+
+                            <div class="item-sub">
+
+                                📞
+
+                                ${escapeHTML(
+                                    customerPhoneDisplay
+                                )}
+
+                            </div>
+
+                            `
+
+                            :
+
+                            ""
+
+                        }
+
+                    </div>
+
+
+                    <div class="property-box">
+
+                        <div class="item-label">
+                            🏠 فایل ملکی
+                        </div>
+
+                        <div class="item-value">
+
+                            ${escapeHTML(
+                                propertyDisplay
+                            )}
+
+                        </div>
+
+                        <div class="item-sub">
+
+                            کد:
+
+                            ${escapeHTML(
+                                codeDisplay
+                            )}
+
+                            ${
+                                regionDisplay
+                                ? " | " +
+                                  escapeHTML(
+                                      regionDisplay
+                                  )
+                                : ""
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="connection-meta">
+
+                        <div class="connection-date">
+
+                            ${escapeHTML(
+                                connection.createdAt
+                            )}
+
+                        </div>
+
+                        <button
+                            class="danger-btn"
+                            onclick="deleteConnection('${escapeHTML(connection.id)}')">
+
+                            🗑 حذف ارتباط
+
+                        </button>
+
+                    </div>
+
+
+                    ${
+                        connection.note
+
+                        ?
+
+                        `
+
+                        <div
+                            style="
+                            grid-column:1/-1;
+                            background:#fafaf7;
+                            padding:10px;
+                            border-radius:8px;
+                            font-size:12px;
+                            color:#666;
+                            ">
+
+                            📝
+
+                            ${escapeHTML(
+                                connection.note
+                            )}
+
+                        </div>
+
+                        `
+
+                        :
+
+                        ""
+
+                    }
+
+
+                    <div
+                        style="
+                        grid-column:1/-1;
+                        font-size:10px;
+                        color:#aaa;
+                        border-top:1px solid #eee;
+                        padding-top:8px;
+                        ">
+
+                        ثبت توسط:
+
+                        ${escapeHTML(
+                            connection.createdBy ||
+                            "مدیر سامانه"
+                        )}
+
+                    </div>
+
+
+                </div>
+
+            `;
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   DELETE CONNECTION
+===================================================== */
+
+function deleteConnection(id){
+
+    const index =
+        connections.findIndex(
+            function(connection){
+
+                return String(
+                    connection.id
+                )
+                ===
+                String(id);
+
+            }
+        );
+
+
+    if(index === -1){
+
+        return;
+
+    }
+
+
+    const confirmed =
+        confirm(
+            "آیا از حذف این ارتباط مطمئن هستید؟"
+        );
+
+
+    if(!confirmed){
+
+        return;
+
+    }
+
+
+    connections.splice(
+        index,
+        1
+    );
+
+
+    saveConnections();
+
+
+    renderConnections();
+
+
+    updateStats();
+
+
+    showToast(
+        "ارتباط حذف شد."
+    );
+
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+function updateStats(){
+
+    document.getElementById(
+        "customersCount"
+    )
+    .textContent =
+        Number(
+            customers.length
+        ).toLocaleString(
+            "fa-IR"
+        );
+
+
+    document.getElementById(
+        "propertiesCount"
+    )
+    .textContent =
+        Number(
+            properties.length
+        ).toLocaleString(
+            "fa-IR"
+        );
+
+
+    document.getElementById(
+        "connectionsCount"
+    )
+    .textContent =
+        Number(
+            connections.length
+        ).toLocaleString(
+            "fa-IR"
+        );
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+let toastTimer;
+
+
+function showToast(message){
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            function(){
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            3000
+        );
+
+}
+
+
+/* =====================================================
+   SEARCH EVENT
+===================================================== */
+
+document
+    .getElementById(
+        "connectionSearch"
+    )
+    .addEventListener(
+        "input",
+        renderConnections
+    );
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+    localStorage.removeItem(
+        "currentUser"
+    );
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        loadData();
+
+        fillCustomerSelect();
+
+        fillPropertySelect();
+
+        renderConnections();
+
+        updateStats();
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

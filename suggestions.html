@@ -1,0 +1,72 @@
+<h2>
+    فایل‌های پیشنهادی
+    </h2>
+    
+    
+    <table border="1">
+    
+    <tbody id="suggestionList">
+    
+    </tbody>
+    
+    </table>
+    
+    
+    
+    <script>
+    
+    let properties =
+    JSON.parse(
+    localStorage.getItem("suggestedProperties")
+    ) || [];
+    
+    
+    
+    let box =
+    document.getElementById("suggestionList");
+    
+    
+    
+    properties.forEach(function(item){
+    
+    
+    box.innerHTML += 
+    
+    
+    <tr>
+    
+    <td>
+    ${item.fileCode}
+    </td>
+    
+    
+    <td>
+    ${item.area}
+    </td>
+    
+    
+    <td>
+    ${item.size} متر
+    </td>
+    
+    
+    <td>
+    ${item.price}
+    </td>
+    
+    
+    <td>
+    ${item.type}
+    </td>
+    
+    
+    </tr>
+    
+    
+    ;
+    
+    
+    });
+    
+    
+    </script>

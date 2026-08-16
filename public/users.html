@@ -1,0 +1,2141 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>
+مدیریت کاربران | کلبه سبز
+</title>
+
+<link rel="stylesheet"
+      href="css/style.css">
+
+<style>
+
+:root{
+    --green-dark:#10231b;
+    --green:#19382a;
+    --gold:#c8a653;
+    --gold-light:#e3ca7b;
+    --cream:#f7f5ef;
+    --white:#ffffff;
+    --text:#26332b;
+    --muted:#7d857f;
+    --border:#e8e4d9;
+    --red:#b94c4c;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Tahoma,Arial,sans-serif;
+    background:
+        linear-gradient(
+            135deg,
+            #faf9f5,
+            #f0eee7
+        );
+    color:var(--text);
+}
+
+
+/* ===============================
+   SIDEBAR
+================================ */
+
+.sidebar{
+    position:fixed;
+    top:20px;
+    right:20px;
+
+    width:235px;
+    height:calc(100vh - 40px);
+
+    padding:22px 15px;
+
+    border-radius:24px;
+
+    background:
+        linear-gradient(
+            160deg,
+            #10231b,
+            #193629
+        );
+
+    box-shadow:
+        0 20px 55px
+        rgba(16,35,27,.20);
+
+    z-index:1000;
+}
+
+.brand{
+    text-align:center;
+
+    padding-bottom:20px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.08);
+}
+
+.brand-logo{
+    width:55px;
+    height:55px;
+
+    margin:auto;
+    margin-bottom:9px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--gold),
+            var(--gold-light)
+        );
+
+    font-size:26px;
+}
+
+.brand h2{
+    margin:0;
+
+    color:#fff;
+
+    font-size:17px;
+}
+
+.brand span{
+    display:block;
+
+    margin-top:6px;
+
+    color:
+        rgba(255,255,255,.45);
+
+    font-size:10px;
+}
+
+.menu-title{
+    margin:
+        18px
+        12px
+        8px;
+
+    color:
+        rgba(255,255,255,.35);
+
+    font-size:10px;
+}
+
+.sidebar a,
+.sidebar button{
+    width:100%;
+
+    display:flex;
+    align-items:center;
+
+    gap:10px;
+
+    padding:12px;
+
+    margin-bottom:6px;
+
+    border:0;
+
+    border-radius:12px;
+
+    background:transparent;
+
+    color:
+        rgba(255,255,255,.72);
+
+    text-decoration:none;
+
+    font-family:inherit;
+
+    font-size:12px;
+
+    cursor:pointer;
+
+    text-align:right;
+
+    transition:.25s;
+}
+
+.sidebar a:hover,
+.sidebar a.active{
+    color:var(--gold-light);
+
+    background:
+        rgba(200,166,83,.13);
+}
+
+.sidebar a.active{
+    border-right:
+        3px solid
+        var(--gold);
+}
+
+.sidebar button{
+    margin-top:20px;
+
+    color:#e5aaa5;
+}
+
+
+/* ===============================
+   MAIN
+================================ */
+
+.main-content{
+    margin-right:275px;
+
+    padding:
+        30px
+        35px
+        50px;
+}
+
+.header{
+    margin-bottom:25px;
+}
+
+.header h1{
+    margin:0;
+
+    color:
+        var(--green-dark);
+
+    font-size:25px;
+}
+
+.header p{
+    margin:
+        8px
+        0
+        0;
+
+    color:var(--muted);
+
+    font-size:11px;
+}
+
+
+/* ===============================
+   TOP BAR
+================================ */
+
+.toolbar{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    margin-bottom:18px;
+
+    flex-wrap:wrap;
+}
+
+.search-box{
+    flex:1;
+
+    min-width:220px;
+
+    position:relative;
+}
+
+.search-box input{
+    width:100%;
+
+    padding:
+        13px
+        15px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:13px;
+
+    outline:none;
+
+    background:#fff;
+
+    font-family:inherit;
+
+    font-size:11px;
+}
+
+.search-box input:focus{
+    border-color:
+        var(--gold);
+}
+
+.add-user-btn{
+    border:0;
+
+    padding:
+        13px
+        20px;
+
+    border-radius:13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--gold),
+            var(--gold-light)
+        );
+
+    color:#fff;
+
+    font-family:inherit;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 8px 20px
+        rgba(200,166,83,.18);
+}
+
+
+/* ===============================
+   STATS
+================================ */
+
+.stats{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:14px;
+
+    margin-bottom:20px;
+}
+
+.stat{
+    background:#fff;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:17px;
+
+    padding:17px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(30,40,33,.05);
+}
+
+.stat-title{
+    color:var(--muted);
+
+    font-size:9px;
+
+    margin-bottom:8px;
+}
+
+.stat-value{
+    color:
+        var(--green-dark);
+
+    font-size:22px;
+
+    font-weight:bold;
+}
+
+
+/* ===============================
+   TABLE
+================================ */
+
+.table-card{
+    background:#fff;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:20px;
+
+    padding:20px;
+
+    box-shadow:
+        0 10px 30px
+        rgba(30,40,33,.06);
+}
+
+.table-header{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:15px;
+}
+
+.table-header h2{
+    margin:0;
+
+    font-size:14px;
+
+    color:
+        var(--green-dark);
+}
+
+.table-header span{
+    font-size:9px;
+
+    color:var(--muted);
+}
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+
+    border-collapse:collapse;
+}
+
+th{
+    padding:11px;
+
+    text-align:right;
+
+    background:#faf9f5;
+
+    color:var(--muted);
+
+    font-size:9px;
+
+    font-weight:normal;
+}
+
+td{
+    padding:12px 11px;
+
+    border-bottom:
+        1px solid
+        #efede7;
+
+    font-size:10px;
+
+    color:
+        var(--green-dark);
+}
+
+.user-name{
+    font-weight:bold;
+}
+
+.username{
+    color:var(--muted);
+
+    font-size:9px;
+
+    margin-top:3px;
+}
+
+
+/* ===============================
+   BADGES
+================================ */
+
+.badge{
+    display:inline-block;
+
+    padding:
+        5px
+        8px;
+
+    border-radius:8px;
+
+    font-size:8px;
+}
+
+.badge-admin{
+    color:#856c20;
+
+    background:#f5efdc;
+}
+
+.badge-consultant{
+    color:#35624c;
+
+    background:#e9f2ec;
+}
+
+.badge-active{
+    color:#287046;
+
+    background:#e8f5ed;
+}
+
+.badge-disabled{
+    color:#984444;
+
+    background:#f8e9e9;
+}
+
+
+/* ===============================
+   ACTIONS
+================================ */
+
+.actions{
+    display:flex;
+
+    gap:6px;
+}
+
+.action-btn{
+    border:0;
+
+    border-radius:8px;
+
+    padding:
+        7px
+        9px;
+
+    cursor:pointer;
+
+    font-family:inherit;
+
+    font-size:8px;
+}
+
+.edit-btn{
+    background:#f5efdc;
+
+    color:#856c20;
+}
+
+.delete-btn{
+    background:#f8e9e9;
+
+    color:#a34646;
+}
+
+.status-btn{
+    background:#e9f2ec;
+
+    color:#35624c;
+}
+
+
+/* ===============================
+   MODAL
+================================ */
+
+.modal{
+    position:fixed;
+
+    inset:0;
+
+    background:
+        rgba(10,20,15,.55);
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+
+    z-index:3000;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:100%;
+
+    max-width:500px;
+
+    background:#fff;
+
+    border-radius:22px;
+
+    padding:25px;
+
+    box-shadow:
+        0 25px 70px
+        rgba(0,0,0,.20);
+}
+
+.modal-title{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:20px;
+}
+
+.modal-title h2{
+    margin:0;
+
+    color:
+        var(--green-dark);
+
+    font-size:17px;
+}
+
+.close-btn{
+    border:0;
+
+    width:32px;
+    height:32px;
+
+    border-radius:10px;
+
+    background:#f2f0ea;
+
+    cursor:pointer;
+
+    font-size:17px;
+}
+
+.form-grid{
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:14px;
+}
+
+.form-group{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:7px;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+.form-group label{
+    font-size:10px;
+
+    color:#59625c;
+
+    font-weight:bold;
+}
+
+.form-group input,
+.form-group select{
+    width:100%;
+
+    padding:11px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:10px;
+
+    outline:none;
+
+    font-family:inherit;
+
+    font-size:11px;
+}
+
+.form-group input:focus,
+.form-group select:focus{
+    border-color:
+        var(--gold);
+}
+
+.modal-actions{
+    display:flex;
+
+    justify-content:flex-start;
+
+    gap:9px;
+
+    margin-top:20px;
+}
+
+.save-btn{
+    border:0;
+
+    padding:
+        11px
+        20px;
+
+    border-radius:10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--gold),
+            var(--gold-light)
+        );
+
+    color:#fff;
+
+    font-family:inherit;
+
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+.cancel-btn{
+    border:0;
+
+    padding:
+        11px
+        20px;
+
+    border-radius:10px;
+
+    background:#eee;
+
+    color:#555;
+
+    font-family:inherit;
+
+    cursor:pointer;
+}
+
+
+/* ===============================
+   EMPTY
+================================ */
+
+.empty{
+    text-align:center;
+
+    padding:40px;
+
+    color:var(--muted);
+
+    font-size:10px;
+}
+
+
+/* ===============================
+   RESPONSIVE
+================================ */
+
+@media(max-width:1100px){
+
+    .stats{
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+}
+
+@media(max-width:900px){
+
+    .sidebar{
+        position:relative;
+
+        top:auto;
+        right:auto;
+
+        width:
+            calc(100% - 30px);
+
+        height:auto;
+
+        margin:15px;
+    }
+
+    .main-content{
+        margin-right:0;
+
+        padding:15px;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-group.full{
+        grid-column:auto;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ===============================
+     SIDEBAR
+================================ -->
+
+<aside class="sidebar">
+
+    <div class="brand">
+
+        <div>
+            <img
+            src="file_000000006740820a810ef460bf5ae223.png"
+            alt="کلبه سبز"
+            style="width:80px;height:80px;object-fit:cover;border-radius:15px;"
+        >
+        </div>
+        
+        <h2>
+            کلبه سبز
+        </h2>
+
+        <span>
+            سامانه تخصصی املاک
+        </span>
+
+    </div>
+
+
+    <div class="menu-title">
+        منوی اصلی
+    </div>
+
+
+    <a href="dashboard.html">
+        🏠 داشبورد
+    </a>
+
+
+    <a href="add-property.html">
+        ➕ ثبت ملک
+    </a>
+
+
+    <a href="properties.html">
+        📁 فایل‌های ملکی
+    </a>
+
+
+    <a href="customers.html">
+        👥 مشتریان
+    </a>
+
+
+    <div class="menu-title">
+        مدیریت
+    </div>
+
+
+    <a href="reports.html">
+        📊 گزارش‌ها
+    </a>
+
+
+    <a href="users.html"
+       class="active">
+
+        👤 مدیریت کاربران
+
+    </a>
+
+
+    <a href="settings.html">
+        ⚙️ تنظیمات
+    </a>
+
+
+    <button
+        type="button"
+        onclick="logout()">
+
+        🚪 خروج از حساب
+
+    </button>
+
+</aside>
+
+
+<!-- ===============================
+     MAIN
+================================ -->
+
+<main class="main-content">
+
+
+    <header class="header">
+
+        <h1>
+            مدیریت کاربران
+        </h1>
+
+        <p>
+            مدیریت دسترسی و حساب کاربران سامانه کلبه سبز
+        </p>
+
+    </header>
+
+
+    <!-- STATS -->
+
+    <section class="stats">
+
+        <div class="stat">
+
+            <div class="stat-title">
+                کل کاربران
+            </div>
+
+            <div
+                class="stat-value"
+                id="totalUsers">
+
+                ۰
+
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-title">
+                کاربران فعال
+            </div>
+
+            <div
+                class="stat-value"
+                id="activeUsers">
+
+                ۰
+
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-title">
+                مشاوران
+            </div>
+
+            <div
+                class="stat-value"
+                id="consultants">
+
+                ۰
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- TOOLBAR -->
+
+    <section class="toolbar">
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="جست‌وجوی نام یا نام کاربری...">
+
+        </div>
+
+
+        <button
+            type="button"
+            class="add-user-btn"
+            onclick="openUserModal()">
+
+            + افزودن کاربر
+
+        </button>
+
+    </section>
+
+
+    <!-- TABLE -->
+
+    <section class="table-card">
+
+        <div class="table-header">
+
+            <h2>
+                فهرست کاربران
+            </h2>
+
+            <span id="userCount">
+                ۰ کاربر
+            </span>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            کاربر
+                        </th>
+
+                        <th>
+                            نام کاربری
+                        </th>
+
+                        <th>
+                            نقش
+                        </th>
+
+                        <th>
+                            وضعیت
+                        </th>
+
+                        <th>
+                            تاریخ ایجاد
+                        </th>
+
+                        <th>
+                            عملیات
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="usersTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<!-- ===============================
+     MODAL
+================================ -->
+
+<div
+    class="modal"
+    id="userModal">
+
+
+    <div class="modal-box">
+
+
+        <div class="modal-title">
+
+            <h2 id="modalTitle">
+                افزودن کاربر
+            </h2>
+
+
+            <button
+                type="button"
+                class="close-btn"
+                onclick="closeUserModal()">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form id="userForm">
+
+
+            <div class="form-grid">
+
+
+                <div class="form-group full">
+
+                    <label>
+                        نام و نام خانوادگی
+                    </label>
+
+                    <input
+                        type="text"
+                        id="userName"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        نام کاربری
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        رمز عبور
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        required>
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label>
+                        نقش کاربر
+                    </label>
+
+                    <select
+                        id="role"
+                        required>
+
+                        <option value="consultant">
+                            مشاور
+                        </option>
+
+                        <option value="admin">
+                            مدیر
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="submit"
+                    class="save-btn">
+
+                    ذخیره کاربر
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    onclick="closeUserModal()">
+
+                    انصراف
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+"use strict";
+
+
+/* ===============================
+   VARIABLES
+================================ */
+
+let users = [];
+
+let editingUserId = null;
+
+
+/* ===============================
+   INIT
+================================ */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        loadUsers();
+
+        renderUsers();
+
+        updateStats();
+
+        setupSearch();
+
+    }
+);
+
+
+/* ===============================
+   LOAD USERS
+================================ */
+
+function loadUsers(){
+
+    try{
+
+        const stored =
+            JSON.parse(
+                localStorage.getItem(
+                    "users"
+                )
+            );
+
+        if(
+            Array.isArray(stored)
+        ){
+
+            users = stored;
+
+        }
+        else{
+
+            users = [];
+
+        }
+
+    }
+    catch(error){
+
+        users = [];
+
+    }
+
+
+    /*
+       اگر هنوز کاربری وجود ندارد،
+       مدیر اولیه ایجاد می‌شود.
+    */
+
+    if(
+        users.length === 0
+    ){
+
+        users = [
+
+            {
+                id:"admin-1",
+
+                name:"مدیر سامانه",
+
+                username:"admin",
+
+                password:"1234",
+
+                role:"admin",
+
+                active:true,
+
+                createdAt:
+                    new Date()
+                    .toLocaleDateString(
+                        "fa-IR"
+                    )
+            }
+
+        ];
+
+
+        saveUsers();
+
+    }
+
+}
+
+
+/* ===============================
+   SAVE
+================================ */
+
+function saveUsers(){
+
+    localStorage.setItem(
+        "users",
+        JSON.stringify(
+            users
+        )
+    );
+
+}
+
+
+/* ===============================
+   RENDER
+================================ */
+
+function renderUsers(){
+
+    const tbody =
+        document.getElementById(
+            "usersTable"
+        );
+
+    const search =
+        document.getElementById(
+            "searchInput"
+        ).value
+        .trim()
+        .toLowerCase();
+
+
+    const filtered =
+        users.filter(
+            function(user){
+
+                return (
+
+                    String(
+                        user.name || ""
+                    )
+                    .toLowerCase()
+                    .includes(search)
+
+                    ||
+
+                    String(
+                        user.username || ""
+                    )
+                    .toLowerCase()
+                    .includes(search)
+
+                );
+
+            }
+        );
+
+
+    document.getElementById(
+        "userCount"
+    ).textContent =
+        filtered.length
+        .toLocaleString("fa-IR")
+        + " کاربر";
+
+
+    if(
+        filtered.length === 0
+    ){
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    class="empty">
+
+                    کاربری پیدا نشد.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML = "";
+
+
+    filtered.forEach(
+        function(user){
+
+            const role =
+                user.role === "admin"
+                    ? "مدیر"
+                    : "مشاور";
+
+
+            const roleClass =
+                user.role === "admin"
+                    ? "badge-admin"
+                    : "badge-consultant";
+
+
+            const status =
+                user.active !== false
+                    ? "فعال"
+                    : "غیرفعال";
+
+
+            const statusClass =
+                user.active !== false
+                    ? "badge-active"
+                    : "badge-disabled";
+
+
+            tbody.innerHTML += `
+
+                <tr>
+
+                    <td>
+
+                        <div
+                            class="user-name">
+
+                            ${escapeHTML(
+                                user.name ||
+                                "-"
+                            )}
+
+                        </div>
+
+                    </td>
+
+
+                    <td>
+
+                        <div
+                            class="username">
+
+                            @${escapeHTML(
+                                user.username ||
+                                "-"
+                            )}
+
+                        </div>
+
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            class="badge ${roleClass}">
+
+                            ${role}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            class="badge ${statusClass}">
+
+                            ${status}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        ${escapeHTML(
+                            user.createdAt ||
+                            "-"
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        <div
+                            class="actions">
+
+                            <button
+                                class="action-btn edit-btn"
+                                onclick="editUser('${escapeJS(user.id)}')">
+
+                                ویرایش
+
+                            </button>
+
+
+                            <button
+                                class="action-btn status-btn"
+                                onclick="toggleUser('${escapeJS(user.id)}')">
+
+                                ${user.active !== false
+                                    ? "غیرفعال"
+                                    : "فعال"}
+
+                            </button>
+
+
+                            <button
+                                class="action-btn delete-btn"
+                                onclick="deleteUser('${escapeJS(user.id)}')">
+
+                                حذف
+
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+}
+
+
+/* ===============================
+   STATS
+================================ */
+
+function updateStats(){
+
+    const total =
+        users.length;
+
+
+    const active =
+        users.filter(
+            function(user){
+
+                return user.active !== false;
+
+            }
+        ).length;
+
+
+    const consultants =
+        users.filter(
+            function(user){
+
+                return user.role !== "admin";
+
+            }
+        ).length;
+
+
+    document.getElementById(
+        "totalUsers"
+    ).textContent =
+        total.toLocaleString("fa-IR");
+
+
+    document.getElementById(
+        "activeUsers"
+    ).textContent =
+        active.toLocaleString("fa-IR");
+
+
+    document.getElementById(
+        "consultants"
+    ).textContent =
+        consultants.toLocaleString("fa-IR");
+
+}
+
+
+/* ===============================
+   OPEN MODAL
+================================ */
+
+function openUserModal(
+    userId = null
+){
+
+    editingUserId =
+        userId;
+
+
+    const modal =
+        document.getElementById(
+            "userModal"
+        );
+
+
+    const title =
+        document.getElementById(
+            "modalTitle"
+        );
+
+
+    document.getElementById(
+        "userForm"
+    ).reset();
+
+
+    if(userId){
+
+        const user =
+            users.find(
+                function(item){
+
+                    return String(
+                        item.id
+                    ) === String(
+                        userId
+                    );
+
+                }
+            );
+
+
+        if(!user){
+
+            return;
+
+        }
+
+
+        title.textContent =
+            "ویرایش کاربر";
+
+
+        document.getElementById(
+            "userName"
+        ).value =
+            user.name || "";
+
+
+        document.getElementById(
+            "username"
+        ).value =
+            user.username || "";
+
+
+        document.getElementById(
+            "password"
+        ).value =
+            user.password || "";
+
+
+        document.getElementById(
+            "role"
+        ).value =
+            user.role || "consultant";
+
+    }
+    else{
+
+        title.textContent =
+            "افزودن کاربر";
+
+    }
+
+
+    modal.classList.add(
+        "show"
+    );
+
+}
+
+
+/* ===============================
+   CLOSE MODAL
+================================ */
+
+function closeUserModal(){
+
+    editingUserId =
+        null;
+
+    document.getElementById(
+        "userModal"
+    ).classList.remove(
+        "show"
+    );
+
+}
+
+
+/* ===============================
+   FORM SUBMIT
+================================ */
+
+document.getElementById(
+    "userForm"
+).addEventListener(
+    "submit",
+    function(event){
+
+        event.preventDefault();
+
+
+        const name =
+            document.getElementById(
+                "userName"
+            ).value.trim();
+
+
+        const username =
+            document.getElementById(
+                "username"
+            ).value.trim();
+
+
+        const password =
+            document.getElementById(
+                "password"
+            ).value;
+
+
+        const role =
+            document.getElementById(
+                "role"
+            ).value;
+
+
+        if(!name){
+
+            alert(
+                "نام کاربر را وارد کنید."
+            );
+
+            return;
+
+        }
+
+
+        if(!username){
+
+            alert(
+                "نام کاربری را وارد کنید."
+            );
+
+            return;
+
+        }
+
+
+        if(!password){
+
+            alert(
+                "رمز عبور را وارد کنید."
+            );
+
+            return;
+
+        }
+
+
+        const duplicate =
+            users.some(
+                function(user){
+
+                    return (
+                        user.username
+                            .toLowerCase()
+                        ===
+                        username.toLowerCase()
+
+                        &&
+
+                        String(user.id)
+                        !==
+                        String(editingUserId)
+                    );
+
+                }
+            );
+
+
+        if(duplicate){
+
+            alert(
+                "این نام کاربری قبلاً ثبت شده است."
+            );
+
+            return;
+
+        }
+
+
+        if(editingUserId){
+
+            const index =
+                users.findIndex(
+                    function(user){
+
+                        return String(
+                            user.id
+                        ) === String(
+                            editingUserId
+                        );
+
+                    }
+                );
+
+
+            if(index !== -1){
+
+                users[index] = {
+
+                    ...users[index],
+
+                    name:name,
+
+                    username:username,
+
+                    password:password,
+
+                    role:role
+
+                };
+
+            }
+
+        }
+        else{
+
+            users.push({
+
+                id:
+                    "user-" +
+                    Date.now(),
+
+                name:name,
+
+                username:username,
+
+                password:password,
+
+                role:role,
+
+                active:true,
+
+                createdAt:
+                    new Date()
+                    .toLocaleDateString(
+                        "fa-IR"
+                    )
+
+            });
+
+        }
+
+
+        saveUsers();
+
+        renderUsers();
+
+        updateStats();
+
+        closeUserModal();
+
+
+        alert(
+            editingUserId
+                ? "اطلاعات کاربر با موفقیت ویرایش شد."
+                : "کاربر با موفقیت اضافه شد."
+        );
+
+    }
+);
+
+
+/* ===============================
+   EDIT
+================================ */
+
+function editUser(id){
+
+    openUserModal(
+        id
+    );
+
+}
+
+
+/* ===============================
+   TOGGLE
+================================ */
+
+function toggleUser(id){
+
+    const user =
+        users.find(
+            function(item){
+
+                return String(
+                    item.id
+                ) === String(
+                    id
+                );
+
+            }
+        );
+
+
+    if(!user){
+
+        return;
+
+    }
+
+
+    user.active =
+        user.active === false;
+
+
+    saveUsers();
+
+    renderUsers();
+
+    updateStats();
+
+}
+
+
+/* ===============================
+   DELETE
+================================ */
+
+function deleteUser(id){
+
+    const user =
+        users.find(
+            function(item){
+
+                return String(
+                    item.id
+                ) === String(
+                    id
+                );
+
+            }
+        );
+
+
+    if(!user){
+
+        return;
+
+    }
+
+
+    if(
+        user.role === "admin" &&
+        users.filter(
+            function(item){
+
+                return item.role === "admin";
+
+            }
+        ).length === 1
+    ){
+
+        alert(
+            "حداقل یک مدیر باید در سامانه باقی بماند."
+        );
+
+        return;
+
+    }
+
+
+    const confirmed =
+        confirm(
+            "آیا از حذف این کاربر مطمئن هستید؟"
+        );
+
+
+    if(!confirmed){
+
+        return;
+
+    }
+
+
+    users =
+        users.filter(
+            function(item){
+
+                return String(
+                    item.id
+                ) !== String(
+                    id
+                );
+
+            }
+        );
+
+
+    saveUsers();
+
+    renderUsers();
+
+    updateStats();
+
+}
+
+
+/* ===============================
+   SEARCH
+================================ */
+
+function setupSearch(){
+
+    document.getElementById(
+        "searchInput"
+    ).addEventListener(
+        "input",
+        function(){
+
+            renderUsers();
+
+        }
+    );
+
+}
+
+
+/* ===============================
+   ESCAPE
+================================ */
+
+function escapeHTML(value){
+
+    if(
+        value === undefined ||
+        value === null
+    ){
+
+        return "";
+
+    }
+
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+function escapeJS(value){
+
+    return String(
+        value || ""
+    )
+    .replace(
+        /\\/g,
+        "\\\\"
+    )
+    .replace(
+        /'/g,
+        "\\'"
+    );
+
+}
+
+
+/* ===============================
+   LOGOUT
+================================ */
+
+function logout(){
+
+    localStorage.removeItem(
+        "currentUser"
+    );
+
+    window.location.href =
+        "index.html";
+
+}
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>گزارش‌ها | سامانه تخصصی املاک کلبه سبز</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        :root{
+            --green-dark:#10231b;
+            --green:#1b3a2d;
+            --gold:#c8a653;
+            --gold-light:#e1c878;
+            --cream:#f6f3eb;
+            --white:#fff;
+            --text:#1d2922;
+            --muted:#7c847f;
+            --border:#e8e4d9;
+        }
+
+        *{box-sizing:border-box;}
+
+        body{
+            margin:0;
+            font-family:Tahoma,Arial,sans-serif;
+            background:url("IMG_20260809_135729.png") center center / cover fixed no-repeat;
+            color:var(--text);
+            min-height:100vh;
+        }
+
+        body::before{
+            content:"";
+            position:fixed;
+            inset:0;
+            background:linear-gradient(
+                135deg,
+                rgba(8,24,18,.50),
+                rgba(10,30,22,.15) 35%,
+                rgba(8,20,15,.35)
+            );
+            z-index:-1;
+            pointer-events:none;
+        }
+
+        /* =========================================
+           MOBILE MENU - PHASE 3.5.1
+        ========================================= */
+
+        .mobile-menu-btn{
+            display:none;
+            position:fixed;
+            top:15px;
+            right:15px;
+            width:48px;
+            height:48px;
+            border:0;
+            border-radius:14px;
+            background:#10231b;
+            color:var(--gold);
+            font-size:22px;
+            cursor:pointer;
+            z-index:3000;
+            box-shadow:0 8px 25px rgba(0,0,0,.20);
+        }
+
+        .mobile-menu-overlay{
+            display:none;
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,.45);
+            z-index:1998;
+        }
+
+        .mobile-menu-overlay.show{display:block;}
+
+        /* =========================================
+           SIDEBAR
+        ========================================= */
+
+        .sidebar{
+            position:fixed;
+            top:20px;
+            right:20px;
+            width:235px;
+            height:calc(100vh - 40px);
+            padding:22px 15px;
+            border-radius:24px;
+            background:linear-gradient(160deg,#10231b,#173126);
+            box-shadow:0 20px 55px rgba(16,35,27,.20);
+            z-index:2000;
+            overflow-y:auto;
+        }
+
+        .brand{
+            text-align:center;
+            padding:5px 5px 22px;
+            border-bottom:1px solid rgba(255,255,255,.08);
+        }
+
+        .brand img{
+            width:80px;
+            height:80px;
+            object-fit:cover;
+            border-radius:15px;
+        }
+
+        .brand h2{
+            margin:8px 0 0;
+            color:#fff;
+            font-size:17px;
+        }
+
+        .brand span{
+            display:block;
+            margin-top:6px;
+            color:rgba(255,255,255,.5);
+            font-size:10px;
+        }
+
+        .menu-title{
+            margin:18px 12px 8px;
+            color:rgba(255,255,255,.35);
+            font-size:10px;
+        }
+
+        .sidebar a,
+        .sidebar button{
+            width:100%;
+            display:flex;
+            align-items:center;
+            gap:10px;
+            padding:12px 13px;
+            margin-bottom:6px;
+            border:0;
+            border-radius:12px;
+            background:transparent;
+            color:rgba(255,255,255,.72);
+            text-decoration:none;
+            font-family:inherit;
+            font-size:12px;
+            cursor:pointer;
+            text-align:right;
+            transition:.25s ease;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active{
+            color:var(--gold-light);
+            background:rgba(200,166,83,.13);
+        }
+
+        .sidebar a.active{
+            border-right:3px solid var(--gold);
+        }
+
+        .sidebar button{
+            margin-top:20px;
+            color:#e7aaa5;
+        }
+
+        .sidebar button:hover{
+            background:rgba(220,100,90,.10);
+        }
+
+        /* =========================================
+           MAIN
+        ========================================= */
+
+        .main-content{
+            margin-right:275px;
+            padding:30px 35px 50px;
+            min-height:100vh;
+        }
+
+        .page-header{
+            margin-bottom:25px;
+            background:rgba(255,255,255,.72);
+            border:1px solid rgba(232,228,217,.75);
+            border-radius:20px;
+            padding:18px 20px;
+            box-shadow:0 10px 30px rgba(31,42,35,.05);
+        }
+
+        .page-header h1{
+            margin:0;
+            color:var(--green-dark);
+            font-size:25px;
+        }
+
+        .page-header p{
+            margin:8px 0 0;
+            color:var(--muted);
+            font-size:11px;
+        }
+
+        /* =========================================
+           STATS
+        ========================================= */
+
+        .stats-grid{
+            display:grid;
+            grid-template-columns:repeat(4,1fr);
+            gap:15px;
+            margin-bottom:22px;
+        }
+
+        .stat-card{
+            position:relative;
+            overflow:hidden;
+            background:rgba(255,255,255,.92);
+            border:1px solid var(--border);
+            border-radius:18px;
+            padding:19px;
+            box-shadow:0 10px 30px rgba(31,42,35,.06);
+            transition:.25s ease;
+        }
+
+        .stat-card:hover{
+            transform:translateY(-3px);
+            border-color:rgba(200,166,83,.45);
+        }
+
+        .stat-card::after{
+            content:"";
+            position:absolute;
+            width:75px;
+            height:75px;
+            left:-25px;
+            bottom:-30px;
+            border-radius:50%;
+            background:rgba(200,166,83,.08);
+        }
+
+        .stat-icon{
+            width:42px;
+            height:42px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            border-radius:13px;
+            background:#f5f0df;
+            color:var(--gold);
+            font-size:19px;
+            margin-bottom:12px;
+        }
+
+        .stat-label{
+            color:var(--muted);
+            font-size:10px;
+            margin-bottom:6px;
+        }
+
+        .stat-number{
+            color:var(--green-dark);
+            font-size:23px;
+            font-weight:bold;
+        }
+
+        /* =========================================
+           CONTENT
+        ========================================= */
+
+        .content-grid{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:18px;
+            margin-bottom:20px;
+        }
+
+        .panel{
+            background:rgba(255,255,255,.92);
+            border:1px solid var(--border);
+            border-radius:19px;
+            padding:20px;
+            box-shadow:0 10px 30px rgba(31,42,35,.05);
+        }
+
+        .full-panel{margin-bottom:20px;}
+
+        .panel-title{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:10px;
+            padding-bottom:13px;
+            margin-bottom:15px;
+            border-bottom:1px solid #efede6;
+        }
+
+        .panel-title h2{
+            margin:0;
+            color:var(--green-dark);
+            font-size:14px;
+        }
+
+        .panel-title span{
+            color:var(--muted);
+            font-size:9px;
+        }
+
+        /* =========================================
+           BARS
+        ========================================= */
+
+        .bar-row{margin-bottom:15px;}
+
+        .bar-info{
+            display:flex;
+            justify-content:space-between;
+            gap:10px;
+            margin-bottom:6px;
+            font-size:10px;
+        }
+
+        .bar-name{color:#59635d;}
+
+        .bar-value{
+            color:var(--green-dark);
+            font-weight:bold;
+        }
+
+        .bar{
+            height:8px;
+            background:#f0eee7;
+            border-radius:20px;
+            overflow:hidden;
+        }
+
+        .bar-fill{
+            height:100%;
+            border-radius:20px;
+            background:linear-gradient(90deg,var(--gold),var(--gold-light));
+            transition:width .5s ease;
+        }
+
+        /* =========================================
+           TABLE
+        ========================================= */
+
+        .table-wrap{
+            width:100%;
+            overflow-x:auto;
+            -webkit-overflow-scrolling:touch;
+        }
+
+        table{
+            width:100%;
+            min-width:650px;
+            border-collapse:collapse;
+        }
+
+        th{
+            color:var(--muted);
+            font-size:9px;
+            font-weight:normal;
+            padding:10px;
+            text-align:right;
+            background:#faf9f5;
+            white-space:nowrap;
+        }
+
+        td{
+            color:var(--green-dark);
+            font-size:9px;
+            padding:11px 10px;
+            border-bottom:1px solid #f0eee8;
+            white-space:nowrap;
+        }
+
+        td strong{font-size:10px;}
+
+        .badge{
+            display:inline-block;
+            padding:5px 7px;
+            border-radius:7px;
+            background:#f5f0df;
+            color:#90752c;
+            font-size:8px;
+        }
+
+        .empty{
+            text-align:center;
+            padding:35px 10px;
+            color:var(--muted);
+            font-size:10px;
+        }
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media(max-width:1250px){
+            .stats-grid{grid-template-columns:repeat(2,1fr);}
+        }
+
+        @media(max-width:950px){
+            .content-grid{grid-template-columns:1fr;}
+        }
+
+        @media(max-width:900px){
+            .mobile-menu-btn{
+                display:flex;
+                align-items:center;
+                justify-content:center;
+            }
+
+            .sidebar{
+                position:fixed !important;
+                top:15px !important;
+                right:15px !important;
+                width:270px !important;
+                height:calc(100vh - 30px) !important;
+                margin:0 !important;
+                transform:translateX(120%);
+                transition:transform .3s ease;
+                z-index:2000;
+            }
+
+            .sidebar.mobile-open{
+                transform:translateX(0);
+            }
+
+            .main-content{
+                margin-right:0 !important;
+                padding:80px 15px 30px !important;
+            }
+        }
+
+        @media(max-width:600px){
+            .stats-grid{grid-template-columns:1fr 1fr;gap:10px;}
+
+            .stat-card{padding:14px;}
+
+            .stat-number{font-size:21px;}
+
+            .page-header h1{font-size:21px;}
+
+            .content-grid{grid-template-columns:1fr;}
+
+            .panel{padding:15px;}
+
+            .panel-title{
+                align-items:flex-start;
+                flex-direction:column;
+            }
+        }
+
+        @media(max-width:420px){
+            .stats-grid{grid-template-columns:1fr;}
+            .sidebar{width:calc(100% - 30px) !important;}
+        }
+    </style>
+</head>
+
+<body>
+
+<button
+    type="button"
+    class="mobile-menu-btn"
+    id="mobileMenuBtn"
+    aria-label="باز کردن منو"
+    onclick="toggleMobileMenu()">
+    ☰
+</button>
+
+<div
+    class="mobile-menu-overlay"
+    id="mobileMenuOverlay"
+    onclick="closeMobileMenu()">
+</div>
+
+<!-- =========================================
+     SIDEBAR
+========================================= -->
+
+<aside class="sidebar">
+
+    <div class="brand">
+        <img
+            src="file_000000006740820a810ef460bf5ae223.png"
+            alt="کلبه سبز">
+        <h2>کلبه سبز</h2>
+        <span>سامانه تخصصی املاک</span>
+    </div>
+
+    <div class="menu-title">منوی اصلی</div>
+
+    <a href="dashboard.html">🏠 <span>داشبورد</span></a>
+
+    <a href="add-property.html">➕ <span>ثبت ملک</span></a>
+
+    <a href="properties.html">📁 <span>فایل‌های ملکی</span></a>
+
+    <a href="customers.html">👥 <span>مشتریان</span></a>
+
+    <div class="menu-title">مدیریت</div>
+
+    <a href="reports.html" class="active">📊 <span>گزارش‌ها</span></a>
+
+    <a id="usersMenu" href="users.html">👤 <span>مدیریت کاربران</span></a>
+
+    <a href="settings.html">⚙️ <span>تنظیمات</span></a>
+
+    <button type="button" onclick="logout()">🚪 <span>خروج از حساب</span></button>
+
+</aside>
+
+<!-- =========================================
+     MAIN
+========================================= -->
+
+<main class="main-content">
+
+    <header class="page-header">
+        <h1>گزارش‌ها و آمار</h1>
+        <p>نمای کلی از عملکرد سامانه و فایل‌های ملکی</p>
+    </header>
+
+    <section class="stats-grid">
+
+        <div class="stat-card">
+            <div class="stat-icon">📁</div>
+            <div class="stat-label">کل فایل‌های ملکی</div>
+            <div class="stat-number" id="totalProperties">۰</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-label">کل مشتریان</div>
+            <div class="stat-number" id="totalCustomers">۰</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🖼️</div>
+            <div class="stat-label">فایل‌های دارای تصویر</div>
+            <div class="stat-number" id="imageProperties">۰</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">📍</div>
+            <div class="stat-label">مناطق فعال</div>
+            <div class="stat-number" id="activeRegions">۰</div>
+        </div>
+
+    </section>
+
+    <section class="content-grid">
+
+        <div class="panel">
+            <div class="panel-title">
+                <h2>نوع معامله</h2>
+                <span>تعداد فایل</span>
+            </div>
+            <div id="transactionStats">
+                <div class="empty">در حال دریافت اطلاعات...</div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">
+                <h2>نوع ملک</h2>
+                <span>تعداد فایل</span>
+            </div>
+            <div id="propertyTypeStats">
+                <div class="empty">در حال دریافت اطلاعات...</div>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="panel full-panel">
+
+        <div class="panel-title">
+            <h2>مناطق فعال</h2>
+            <span>بیشترین فایل</span>
+        </div>
+
+        <div id="regionStats">
+            <div class="empty">در حال دریافت اطلاعات...</div>
+        </div>
+
+    </section>
+
+    <section class="panel full-panel">
+
+        <div class="panel-title">
+            <h2>آخرین فایل‌های ثبت‌شده</h2>
+            <span>آخرین اطلاعات سامانه</span>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>کد فایل</th>
+                        <th>منطقه</th>
+                        <th>نوع ملک</th>
+                        <th>متراژ</th>
+                        <th>معامله</th>
+                        <th>ثبت‌کننده</th>
+                    </tr>
+                </thead>
+                <tbody id="latestProperties"></tbody>
+            </table>
+        </div>
+
+    </section>
+
+    <section class="panel full-panel">
+
+        <div class="panel-title">
+            <h2>آخرین مشتریان</h2>
+            <span>مشتریان ثبت‌شده</span>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>نام</th>
+                        <th>شماره تماس</th>
+                        <th>نوع مشتری</th>
+                        <th>نوع ملک</th>
+                        <th>منطقه</th>
+                    </tr>
+                </thead>
+                <tbody id="latestCustomers"></tbody>
+            </table>
+        </div>
+
+    </section>
+
+</main>
+
+<script>
+"use strict";
+
+/* =========================================
+   HELPERS
+========================================= */
+
+function escapeHTML(value){
+    if(value === undefined || value === null) return "";
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+function faNumber(value){
+    const number = Number(value) || 0;
+    return number.toLocaleString("fa-IR");
+}
+
+function getTransaction(property){
+    return String(
+        property?.transactionType ||
+        property?.dealType ||
+        property?.transaction ||
+        property?.typeOfTransaction ||
+        ""
+    ).trim();
+}
+
+function getPropertyType(property){
+    return String(
+        property?.propertyType ||
+        property?.type ||
+        property?.propertyCategory ||
+        property?.category ||
+        ""
+    ).trim();
+}
+
+function getRegion(property){
+    return String(
+        property?.region ||
+        property?.areaName ||
+        property?.district ||
+        property?.zone ||
+        property?.location ||
+        ""
+    ).trim();
+}
+
+function getArea(property){
+    return (
+        property?.area ??
+        property?.metraj ??
+        property?.meterage ??
+        property?.meter ??
+        property?.size ??
+        "-"
+    );
+}
+
+/* =========================================
+   PROPERTIES
+   منبع اصلی همان API سرور است
+========================================= */
+
+async function getProperties(){
+
+    try{
+
+        const response = await fetch(
+            "/api/properties",
+            {
+                method:"GET",
+                credentials:"include",
+                headers:{
+                    "Accept":"application/json"
+                }
+            }
+        );
+
+        if(response.status === 401){
+            window.location.href = "index.html";
+            return [];
+        }
+
+        if(!response.ok){
+            throw new Error("خطا در دریافت فایل‌های ملکی");
+        }
+
+        const data = await response.json();
+
+        if(Array.isArray(data)){
+            return data;
+        }
+
+        if(data && Array.isArray(data.properties)){
+            return data.properties;
+        }
+
+        return [];
+
+    }catch(error){
+
+        console.error("خطا در دریافت املاک:",error);
+
+        /* فقط برای جلوگیری از خالی ماندن صفحه
+           در صورت وجود داده قدیمی */
+        try{
+            const oldData = JSON.parse(
+                localStorage.getItem("properties")
+            );
+
+            return Array.isArray(oldData) ? oldData : [];
+
+        }catch(e){
+            return [];
+        }
+    }
+}
+
+/* =========================================
+   CUSTOMERS
+   چون API مشتریان در نسخه فعلی مشخص نشده،
+   منبع مشتریان localStorage باقی می‌ماند.
+========================================= */
+
+function getCustomers(){
+
+    try{
+
+        const data = JSON.parse(
+            localStorage.getItem("customers")
+        );
+
+        return Array.isArray(data) ? data : [];
+
+    }catch(error){
+
+        console.error("خطا در دریافت مشتریان:",error);
+        return [];
+
+    }
+}
+
+/* =========================================
+   MAIN STATS
+========================================= */
+
+function updateMainStats(properties,customers){
+
+    document.getElementById("totalProperties")
+        .textContent = faNumber(properties.length);
+
+    document.getElementById("totalCustomers")
+        .textContent = faNumber(customers.length);
+
+    const imageCount = properties.filter(function(property){
+
+        return (
+            (Array.isArray(property.images) && property.images.length > 0) ||
+            (Array.isArray(property.photos) && property.photos.length > 0) ||
+            (typeof property.images === "string" && property.images.trim() !== "")
+        );
+
+    }).length;
+
+    document.getElementById("imageProperties")
+        .textContent = faNumber(imageCount);
+
+    const regions = new Set();
+
+    properties.forEach(function(property){
+
+        const region = getRegion(property);
+
+        if(region){
+            regions.add(region);
+        }
+
+    });
+
+    document.getElementById("activeRegions")
+        .textContent = faNumber(regions.size);
+}
+
+/* =========================================
+   TRANSACTION
+========================================= */
+
+function generateTransactionStats(properties){
+
+    const stats = {
+        "فروش":0,
+        "رهن و اجاره":0,
+        "پیش فروش":0
+    };
+
+    properties.forEach(function(property){
+
+        const type = getTransaction(property);
+
+        if(type.includes("پیش فروش")){
+            stats["پیش فروش"]++;
+        }
+        else if(type.includes("رهن") || type.includes("اجاره")){
+            stats["رهن و اجاره"]++;
+        }
+        else if(type.includes("فروش")){
+            stats["فروش"]++;
+        }
+
+    });
+
+    renderBars(
+        document.getElementById("transactionStats"),
+        stats
+    );
+}
+
+/* =========================================
+   PROPERTY TYPE
+========================================= */
+
+function generatePropertyTypeStats(properties){
+
+    const stats = {};
+
+    properties.forEach(function(property){
+
+        const type = getPropertyType(property) || "نامشخص";
+
+        stats[type] = (stats[type] || 0) + 1;
+
+    });
+
+    renderBars(
+        document.getElementById("propertyTypeStats"),
+        stats,
+        8
+    );
+}
+
+/* =========================================
+   REGIONS
+========================================= */
+
+function generateRegionStats(properties){
+
+    const stats = {};
+
+    properties.forEach(function(property){
+
+        const region = getRegion(property) || "نامشخص";
+
+        stats[region] = (stats[region] || 0) + 1;
+
+    });
+
+    renderBars(
+        document.getElementById("regionStats"),
+        stats,
+        8
+    );
+}
+
+/* =========================================
+   BAR RENDER
+========================================= */
+
+function renderBars(container,stats,limit){
+
+    const entries = Object.entries(stats)
+        .sort(function(a,b){
+            return b[1] - a[1];
+        })
+        .slice(0,limit || 6);
+
+    if(!entries.length){
+
+        container.innerHTML = `
+            <div class="empty">
+                اطلاعاتی برای نمایش وجود ندارد.
+            </div>
+        `;
+
+        return;
+    }
+
+    const max = entries[0][1];
+
+    container.innerHTML = "";
+
+    entries.forEach(function(item){
+
+        const name = item[0];
+        const value = item[1];
+        const percentage = max ? (value / max) * 100 : 0;
+
+        container.innerHTML += `
+            <div class="bar-row">
+
+                <div class="bar-info">
+
+                    <span class="bar-name">
+                        ${escapeHTML(name)}
+                    </span>
+
+                    <span class="bar-value">
+                        ${faNumber(value)}
+                    </span>
+
+                </div>
+
+                <div class="bar">
+                    <div
+                        class="bar-fill"
+                        style="width:${percentage}%">
+                    </div>
+                </div>
+
+            </div>
+        `;
+
+    });
+}
+
+/* =========================================
+   LATEST PROPERTIES
+========================================= */
+
+function generateLatestProperties(properties){
+
+    const tbody = document.getElementById("latestProperties");
+
+    const latest = properties
+        .slice()
+        .reverse()
+        .slice(0,8);
+
+    if(!latest.length){
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" class="empty">
+                    هنوز فایلی ثبت نشده است.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    tbody.innerHTML = "";
+
+    latest.forEach(function(property){
+
+        const code =
+            property.code ||
+            property.propertyCode ||
+            property.id ||
+            "-";
+
+        const region =
+            getRegion(property) || "-";
+
+        const propertyType =
+            getPropertyType(property) || "-";
+
+        const area = getArea(property);
+
+        const transaction =
+            getTransaction(property) || "-";
+
+        const creator =
+            property.createdBy ||
+            property.creator ||
+            property.userName ||
+            "کاربر سامانه";
+
+        tbody.innerHTML += `
+            <tr>
+
+                <td>
+                    <strong>
+                        ${escapeHTML(code)}
+                    </strong>
+                </td>
+
+                <td>
+                    ${escapeHTML(region)}
+                </td>
+
+                <td>
+                    ${escapeHTML(propertyType)}
+                </td>
+
+                <td>
+                    ${escapeHTML(area)} متر
+                </td>
+
+                <td>
+                    <span class="badge">
+                        ${escapeHTML(transaction)}
+                    </span>
+                </td>
+
+                <td>
+                    ${escapeHTML(creator)}
+                </td>
+
+            </tr>
+        `;
+
+    });
+}
+
+/* =========================================
+   LATEST CUSTOMERS
+========================================= */
+
+function generateLatestCustomers(customers){
+
+    const tbody = document.getElementById("latestCustomers");
+
+    const latest = customers
+        .slice()
+        .reverse()
+        .slice(0,8);
+
+    if(!latest.length){
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5" class="empty">
+                    هنوز مشتری ثبت نشده است.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    tbody.innerHTML = "";
+
+    latest.forEach(function(customer){
+
+        const name =
+            customer.name ||
+            customer.fullName ||
+            customer.fullname ||
+            customer.customerName ||
+            "-";
+
+        const phone =
+            customer.phone ||
+            customer.mobile ||
+            customer.phoneNumber ||
+            "-";
+
+        const type =
+            customer.type ||
+            customer.customerType ||
+            "-";
+
+        const propertyType =
+            customer.propertyType ||
+            customer.interestedPropertyType ||
+            "-";
+
+        const region =
+            customer.region ||
+            customer.areaName ||
+            customer.district ||
+            customer.zone ||
+            "-";
+
+        tbody.innerHTML += `
+            <tr>
+
+                <td>
+                    <strong>
+                        ${escapeHTML(name)}
+                    </strong>
+                </td>
+
+                <td>
+                    ${escapeHTML(phone)}
+                </td>
+
+                <td>
+                    <span class="badge">
+                        ${escapeHTML(type)}
+                    </span>
+                </td>
+
+                <td>
+                    ${escapeHTML(propertyType)}
+                </td>
+
+                <td>
+                    ${escapeHTML(region)}
+                </td>
+
+            </tr>
+        `;
+
+    });
+}
+
+/* =========================================
+   LOAD REPORTS
+========================================= */
+
+async function loadReports(){
+
+    const properties = await getProperties();
+    const customers = getCustomers();
+
+    updateMainStats(properties,customers);
+
+    generateTransactionStats(properties);
+
+    generatePropertyTypeStats(properties);
+
+    generateRegionStats(properties);
+
+    generateLatestProperties(properties);
+
+    generateLatestCustomers(customers);
+}
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+async function logout(){
+
+    try{
+
+        await fetch(
+            "/api/logout",
+            {
+                method:"POST",
+                credentials:"include"
+            }
+        );
+
+    }catch(error){
+
+        console.error("خطا در خروج:",error);
+
+    }
+
+    localStorage.removeItem("currentUser");
+
+    window.location.href = "index.html";
+}
+
+/* =========================================
+   MOBILE MENU
+========================================= */
+
+function toggleMobileMenu(){
+
+    const sidebar = document.querySelector(".sidebar");
+    const overlay = document.getElementById("mobileMenuOverlay");
+
+    if(!sidebar || !overlay) return;
+
+    sidebar.classList.toggle("mobile-open");
+
+    if(sidebar.classList.contains("mobile-open")){
+        overlay.classList.add("show");
+    }else{
+        overlay.classList.remove("show");
+    }
+}
+
+function closeMobileMenu(){
+
+    const sidebar = document.querySelector(".sidebar");
+    const overlay = document.getElementById("mobileMenuOverlay");
+
+    if(!sidebar || !overlay) return;
+
+    sidebar.classList.remove("mobile-open");
+    overlay.classList.remove("show");
+}
+
+/* =========================================
+   INIT
+========================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        loadReports();
+
+        const links = document.querySelectorAll(".sidebar a");
+
+        links.forEach(function(link){
+
+            link.addEventListener(
+                "click",
+                function(){
+                    closeMobileMenu();
+                }
+            );
+
+        });
+
+    }
+);
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Escape"){
+            closeMobileMenu();
+        }
+
+    }
+);
+</script>
+
+</body>
+</html>

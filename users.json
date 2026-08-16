@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "fullname": "مدیر سیستم",
+    "username": "admin",
+    "password": "$2b$12$NBd32bsgcVpA5MZ84/qxRe6wGSwXw7bFnE7zBIPXYHNx6x4Bfn5A6",
+    "role": "admin",
+    "status": true
+  },
+  {
+    "id": 1786828820037,
+    "fullname": "abiw",
+    "username": "consultant",
+    "password": "$2b$12$7J2dOcNgCe6LReTsJsbfeu1qmlH3lH1euByDJDHUrNM7Nw/jTpjBG",
+    "role": "consultant",
+    "status": true
+  }
+]

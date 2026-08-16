@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        ورود | سامانه تخصصی املاک کلبه سبز
+    </title>
+
+    <style>
+
+        *{
+            box-sizing:border-box;
+        }
+
+        html,
+        body{
+            width:100%;
+            min-height:100%;
+        }
+
+        body {
+            background: url("IMG_20260809_135729.png") center center / cover fixed no-repeat !important;
+            position: relative;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(8,24,18,.52), rgba(10,30,22,.18) 20%, rgba(8,20,15,.38));
+            z-index: -1;
+            pointer-events: none;
+        }
+
+
+
+        /* ================================
+           BACKGROUND
+        ================================= */
+
+        .background-shape{
+            position:fixed;
+
+            width:420px;
+            height:420px;
+
+            border-radius:50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(199,165,77,.16),
+                    transparent 70%
+                );
+
+            pointer-events:none;
+        }
+
+        .shape-one{
+            top:-180px;
+            right:-150px;
+        }
+
+        .shape-two{
+            bottom:-220px;
+            left:-180px;
+        }
+
+
+        /* ================================
+           LOGIN CONTAINER
+        ================================= */
+
+        .login-wrapper{
+
+            width:100%;
+            max-width:1050px;
+
+            min-height:600px;
+
+            display:grid;
+
+            grid-template-columns:
+                1.05fr
+                .95fr;
+
+            background:#fff;
+
+            border-radius:28px;
+
+            overflow:hidden;
+
+            box-shadow:
+                0 25px 70px
+                rgba(0,0,0,.35);
+
+            position:relative;
+
+            z-index:2;
+        }
+
+
+        /* ================================
+           BRAND SIDE
+        ================================= */
+
+        .brand-side{
+
+            position:relative;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #20352a,
+                    #14221a
+                );
+
+            color:#fff;
+
+            padding:55px;
+
+            display:flex;
+
+            flex-direction:column;
+
+            justify-content:center;
+
+            overflow:hidden;
+        }
+
+
+        .brand-side::before{
+
+            content:"";
+
+            position:absolute;
+
+            width:300px;
+            height:300px;
+
+            border-radius:50%;
+
+            border:
+                1px solid
+                rgba(199,165,77,.2);
+
+            top:-100px;
+            right:-100px;
+        }
+
+
+        .brand-side::after{
+
+            content:"";
+
+            position:absolute;
+
+            width:220px;
+            height:220px;
+
+            border-radius:50%;
+
+            border:
+                1px solid
+                rgba(255,255,255,.08);
+
+            bottom:-100px;
+            left:-70px;
+        }
+
+
+        .brand-content{
+
+            position:relative;
+
+            z-index:2;
+        }
+
+
+        .brand-logo{
+
+            width:82px;
+            height:82px;
+
+            border-radius:24px;
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #d8b65c,
+                    #a9842e
+                );
+
+            box-shadow:
+                0 12px 30px
+                rgba(0,0,0,.25);
+
+            margin-bottom:25px;
+
+            font-size:42px;
+        }
+
+
+        .brand-title{
+
+            margin:0 0 12px;
+
+            font-size:30px;
+
+            line-height:1.7;
+
+            color:#fff;
+        }
+
+
+        .brand-title span{
+
+            color:#d5b45c;
+        }
+
+
+        .brand-description{
+
+            margin:0;
+
+            color:#cbd3cd;
+
+            font-size:14px;
+
+            line-height:2.2;
+
+            max-width:420px;
+        }
+
+
+        .brand-features{
+
+            margin-top:35px;
+
+            display:grid;
+
+            gap:13px;
+        }
+
+
+        .brand-feature{
+
+            display:flex;
+
+            align-items:center;
+
+            gap:10px;
+
+            color:#dce3de;
+
+            font-size:13px;
+        }
+
+
+        .feature-icon{
+
+            width:29px;
+            height:29px;
+
+            border-radius:9px;
+
+            background:
+                rgba(199,165,77,.14);
+
+            border:
+                1px solid
+                rgba(199,165,77,.25);
+
+            color:#d5b45c;
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+            font-size:14px;
+        }
+
+
+        /* ================================
+           LOGIN SIDE
+        ================================= */
+
+        .login-side{
+
+            background:#fff;
+
+            padding:55px;
+
+            display:flex;
+
+            align-items:center;
+
+            justify-content:center;
+        }
+
+
+        .login-content{
+
+            width:100%;
+
+            max-width:390px;
+        }
+
+
+        .mobile-logo{
+
+            display:none;
+
+            width:65px;
+            height:65px;
+
+            border-radius:18px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #d8b65c,
+                    #a9842e
+                );
+
+            align-items:center;
+            justify-content:center;
+
+            font-size:32px;
+
+            margin-bottom:20px;
+        }
+
+
+        .login-title{
+
+            margin:0 0 8px;
+
+            color:#17231c;
+
+            font-size:26px;
+
+            font-weight:bold;
+        }
+
+
+        .login-subtitle{
+
+            margin:0 0 30px;
+
+            color:#888;
+
+            font-size:13px;
+
+            line-height:1.9;
+        }
+
+
+        /* ================================
+           FORM
+        ================================= */
+
+        .form-group{
+
+            margin-bottom:19px;
+        }
+
+
+        .form-label{
+
+            display:block;
+
+            margin-bottom:8px;
+
+            color:#333;
+
+            font-size:12px;
+
+            font-weight:bold;
+        }
+
+
+        .input-wrapper{
+
+            position:relative;
+        }
+
+
+        .input-icon{
+
+            position:absolute;
+
+            right:14px;
+
+            top:50%;
+
+            transform:
+                translateY(-50%);
+
+            color:#999;
+
+            font-size:15px;
+
+            pointer-events:none;
+        }
+
+
+        .form-input{
+
+            width:100%;
+
+            height:50px;
+
+            border:
+                1px solid
+                #e1e4e1;
+
+            border-radius:12px;
+
+            outline:none;
+
+            padding:
+                0 43px
+                0 14px;
+
+            font-family:inherit;
+
+            font-size:13px;
+
+            color:#333;
+
+            background:#fafbfa;
+
+            transition:.2s;
+        }
+
+
+        .form-input:focus{
+
+            border-color:#c7a54d;
+
+            background:#fff;
+
+            box-shadow:
+                0 0 0 4px
+                rgba(199,165,77,.10);
+        }
+
+
+        .form-input::placeholder{
+
+            color:#aaa;
+        }
+
+
+        .password-toggle{
+
+            position:absolute;
+
+            left:10px;
+
+            top:50%;
+
+            transform:
+                translateY(-50%);
+
+            border:0;
+
+            background:transparent;
+
+            cursor:pointer;
+
+            color:#888;
+
+            font-family:inherit;
+
+            font-size:13px;
+
+            padding:7px;
+        }
+
+
+        .password-toggle:hover{
+
+            color:#b18c35;
+        }
+
+
+        /* ================================
+           LOGIN MESSAGE
+        ================================= */
+
+        .login-message{
+
+            display:none;
+
+            background:#fff1f1;
+
+            border:
+                1px solid
+                #f0caca;
+
+            color:#b43c3c;
+
+            border-radius:10px;
+
+            padding:11px 13px;
+
+            margin-bottom:17px;
+
+            font-size:12px;
+
+            line-height:1.8;
+        }
+
+
+        .login-message.show{
+
+            display:block;
+        }
+
+
+        /* ================================
+           LOGIN BUTTON
+        ================================= */
+
+        .login-button{
+
+            width:100%;
+
+            height:52px;
+
+            border:0;
+
+            border-radius:12px;
+
+            cursor:pointer;
+
+            font-family:inherit;
+
+            font-size:13px;
+
+            font-weight:bold;
+
+            color:#fff;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #c7a54d,
+                    #a9842e
+                );
+
+            box-shadow:
+                0 10px 22px
+                rgba(169,132,46,.22);
+
+            transition:
+                transform .2s,
+                box-shadow .2s,
+                opacity .2s;
+        }
+
+
+        .login-button:hover{
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 14px 28px
+                rgba(169,132,46,.30);
+        }
+
+
+        .login-button:active{
+
+            transform:
+                translateY(0);
+        }
+
+
+        .login-button.loading{
+
+            opacity:.7;
+
+            cursor:wait;
+        }
+
+
+        /* ================================
+           DEFAULT USER INFO
+        ================================= */
+
+        .default-account{
+
+            margin-top:20px;
+
+            padding:12px 14px;
+
+            border-radius:11px;
+
+            background:#f8f9f8;
+
+            border:
+                1px solid
+                #e8ebe8;
+
+            font-size:11px;
+
+            color:#777;
+
+            line-height:1.9;
+
+            text-align:center;
+        }
+
+
+        .default-account strong{
+
+            color:#555;
+        }
+
+
+        /* ================================
+           FOOTER
+        ================================= */
+
+        .login-footer{
+
+            margin-top:24px;
+
+            text-align:center;
+
+            color:#aaa;
+
+            font-size:10px;
+
+            line-height:1.8;
+        }
+
+
+        .login-footer span{
+
+            color:#b18c35;
+
+            font-weight:bold;
+        }
+
+
+        /* ================================
+           RESPONSIVE
+        ================================= */
+
+        @media(max-width:850px){
+
+            body{
+
+                padding:15px;
+
+            }
+
+
+            .login-wrapper{
+
+                grid-template-columns:1fr;
+
+                max-width:520px;
+
+                min-height:auto;
+
+                border-radius:22px;
+
+            }
+
+
+            .brand-side{
+
+                display:none;
+
+            }
+
+
+            .login-side{
+
+                padding:35px 25px;
+
+            }
+
+
+            .mobile-logo{
+
+                display:flex;
+
+            }
+
+        }
+
+
+        @media(max-width:500px){
+
+            body{
+
+                padding:10px;
+
+            }
+
+
+            .login-wrapper{
+
+                border-radius:18px;
+
+            }
+
+
+            .login-side{
+
+                padding:28px 20px;
+
+            }
+
+
+            .login-title{
+
+                font-size:22px;
+
+            }
+
+
+            .login-subtitle{
+
+                font-size:12px;
+
+                margin-bottom:25px;
+
+            }
+
+
+            .form-input{
+
+                height:48px;
+
+            }
+
+
+            .login-button{
+
+                height:50px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="background-shape shape-one"></div>
+    <div class="background-shape shape-two"></div>
+
+
+    <main class="login-wrapper">
+
+
+        <!-- ============================
+             BRAND
+        ============================= -->
+
+        <section class="brand-side">
+
+            <div class="brand-content">
+                <div>
+                    <img
+                    src="file_000000006740820a810ef460bf5ae223.png"
+                    alt="کلبه سبز"
+                    style="width:80px;height:80px;object-fit:cover;border-radius:15px;"
+                >
+                </div>
+
+                <h1 class="brand-title">
+
+                    سامانه تخصصی املاک
+
+                    <span>
+                        کلبه سبز
+                    </span>
+
+                </h1>
+
+
+                <p class="brand-description">
+
+                    مدیریت حرفه‌ای فایل‌های ملکی،
+                    مشاوران، مشتریان و اطلاعات املاک
+                    در یک سامانه یکپارچه و اختصاصی.
+
+                </p>
+
+
+                <div class="brand-features">
+
+                    <div class="brand-feature">
+
+                        <div class="feature-icon">
+                            ✓
+                        </div>
+
+                        مدیریت فایل‌های ملکی
+
+                    </div>
+
+
+                    <div class="brand-feature">
+
+                        <div class="feature-icon">
+                            ✓
+                        </div>
+
+                        ثبت و مدیریت تصاویر ملک
+
+                    </div>
+
+
+                    <div class="brand-feature">
+
+                        <div class="feature-icon">
+                            ✓
+                        </div>
+
+                        مدیریت مشاوران و مشتریان
+
+                    </div>
+
+
+                    <div class="brand-feature">
+
+                        <div class="feature-icon">
+                            ✓
+                        </div>
+
+                        گزارش‌گیری و مدیریت اطلاعات
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================
+             LOGIN
+        ============================= -->
+
+        <section class="login-side">
+
+            <div class="login-content">
+
+
+                <div class="mobile-logo">
+                    🌿
+                </div>
+
+
+                <h2 class="login-title">
+
+                    ورود به سامانه
+
+                </h2>
+
+
+                <p class="login-subtitle">
+
+                    برای ورود به پنل مدیریت کلبه سبز،
+                    نام کاربری و رمز عبور خود را وارد کنید.
+
+                </p>
+
+
+                <form
+                    id="loginForm"
+                    autocomplete="off"
+                >
+
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="username"
+                        >
+                            نام کاربری
+                        </label>
+
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                👤
+                            </span>
+
+
+                            <input
+                                type="text"
+                                id="username"
+                                class="form-input"
+                                placeholder="نام کاربری خود را وارد کنید"
+                                autocomplete="username"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="password"
+                        >
+                            رمز عبور
+                        </label>
+
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                🔒
+                            </span>
+
+
+                            <input
+                                type="password"
+                                id="password"
+                                class="form-input"
+                                placeholder="رمز عبور خود را وارد کنید"
+                                autocomplete="current-password"
+                                required
+                            >
+
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                id="passwordToggle"
+                                aria-label="نمایش رمز عبور"
+                            >
+                                نمایش
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="loginMessage"
+                        class="login-message"
+                    ></div>
+
+
+                    <button
+                        type="submit"
+                        id="loginButton"
+                        class="login-button"
+                    >
+                        ورود به سامانه
+                    </button>
+
+
+                </form>
+
+
+                </div>
+
+
+                <div class="login-footer">
+
+                    سامانه تخصصی املاک
+                    <span>
+                        کلبه سبز
+                    </span>
+
+                    <br>
+
+                    تمامی حقوق محفوظ است.
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <script>
+
+        "use strict";
+
+
+        /* =========================================
+           USERS
+        ========================================== */
+
+        const DEFAULT_USERS = [
+
+            {
+                id: 1,
+                username: "admin",
+                password: "1234",
+                name: "مدیر سامانه",
+                role: "admin"
+            },
+
+            {
+                id: 2,
+                username: "consultant",
+                password: "1234",
+                name: "مشاور املاک",
+                role: "consultant"
+            }
+
+        ];
+
+
+        /* =========================================
+           INITIALIZE USERS
+        ========================================== */
+
+        function initializeUsers(){
+
+            try{
+
+                const users =
+                    localStorage.getItem("users");
+
+
+                if(!users){
+
+                    localStorage.setItem(
+                        "users",
+                        JSON.stringify(
+                            DEFAULT_USERS
+                        )
+                    );
+
+                }
+
+            }catch(error){
+
+                console.error(
+                    "خطا در ذخیره کاربران:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* =========================================
+           LOGIN USER
+        ========================================== */
+
+        function loginUser(
+            username,
+            password
+        ){
+
+            try{
+
+                const storedUsers =
+                    localStorage.getItem("users");
+
+
+                const users =
+                    storedUsers
+                        ? JSON.parse(storedUsers)
+                        : DEFAULT_USERS;
+
+
+                const user =
+                    users.find(
+                        function(item){
+
+                            return (
+                                String(item.username)
+                                    .toLowerCase()
+                                ===
+                                String(username)
+                                    .toLowerCase()
+
+                                &&
+                                String(item.password)
+                                ===
+                                String(password)
+                            );
+
+                        }
+                    );
+
+
+                if(!user){
+
+                    return false;
+
+                }
+
+
+                const currentUser = {
+
+                    id:
+                        user.id,
+
+                    username:
+                        user.username,
+
+                    name:
+                        user.name,
+
+                    role:
+                        user.role
+
+                };
+
+
+                localStorage.setItem(
+
+                    "currentUser",
+
+                    JSON.stringify(
+                        currentUser
+                    )
+
+                );
+
+
+                return true;
+
+            }catch(error){
+
+                console.error(
+                    "خطا در ورود:",
+                    error
+                );
+
+                return false;
+
+            }
+
+        }
+
+
+        /* =========================================
+           DOM READY
+        ========================================== */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function(){
+
+                initializeUsers();
+
+
+                const loginForm =
+                    document.getElementById(
+                        "loginForm"
+                    );
+
+
+                const usernameInput =
+                    document.getElementById(
+                        "username"
+                    );
+
+
+                const passwordInput =
+                    document.getElementById(
+                        "password"
+                    );
+
+
+                const loginMessage =
+                    document.getElementById(
+                        "loginMessage"
+                    );
+
+
+                const loginButton =
+                    document.getElementById(
+                        "loginButton"
+                    );
+
+
+                const passwordToggle =
+                    document.getElementById(
+                        "passwordToggle"
+                    );
+
+
+                /* =========================
+                   PASSWORD TOGGLE
+                ========================== */
+
+                if(passwordToggle){
+
+                    passwordToggle.addEventListener(
+                        "click",
+                        function(){
+
+                            if(
+                                passwordInput.type
+                                ===
+                                "password"
+                            ){
+
+                                passwordInput.type =
+                                    "text";
+
+                                passwordToggle.textContent =
+                                    "مخفی";
+
+                            }else{
+
+                                passwordInput.type =
+                                    "password";
+
+                                passwordToggle.textContent =
+                                    "نمایش";
+
+                            }
+
+                        }
+                    );
+
+                }
+
+
+                /* =========================
+                   LOGIN
+                ========================== */
+
+                if(!loginForm){
+
+                    return;
+
+                }
+
+
+                loginForm.addEventListener(
+                    "submit",
+                    function(event){
+
+                        event.preventDefault();
+
+
+                        const username =
+                            usernameInput
+                                .value
+                                .trim();
+
+
+                        const password =
+                            passwordInput
+                                .value;
+
+
+                        loginMessage.classList.remove(
+                            "show"
+                        );
+
+
+                        loginMessage.textContent =
+                            "";
+
+
+                        if(
+                            !username ||
+                            !password
+                        ){
+
+                            loginMessage.textContent =
+                                "لطفاً نام کاربری و رمز عبور را وارد کنید.";
+
+                            loginMessage.classList.add(
+                                "show"
+                            );
+
+                            return;
+
+                        }
+
+
+                        loginButton.classList.add(
+                            "loading"
+                        );
+
+
+                        loginButton.textContent =
+                            "در حال بررسی...";
+
+
+                        setTimeout(
+                            function(){
+
+                                const success =
+                                    loginUser(
+                                        username,
+                                        password
+                                    );
+
+
+                                if(!success){
+
+                                    loginButton.classList.remove(
+                                        "loading"
+                                    );
+
+
+                                    loginButton.textContent =
+                                        "ورود به سامانه";
+
+
+                                    loginMessage.textContent =
+                                        "نام کاربری یا رمز عبور اشتباه است.";
+
+
+                                    loginMessage.classList.add(
+                                        "show"
+                                    );
+
+
+                                    passwordInput.focus();
+
+
+                                    return;
+
+                                }
+
+
+                                loginButton.textContent =
+                                    "ورود موفق ✓";
+
+
+                                setTimeout(
+                                    function(){
+
+                                        window.location.href =
+                                            "dashboard.html";
+
+                                    },
+                                    300
+                                );
+
+
+                            },
+                            350
+                        );
+
+                    }
+                );
+
+
+                /* =========================
+                   ENTER KEY
+                ========================== */
+
+                passwordInput.addEventListener(
+                    "keydown",
+                    function(event){
+
+                        if(
+                            event.key === "Enter"
+                        ){
+
+                            loginForm.requestSubmit();
+
+                        }
+
+                    }
+                );
+
+
+            }
+        );
+
+    </script>
+
+
+</body>
+
+</html>
