@@ -70,8 +70,10 @@ async function testDatabase() {
         );
 
         console.error(
-            error.message
+            "PostgreSQL ERROR:",
+            error
         );
+            
 
         return false;
 
