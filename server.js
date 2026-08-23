@@ -1,11 +1,11 @@
-"use strict";
+﻿"use strict";
 
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const session = require("express-session");
 const bcrypt = require("bcrypt");
-
+const { testDatabase } = require("./db");
 const app = express();
 
 // =====================================================
@@ -1849,7 +1849,11 @@ async function startServer() {
         ensureUsersFile();
 
         await migratePasswords();
+const databaseConnected = await testDatabase();
 
+if (!databaseConnected) {
+    throw new Error("PostgreSQL connection failed");
+}
         const server =
             app.listen(
 
