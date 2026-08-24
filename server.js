@@ -5,7 +5,13 @@ const path = require("path");
 const fs = require("fs");
 const session = require("express-session");
 const bcrypt = require("bcrypt");
-const { testDatabase } = require("./db");
+
+const {
+    pool,
+    testDatabase,
+    initializeDatabase
+} = require("./db");
+
 const app = express();
 
 // =====================================================
@@ -14,11 +20,10 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-// Render پشت Proxy قرار دارد
 app.set("trust proxy", 1);
 
 // =====================================================
-// مسیرهای اصلی پروژه
+// مسیرهای پروژه
 // =====================================================
 
 const projectPath = __dirname;
@@ -37,14 +42,18 @@ const usersPath = path.join(
 // Middleware
 // =====================================================
 
-app.use(express.json({
-    limit: "50mb"
-}));
+app.use(
+    express.json({
+        limit: "50mb"
+    })
+);
 
-app.use(express.urlencoded({
-    extended: true,
-    limit: "50mb"
-}));
+app.use(
+    express.urlencoded({
+        extended: true,
+        limit: "50mb"
+    })
+);
 
 // =====================================================
 // Session
@@ -53,32 +62,34 @@ app.use(express.urlencoded({
 const isProduction =
     process.env.NODE_ENV === "production";
 
-app.use(session({
+app.use(
+    session({
 
-    secret:
-        process.env.SESSION_SECRET ||
-        "kolbeye-sabz-secret-key-2026",
+        secret:
+            process.env.SESSION_SECRET ||
+            "kolbeye-sabz-secret-key-2026",
 
-    resave: false,
+        resave: false,
 
-    saveUninitialized: false,
+        saveUninitialized: false,
 
-    rolling: true,
+        rolling: true,
 
-    cookie: {
+        cookie: {
 
-        httpOnly: true,
+            httpOnly: true,
 
-        sameSite: "lax",
+            sameSite: "lax",
 
-        secure: isProduction,
+            secure: isProduction,
 
-        maxAge:
-            1000 * 60 * 60 * 8
+            maxAge:
+                1000 * 60 * 60 * 8
 
-    }
+        }
 
-}));
+    })
+);
 
 // =====================================================
 // فایل‌های استاتیک
@@ -89,7 +100,7 @@ app.use(
 );
 
 // =====================================================
-// Health Check برای Render
+// Health Check
 // =====================================================
 
 app.get(
@@ -172,7 +183,6 @@ function ensureUsersFile() {
                     username:
                         "admin",
 
-                    // رمز اولیه: 123456
                     password:
                         "123456",
 
@@ -214,18 +224,11 @@ function ensureUsersFile() {
 }
 
 // =====================================================
-// اجرای اولیه فایل‌ها
+// خواندن املاک قدیمی از JSON
+// فقط برای Migration
 // =====================================================
 
-ensurePropertiesFile();
-
-ensureUsersFile();
-
-// =====================================================
-// خواندن املاک
-// =====================================================
-
-function getProperties() {
+function getPropertiesFromJSON() {
 
     try {
 
@@ -260,30 +263,6 @@ function getProperties() {
         return [];
 
     }
-
-}
-
-// =====================================================
-// ذخیره املاک
-// =====================================================
-
-function saveProperties(
-    properties
-) {
-
-    fs.writeFileSync(
-
-        dataPath,
-
-        JSON.stringify(
-            properties,
-            null,
-            2
-        ),
-
-        "utf8"
-
-    );
 
 }
 
@@ -333,9 +312,7 @@ function getUsers() {
 // ذخیره کاربران
 // =====================================================
 
-function saveUsers(
-    users
-) {
+function saveUsers(users) {
 
     fs.writeFileSync(
 
@@ -350,6 +327,339 @@ function saveUsers(
         "utf8"
 
     );
+
+}
+
+// =====================================================
+// ایجاد جدول PostgreSQL
+// =====================================================
+
+async function initializeDatabase() {
+
+    console.log(
+        "در حال بررسی ساختار PostgreSQL..."
+    );
+
+    await pool.query(`
+
+        CREATE TABLE IF NOT EXISTS properties (
+
+            id TEXT PRIMARY KEY,
+
+            code TEXT,
+
+            property_data JSONB NOT NULL,
+
+            created_at TIMESTAMPTZ DEFAULT NOW(),
+
+            updated_at TIMESTAMPTZ DEFAULT NOW()
+
+        )
+
+    `);
+
+    await pool.query(`
+
+        CREATE INDEX IF NOT EXISTS
+        properties_code_idx
+        ON properties(code)
+
+    `);
+
+    console.log(
+        "PostgreSQL properties table: READY"
+    );
+
+}
+
+// =====================================================
+// انتقال اطلاعات properties.json به PostgreSQL
+// =====================================================
+
+async function migratePropertiesToDatabase() {
+
+    try {
+
+        const oldProperties =
+            getPropertiesFromJSON();
+
+        if (
+            !Array.isArray(oldProperties) ||
+            oldProperties.length === 0
+        ) {
+
+            console.log(
+                "هیچ ملک قدیمی برای انتقال وجود ندارد."
+            );
+
+            return;
+
+        }
+
+        const result =
+            await pool.query(
+                "SELECT COUNT(*)::int AS count FROM properties"
+            );
+
+        const databaseCount =
+            result.rows[0].count;
+
+        if (databaseCount > 0) {
+
+            console.log(
+                "PostgreSQL دارای اطلاعات ملک است؛ Migration رد شد."
+            );
+
+            return;
+
+        }
+
+        let migrated =
+            0;
+
+        for (
+            const property of oldProperties
+        ) {
+
+            if (
+                !property ||
+                !property.id
+            ) {
+
+                continue;
+
+            }
+
+            await pool.query(
+
+                `
+
+                INSERT INTO properties
+                (
+                    id,
+                    code,
+                    property_data
+                )
+
+                VALUES
+                (
+                    $1,
+                    $2,
+                    $3::jsonb
+                )
+
+                ON CONFLICT (id)
+                DO NOTHING
+
+                `,
+
+                [
+
+                    String(property.id),
+
+                    property.code
+                        ? String(property.code)
+                        : null,
+
+                    JSON.stringify(property)
+
+                ]
+
+            );
+
+            migrated++;
+
+        }
+
+        console.log(
+            "تعداد املاک منتقل‌شده به PostgreSQL:",
+            migrated
+        );
+
+    } catch (error) {
+
+        console.error(
+            "PROPERTY MIGRATION ERROR:",
+            error
+        );
+
+    }
+
+}
+
+// =====================================================
+// تبدیل رکورد PostgreSQL به ملک
+// =====================================================
+
+function normalizeDatabaseProperty(row) {
+
+    if (
+        !row ||
+        !row.property_data
+    ) {
+
+        return null;
+
+    }
+
+    const property = {
+
+        ...row.property_data
+
+    };
+
+    if (!property.id) {
+
+        property.id =
+            row.id;
+
+    }
+
+    if (
+        !property.code &&
+        row.code
+    ) {
+
+        property.code =
+            row.code;
+
+    }
+
+    return property;
+
+}
+
+// =====================================================
+// انتقال کاربران users.json به PostgreSQL
+// =====================================================
+
+async function migrateUsersToDatabase() {
+
+    try {
+
+        const oldUsers = getUsers();
+
+        if (
+            !Array.isArray(oldUsers) ||
+            oldUsers.length === 0
+        ) {
+
+            console.log(
+                "هیچ کاربر قدیمی برای انتقال وجود ندارد."
+            );
+
+            return;
+
+        }
+
+        const result = await pool.query(
+            "SELECT COUNT(*)::int AS count FROM users"
+        );
+
+        const databaseCount =
+            result.rows[0].count;
+
+        if (databaseCount > 0) {
+
+            console.log(
+                "PostgreSQL دارای کاربران است؛ Migration رد شد."
+            );
+
+            return;
+
+        }
+
+        let migrated = 0;
+
+        for (const user of oldUsers) {
+
+            if (
+                !user ||
+                !user.username ||
+                !user.password
+            ) {
+
+                continue;
+
+            }
+
+            await pool.query(
+
+                `
+
+                INSERT INTO users
+                (
+                    id,
+                    fullname,
+                    username,
+                    password,
+                    role,
+                    status
+                )
+
+                VALUES
+                (
+                    $1,
+                    $2,
+                    $3,
+                    $4,
+                    $5,
+                    $6
+                )
+
+                ON CONFLICT (username)
+                DO NOTHING
+
+                `,
+
+                [
+
+                    String(
+                        user.id || Date.now()
+                    ),
+
+                    String(
+                        user.fullname ||
+                        user.name ||
+                        user.username
+                    ),
+
+                    String(
+                        user.username
+                    ).trim(),
+
+                    String(
+                        user.password
+                    ),
+
+                    user.role ||
+                        "consultant",
+
+                    user.status !== false
+
+                ]
+
+            );
+
+            migrated++;
+
+        }
+
+        console.log(
+            "تعداد کاربران منتقل‌شده به PostgreSQL:",
+            migrated
+        );
+
+    } catch (error) {
+
+        console.error(
+            "USER MIGRATION ERROR:",
+            error
+        );
+
+        throw error;
+
+    }
 
 }
 
@@ -443,9 +753,7 @@ function requireAuth(
 // بررسی نقش کاربر
 // =====================================================
 
-function requireRole(
-    ...roles
-) {
+function requireRole(...roles) {
 
     return function (
         req,
@@ -522,15 +830,20 @@ app.get(
 );
 
 // =====================================================
-// LOGIN
+// 
+// =====================================================
+
+// =====================================================
+// LOGIN - PostgreSQL
+// =====================================================
+
+// =====================================================
+// LOGIN - PostgreSQL
 // =====================================================
 
 app.post(
     "/api/login",
-    async function (
-        req,
-        res
-    ) {
+    async function (req, res) {
 
         try {
 
@@ -544,10 +857,7 @@ app.post(
                     req.body.password || ""
                 );
 
-            if (
-                !username ||
-                !password
-            ) {
+            if (!username || !password) {
 
                 return res.status(400).json({
 
@@ -560,38 +870,34 @@ app.post(
 
             }
 
-            const users =
-                getUsers();
+            // =================================================
+            // دریافت کاربر از PostgreSQL
+            // =================================================
 
-            const user =
-                users.find(
-                    function (
-                        item
-                    ) {
+            const result =
+                await pool.query(
 
-                        return (
+                    `
+                    SELECT
+                        id,
+                        fullname,
+                        username,
+                        password,
+                        role,
+                        status
 
-                            String(
-                                item.username
-                            )
-                            .trim()
-                            .toLowerCase()
+                    FROM users
 
-                            ===
+                    WHERE LOWER(username) = LOWER($1)
 
-                            username
-                                .toLowerCase()
+                    LIMIT 1
+                    `,
 
-                            &&
+                    [username]
 
-                            item.status !== false
-
-                        );
-
-                    }
                 );
 
-            if (!user) {
+            if (result.rows.length === 0) {
 
                 return res.status(401).json({
 
@@ -604,62 +910,38 @@ app.post(
 
             }
 
-            let passwordOK =
-                false;
+            const user =
+                result.rows[0];
 
             // =================================================
-            // بررسی bcrypt
+            // بررسی فعال بودن کاربر
             // =================================================
 
-            if (
+            if (user.status === false) {
 
-                user.password &&
+                return res.status(403).json({
 
-                String(
-                    user.password
-                ).startsWith("$2")
+                    success: false,
 
-            ) {
+                    message:
+                        "حساب کاربری شما غیرفعال است."
 
-                passwordOK =
-                    await bcrypt.compare(
-
-                        password,
-
-                        user.password
-
-                    );
+                });
 
             }
 
             // =================================================
-            // پشتیبانی از رمز قدیمی
+            // بررسی رمز عبور
             // =================================================
 
-            else {
+            const passwordOK =
+                await bcrypt.compare(
 
-                passwordOK =
-                    password ===
-                    String(
-                        user.password
-                    );
+                    password,
 
-                if (passwordOK) {
+                    String(user.password)
 
-                    user.password =
-                        await bcrypt.hash(
-
-                            password,
-
-                            12
-
-                        );
-
-                    saveUsers(users);
-
-                }
-
-            }
+                );
 
             if (!passwordOK) {
 
@@ -685,7 +967,6 @@ app.post(
 
                 fullname:
                     user.fullname ||
-                    user.name ||
                     user.username,
 
                 username:
@@ -702,9 +983,7 @@ app.post(
             // =================================================
 
             req.session.save(
-                function (
-                    sessionError
-                ) {
+                function (sessionError) {
 
                     if (sessionError) {
 
@@ -723,6 +1002,11 @@ app.post(
                         });
 
                     }
+
+                    console.log(
+                        "USER LOGIN:",
+                        user.username
+                    );
 
                     return res.json({
 
@@ -759,7 +1043,6 @@ app.post(
 
     }
 );
-
 // =====================================================
 // LOGOUT
 // =====================================================
@@ -834,21 +1117,41 @@ app.post(
 );
 
 // =====================================================
-// دریافت تمام املاک
+// دریافت تمام املاک از PostgreSQL
 // =====================================================
 
 app.get(
     "/api/properties",
     requireAuth,
-    function (
+    async function (
         req,
         res
     ) {
 
         try {
 
+            const result =
+                await pool.query(`
+
+                    SELECT
+                        id,
+                        code,
+                        property_data,
+                        created_at,
+                        updated_at
+
+                    FROM properties
+
+                    ORDER BY created_at DESC
+
+                `);
+
             const properties =
-                getProperties();
+                result.rows
+                    .map(
+                        normalizeDatabaseProperty
+                    )
+                    .filter(Boolean);
 
             return res.json({
 
@@ -881,46 +1184,50 @@ app.get(
 );
 
 // =====================================================
-// دریافت یک ملک
+// دریافت یک ملک از PostgreSQL
 // =====================================================
 
 app.get(
     "/api/properties/:id",
     requireAuth,
-    function (
+    async function (
         req,
         res
     ) {
 
         try {
 
-            const properties =
-                getProperties();
+            const result =
+                await pool.query(
 
-            const property =
-                properties.find(
-                    function (
-                        item
-                    ) {
+                    `
 
-                        return (
+                    SELECT
+                        id,
+                        code,
+                        property_data,
+                        created_at,
+                        updated_at
 
-                            String(
-                                item.id
-                            )
+                    FROM properties
 
-                            ===
+                    WHERE id = $1
 
-                            String(
-                                req.params.id
-                            )
+                    LIMIT 1
 
-                        );
+                    `,
 
-                    }
+                    [
+                        String(
+                            req.params.id
+                        )
+                    ]
+
                 );
 
-            if (!property) {
+            if (
+                result.rows.length === 0
+            ) {
 
                 return res.status(404).json({
 
@@ -932,6 +1239,11 @@ app.get(
                 });
 
             }
+
+            const property =
+                normalizeDatabaseProperty(
+                    result.rows[0]
+                );
 
             return res.json({
 
@@ -964,13 +1276,13 @@ app.get(
 );
 
 // =====================================================
-// ثبت ملک
+// ثبت ملک در PostgreSQL
 // =====================================================
 
 app.post(
     "/api/properties",
     requireAuth,
-    function (
+    async function (
         req,
         res
     ) {
@@ -996,9 +1308,6 @@ app.post(
                 });
 
             }
-
-            const properties =
-                getProperties();
 
             const property = {
 
@@ -1081,15 +1390,52 @@ app.post(
             }
 
             // =================================================
-            // ذخیره
+            // ذخیره در PostgreSQL
             // =================================================
 
-            properties.push(
-                property
+            await pool.query(
+
+                `
+
+                INSERT INTO properties
+                (
+                    id,
+                    code,
+                    property_data
+                )
+
+                VALUES
+                (
+                    $1,
+                    $2,
+                    $3::jsonb
+                )
+
+                `,
+
+                [
+
+                    String(
+                        property.id
+                    ),
+
+                    property.code
+                        ? String(
+                            property.code
+                        )
+                        : null,
+
+                    JSON.stringify(
+                        property
+                    )
+
+                ]
+
             );
 
-            saveProperties(
-                properties
+            console.log(
+                "PROPERTY CREATED:",
+                property.id
             );
 
             return res.status(201).json({
@@ -1126,46 +1472,48 @@ app.post(
 );
 
 // =====================================================
-// ویرایش ملک
+// ویرایش ملک در PostgreSQL
 // =====================================================
 
 app.put(
     "/api/properties/:id",
     requireAuth,
-    function (
+    async function (
         req,
         res
     ) {
 
         try {
 
-            const properties =
-                getProperties();
+            const result =
+                await pool.query(
 
-            const index =
-                properties.findIndex(
-                    function (
-                        item
-                    ) {
+                    `
 
-                        return (
+                    SELECT
+                        id,
+                        code,
+                        property_data
 
-                            String(
-                                item.id
-                            )
+                    FROM properties
 
-                            ===
+                    WHERE id = $1
 
-                            String(
-                                req.params.id
-                            )
+                    LIMIT 1
 
-                        );
+                    `,
 
-                    }
+                    [
+                        String(
+                            req.params.id
+                        )
+                    ]
+
                 );
 
-            if (index === -1) {
+            if (
+                result.rows.length === 0
+            ) {
 
                 return res.status(404).json({
 
@@ -1179,7 +1527,9 @@ app.put(
             }
 
             const oldProperty =
-                properties[index];
+                normalizeDatabaseProperty(
+                    result.rows[0]
+                );
 
             const updatedProperty = {
 
@@ -1239,11 +1589,47 @@ app.put(
 
             }
 
-            properties[index] =
-                updatedProperty;
+            await pool.query(
 
-            saveProperties(
-                properties
+                `
+
+                UPDATE properties
+
+                SET
+
+                    code = $1,
+
+                    property_data = $2::jsonb,
+
+                    updated_at = NOW()
+
+                WHERE id = $3
+
+                `,
+
+                [
+
+                    updatedProperty.code
+                        ? String(
+                            updatedProperty.code
+                        )
+                        : null,
+
+                    JSON.stringify(
+                        updatedProperty
+                    ),
+
+                    String(
+                        oldProperty.id
+                    )
+
+                ]
+
+            );
+
+            console.log(
+                "PROPERTY UPDATED:",
+                oldProperty.id
             );
 
             return res.json({
@@ -1280,51 +1666,42 @@ app.put(
 );
 
 // =====================================================
-// حذف ملک
+// حذف ملک از PostgreSQL
 // =====================================================
 
 app.delete(
     "/api/properties/:id",
     requireRole("admin"),
-    function (
+    async function (
         req,
         res
     ) {
 
         try {
 
-            let properties =
-                getProperties();
+            const result =
+                await pool.query(
 
-            const oldLength =
-                properties.length;
+                    `
 
-            properties =
-                properties.filter(
-                    function (
-                        item
-                    ) {
+                    DELETE FROM properties
 
-                        return (
+                    WHERE id = $1
 
-                            String(
-                                item.id
-                            )
+                    RETURNING id
 
-                            !==
+                    `,
 
-                            String(
-                                req.params.id
-                            )
+                    [
+                        String(
+                            req.params.id
+                        )
+                    ]
 
-                        );
-
-                    }
                 );
 
             if (
-                properties.length ===
-                oldLength
+                result.rows.length === 0
             ) {
 
                 return res.status(404).json({
@@ -1338,8 +1715,9 @@ app.delete(
 
             }
 
-            saveProperties(
-                properties
+            console.log(
+                "PROPERTY DELETED:",
+                req.params.id
             );
 
             return res.json({
@@ -1779,7 +2157,7 @@ app.get(
 );
 
 // =====================================================
-// خطای 404 برای API
+// 404 API
 // =====================================================
 
 app.use(
@@ -1802,7 +2180,7 @@ app.use(
 );
 
 // =====================================================
-// مدیریت خطاهای Express
+// مدیریت خطا
 // =====================================================
 
 app.use(
@@ -1848,12 +2226,48 @@ async function startServer() {
 
         ensureUsersFile();
 
-        await migratePasswords();
-const databaseConnected = await testDatabase();
+        // =================================================
+        // بررسی اتصال PostgreSQL
+        // =================================================
 
-if (!databaseConnected) {
-    throw new Error("PostgreSQL connection failed");
-}
+        const databaseConnected =
+            await testDatabase();
+
+        if (!databaseConnected) {
+
+            throw new Error(
+                "PostgreSQL connection failed"
+            );
+
+        }
+
+        // =================================================
+        // ساخت جدول‌ها
+        // =================================================
+
+        await initializeDatabase();
+
+        // =================================================
+        // انتقال اطلاعات قدیمی
+        // =================================================
+
+        await migratePropertiesToDatabase();
+
+        // =================================================
+        // انتقال کاربران به PostgreSQL
+        // =================================================
+        
+        await migrateUsersToDatabase();
+        
+        // =================================================
+        // تبدیل رمزهای قدیمی
+        // =================================================
+        
+        await migratePasswords();
+        // =================================================
+        // اجرای سرور
+        // =================================================
+
         const server =
             app.listen(
 
@@ -1912,6 +2326,10 @@ if (!databaseConnected) {
 
                     console.log(
                         "Users API      : ACTIVE"
+                    );
+
+                    console.log(
+                        "PostgreSQL     : ACTIVE"
                     );
 
                     console.log(
@@ -1983,5 +2401,6 @@ process.on(
             "UNHANDLED REJECTION:",
             error
         );
+
     }
 );
