@@ -15,56 +15,48 @@ const {
 const app = express();
 
 // =====================================================
-// تنظیمات سرور
+// تنظیمات اصلی
 // =====================================================
 
 const PORT = process.env.PORT || 3000;
+const HOST = "0.0.0.0";
+const projectPath = __dirname;
+
+const isProduction =
+    process.env.NODE_ENV === "production";
 
 app.set("trust proxy", 1);
 
 // =====================================================
-// مسیرهای پروژه
+// فایل‌های قدیمی JSON
+// فقط برای Migration
 // =====================================================
 
-const projectPath = __dirname;
+const propertiesJSONPath =
+    path.join(projectPath, "properties.json");
 
-const dataPath = path.join(
-    projectPath,
-    "properties.json"
-);
-
-const usersPath = path.join(
-    projectPath,
-    "users.json"
-);
+const usersJSONPath =
+    path.join(projectPath, "users.json");
 
 // =====================================================
 // Middleware
 // =====================================================
 
-app.use(
-    express.json({
-        limit: "50mb"
-    })
-);
+app.use(express.json({
+    limit: "50mb"
+}));
 
-app.use(
-    express.urlencoded({
-        extended: true,
-        limit: "50mb"
-    })
-);
+app.use(express.urlencoded({
+    extended: true,
+    limit: "50mb"
+}));
 
 // =====================================================
 // Session
 // =====================================================
 
-const isProduction =
-    process.env.NODE_ENV === "production";
-
 app.use(
     session({
-
         secret:
             process.env.SESSION_SECRET ||
             "kolbeye-sabz-secret-key-2026",
@@ -76,18 +68,12 @@ app.use(
         rolling: true,
 
         cookie: {
-
             httpOnly: true,
-
             sameSite: "lax",
-
             secure: isProduction,
-
             maxAge:
                 1000 * 60 * 60 * 8
-
         }
-
     })
 );
 
@@ -100,52 +86,43 @@ app.use(
 );
 
 // =====================================================
-// Health Check
+// Health Check - Render
 // =====================================================
 
-app.get(
-    "/health",
-    function (req, res) {
+app.get("/health", (req, res) => {
 
-        return res.status(200).json({
+    return res.status(200).json({
+        success: true,
+        status: "ok",
+        message:
+            "Kolbeye Sabz Server is running",
+        port: PORT
+    });
 
-            success: true,
-
-            status: "ok",
-
-            message:
-                "Kolbeye Sabz Server is running",
-
-            port:
-                PORT
-
-        });
-
-    }
-);
+});
 
 // =====================================================
-// ساخت properties.json در صورت نبودن
+// فایل‌های JSON قدیمی
 // =====================================================
 
 function ensurePropertiesFile() {
 
     try {
 
-        if (!fs.existsSync(dataPath)) {
+        if (
+            !fs.existsSync(
+                propertiesJSONPath
+            )
+        ) {
 
             fs.writeFileSync(
-
-                dataPath,
-
+                propertiesJSONPath,
                 JSON.stringify(
                     [],
                     null,
                     2
                 ),
-
                 "utf8"
-
             );
 
         }
@@ -161,53 +138,35 @@ function ensurePropertiesFile() {
 
 }
 
-// =====================================================
-// ساخت users.json در صورت نبودن
-// =====================================================
-
 function ensureUsersFile() {
 
     try {
 
-        if (!fs.existsSync(usersPath)) {
+        if (
+            !fs.existsSync(
+                usersJSONPath
+            )
+        ) {
 
             const defaultUsers = [
-
                 {
-
-                    id: 1,
-
-                    fullname:
-                        "مدیر سیستم",
-
-                    username:
-                        "admin",
-
-                    password:
-                        "123456",
-
-                    role:
-                        "admin",
-
-                    status:
-                        true
-
+                    id: "1",
+                    fullname: "مدیر سیستم",
+                    username: "admin",
+                    password: "123456",
+                    role: "admin",
+                    status: true
                 }
-
             ];
 
             fs.writeFileSync(
-
-                usersPath,
-
+                usersJSONPath,
                 JSON.stringify(
                     defaultUsers,
                     null,
                     2
                 ),
-
                 "utf8"
-
             );
 
         }
@@ -223,11 +182,6 @@ function ensureUsersFile() {
 
 }
 
-// =====================================================
-// خواندن املاک قدیمی از JSON
-// فقط برای Migration
-// =====================================================
-
 function getPropertiesFromJSON() {
 
     try {
@@ -236,14 +190,12 @@ function getPropertiesFromJSON() {
 
         const raw =
             fs.readFileSync(
-                dataPath,
+                propertiesJSONPath,
                 "utf8"
             );
 
         if (!raw.trim()) {
-
             return [];
-
         }
 
         const data =
@@ -266,11 +218,7 @@ function getPropertiesFromJSON() {
 
 }
 
-// =====================================================
-// خواندن کاربران
-// =====================================================
-
-function getUsers() {
+function getUsersFromJSON() {
 
     try {
 
@@ -278,21 +226,19 @@ function getUsers() {
 
         const raw =
             fs.readFileSync(
-                usersPath,
+                usersJSONPath,
                 "utf8"
             );
 
         if (!raw.trim()) {
-
             return [];
-
         }
 
-        const users =
+        const data =
             JSON.parse(raw);
 
-        return Array.isArray(users)
-            ? users
+        return Array.isArray(data)
+            ? data
             : [];
 
     } catch (error) {
@@ -309,71 +255,7 @@ function getUsers() {
 }
 
 // =====================================================
-// ذخیره کاربران
-// =====================================================
-
-function saveUsers(users) {
-
-    fs.writeFileSync(
-
-        usersPath,
-
-        JSON.stringify(
-            users,
-            null,
-            2
-        ),
-
-        "utf8"
-
-    );
-
-}
-
-// =====================================================
-// ایجاد جدول PostgreSQL
-// =====================================================
-
-async function initializeDatabase() {
-
-    console.log(
-        "در حال بررسی ساختار PostgreSQL..."
-    );
-
-    await pool.query(`
-
-        CREATE TABLE IF NOT EXISTS properties (
-
-            id TEXT PRIMARY KEY,
-
-            code TEXT,
-
-            property_data JSONB NOT NULL,
-
-            created_at TIMESTAMPTZ DEFAULT NOW(),
-
-            updated_at TIMESTAMPTZ DEFAULT NOW()
-
-        )
-
-    `);
-
-    await pool.query(`
-
-        CREATE INDEX IF NOT EXISTS
-        properties_code_idx
-        ON properties(code)
-
-    `);
-
-    console.log(
-        "PostgreSQL properties table: READY"
-    );
-
-}
-
-// =====================================================
-// انتقال اطلاعات properties.json به PostgreSQL
+// Migration املاک قدیمی
 // =====================================================
 
 async function migratePropertiesToDatabase() {
@@ -384,8 +266,7 @@ async function migratePropertiesToDatabase() {
             getPropertiesFromJSON();
 
         if (
-            !Array.isArray(oldProperties) ||
-            oldProperties.length === 0
+            !oldProperties.length
         ) {
 
             console.log(
@@ -396,83 +277,64 @@ async function migratePropertiesToDatabase() {
 
         }
 
-        const result =
-            await pool.query(
-                "SELECT COUNT(*)::int AS count FROM properties"
-            );
-
-        const databaseCount =
-            result.rows[0].count;
-
-        if (databaseCount > 0) {
-
-            console.log(
-                "PostgreSQL دارای اطلاعات ملک است؛ Migration رد شد."
-            );
-
-            return;
-
-        }
-
-        let migrated =
-            0;
+        let migrated = 0;
 
         for (
-            const property of oldProperties
+            const property
+            of oldProperties
         ) {
 
             if (
                 !property ||
                 !property.id
             ) {
-
                 continue;
-
             }
 
-            await pool.query(
+            const result =
+                await pool.query(
+                    `
+                    INSERT INTO properties
+                    (
+                        id,
+                        code,
+                        property_data
+                    )
+                    VALUES
+                    (
+                        $1,
+                        $2,
+                        $3::jsonb
+                    )
+                    ON CONFLICT (id)
+                    DO NOTHING
+                    RETURNING id
+                    `,
+                    [
+                        String(property.id),
 
-                `
+                        property.code
+                            ? String(
+                                property.code
+                            )
+                            : null,
 
-                INSERT INTO properties
-                (
-                    id,
-                    code,
-                    property_data
-                )
+                        JSON.stringify(
+                            property
+                        )
+                    ]
+                );
 
-                VALUES
-                (
-                    $1,
-                    $2,
-                    $3::jsonb
-                )
-
-                ON CONFLICT (id)
-                DO NOTHING
-
-                `,
-
-                [
-
-                    String(property.id),
-
-                    property.code
-                        ? String(property.code)
-                        : null,
-
-                    JSON.stringify(property)
-
-                ]
-
-            );
-
-            migrated++;
+            if (
+                result.rowCount > 0
+            ) {
+                migrated++;
+            }
 
         }
 
         console.log(
-            "تعداد املاک منتقل‌شده به PostgreSQL:",
+            "تعداد املاک منتقل‌شده:",
             migrated
         );
 
@@ -488,61 +350,17 @@ async function migratePropertiesToDatabase() {
 }
 
 // =====================================================
-// تبدیل رکورد PostgreSQL به ملک
-// =====================================================
-
-function normalizeDatabaseProperty(row) {
-
-    if (
-        !row ||
-        !row.property_data
-    ) {
-
-        return null;
-
-    }
-
-    const property = {
-
-        ...row.property_data
-
-    };
-
-    if (!property.id) {
-
-        property.id =
-            row.id;
-
-    }
-
-    if (
-        !property.code &&
-        row.code
-    ) {
-
-        property.code =
-            row.code;
-
-    }
-
-    return property;
-
-}
-
-// =====================================================
-// انتقال کاربران users.json به PostgreSQL
+// Migration کاربران قدیمی
 // =====================================================
 
 async function migrateUsersToDatabase() {
 
     try {
 
-        const oldUsers = getUsers();
+        const oldUsers =
+            getUsersFromJSON();
 
-        if (
-            !Array.isArray(oldUsers) ||
-            oldUsers.length === 0
-        ) {
+        if (!oldUsers.length) {
 
             console.log(
                 "هیچ کاربر قدیمی برای انتقال وجود ندارد."
@@ -552,101 +370,96 @@ async function migrateUsersToDatabase() {
 
         }
 
-        const result = await pool.query(
-            "SELECT COUNT(*)::int AS count FROM users"
-        );
-
-        const databaseCount =
-            result.rows[0].count;
-
-        if (databaseCount > 0) {
-
-            console.log(
-                "PostgreSQL دارای کاربران است؛ Migration رد شد."
-            );
-
-            return;
-
-        }
-
         let migrated = 0;
 
-        for (const user of oldUsers) {
+        for (
+            const user
+            of oldUsers
+        ) {
 
             if (
                 !user ||
                 !user.username ||
                 !user.password
             ) {
-
                 continue;
+            }
+
+            let password =
+                String(user.password);
+
+            if (
+                !password.startsWith("$2")
+            ) {
+
+                password =
+                    await bcrypt.hash(
+                        password,
+                        12
+                    );
 
             }
 
-            await pool.query(
+            const result =
+                await pool.query(
+                    `
+                    INSERT INTO users
+                    (
+                        id,
+                        fullname,
+                        username,
+                        password,
+                        role,
+                        status
+                    )
+                    VALUES
+                    (
+                        $1,
+                        $2,
+                        $3,
+                        $4,
+                        $5,
+                        $6
+                    )
+                    ON CONFLICT (username)
+                    DO NOTHING
+                    RETURNING id
+                    `,
+                    [
+                        String(
+                            user.id ||
+                            Date.now()
+                        ),
 
-                `
+                        String(
+                            user.fullname ||
+                            user.name ||
+                            user.username
+                        ),
 
-                INSERT INTO users
-                (
-                    id,
-                    fullname,
-                    username,
-                    password,
-                    role,
-                    status
-                )
+                        String(
+                            user.username
+                        ).trim(),
 
-                VALUES
-                (
-                    $1,
-                    $2,
-                    $3,
-                    $4,
-                    $5,
-                    $6
-                )
+                        password,
 
-                ON CONFLICT (username)
-                DO NOTHING
+                        user.role ||
+                            "consultant",
 
-                `,
+                        user.status !== false
+                    ]
+                );
 
-                [
-
-                    String(
-                        user.id || Date.now()
-                    ),
-
-                    String(
-                        user.fullname ||
-                        user.name ||
-                        user.username
-                    ),
-
-                    String(
-                        user.username
-                    ).trim(),
-
-                    String(
-                        user.password
-                    ),
-
-                    user.role ||
-                        "consultant",
-
-                    user.status !== false
-
-                ]
-
-            );
-
-            migrated++;
+            if (
+                result.rowCount > 0
+            ) {
+                migrated++;
+            }
 
         }
 
         console.log(
-            "تعداد کاربران منتقل‌شده به PostgreSQL:",
+            "تعداد کاربران منتقل‌شده:",
             migrated
         );
 
@@ -657,59 +470,85 @@ async function migrateUsersToDatabase() {
             error
         );
 
-        throw error;
-
     }
 
 }
 
 // =====================================================
-// تبدیل رمزهای قدیمی به bcrypt
+// Hash کردن رمزهای موجود
 // =====================================================
 
-async function migratePasswords() {
+async function migrateDatabasePasswords() {
 
-    const users =
-        getUsers();
+    try {
 
-    let changed =
-        false;
+        const result =
+            await pool.query(
+                `
+                SELECT id, password
+                FROM users
+                `
+            );
 
-    for (
-        const user of users
-    ) {
+        let changed = 0;
 
-        if (
-
-            user.password &&
-
-            !String(
-                user.password
-            ).startsWith("$2")
-
+        for (
+            const user
+            of result.rows
         ) {
 
-            user.password =
-                await bcrypt.hash(
-                    String(
-                        user.password
-                    ),
-                    12
+            const password =
+                String(
+                    user.password || ""
                 );
 
-            changed =
-                true;
+            if (
+                password &&
+                !password.startsWith("$2")
+            ) {
+
+                const hashed =
+                    await bcrypt.hash(
+                        password,
+                        12
+                    );
+
+                await pool.query(
+                    `
+                    UPDATE users
+
+                    SET
+                        password = $1,
+                        updated_at = NOW()
+
+                    WHERE id = $2
+                    `,
+                    [
+                        hashed,
+                        String(user.id)
+                    ]
+                );
+
+                changed++;
+
+            }
 
         }
 
-    }
+        if (changed > 0) {
 
-    if (changed) {
+            console.log(
+                "تعداد رمزهای Hash شده:",
+                changed
+            );
 
-        saveUsers(users);
+        }
 
-        console.log(
-            "رمزهای قدیمی کاربران به bcrypt تبدیل شدند."
+    } catch (error) {
+
+        console.error(
+            "PASSWORD MIGRATION ERROR:",
+            error
         );
 
     }
@@ -717,7 +556,7 @@ async function migratePasswords() {
 }
 
 // =====================================================
-// احراز هویت
+// Authentication
 // =====================================================
 
 function requireAuth(
@@ -727,20 +566,14 @@ function requireAuth(
 ) {
 
     if (
-
         !req.session ||
-
         !req.session.user
-
     ) {
 
         return res.status(401).json({
-
             success: false,
-
             message:
                 "جلسه ورود شما معتبر نیست. لطفاً دوباره وارد سامانه شوید."
-
         });
 
     }
@@ -748,10 +581,6 @@ function requireAuth(
     next();
 
 }
-
-// =====================================================
-// بررسی نقش کاربر
-// =====================================================
 
 function requireRole(...roles) {
 
@@ -762,39 +591,28 @@ function requireRole(...roles) {
     ) {
 
         if (
-
             !req.session ||
-
             !req.session.user
-
         ) {
 
             return res.status(401).json({
-
                 success: false,
-
                 message:
                     "جلسه ورود شما معتبر نیست. لطفاً دوباره وارد سامانه شوید."
-
             });
 
         }
 
         if (
-
             !roles.includes(
                 req.session.user.role
             )
-
         ) {
 
             return res.status(403).json({
-
                 success: false,
-
                 message:
                     "شما اجازه انجام این عملیات را ندارید."
-
             });
 
         }
@@ -806,44 +624,64 @@ function requireRole(...roles) {
 }
 
 // =====================================================
-// API وضعیت ورود
+// تبدیل رکورد ملک
+// =====================================================
+
+function normalizeDatabaseProperty(
+    row
+) {
+
+    if (
+        !row ||
+        !row.property_data
+    ) {
+        return null;
+    }
+
+    const property = {
+        ...row.property_data
+    };
+
+    if (!property.id) {
+        property.id = row.id;
+    }
+
+    if (
+        !property.code &&
+        row.code
+    ) {
+        property.code = row.code;
+    }
+
+    return property;
+
+}
+
+// =====================================================
+// اطلاعات کاربر فعلی
 // =====================================================
 
 app.get(
     "/api/me",
     requireAuth,
-    function (
-        req,
-        res
-    ) {
+    (req, res) => {
 
         return res.json({
-
             success: true,
-
             user:
                 req.session.user
-
         });
 
     }
 );
 
 // =====================================================
-// 
-// =====================================================
-
-// =====================================================
-// LOGIN - PostgreSQL
-// =====================================================
-
-// =====================================================
-// LOGIN - PostgreSQL
+// LOGIN
 // =====================================================
 
 app.post(
     "/api/login",
-    async function (req, res) {
+    async (req, res) => {
 
         try {
 
@@ -857,26 +695,21 @@ app.post(
                     req.body.password || ""
                 );
 
-            if (!username || !password) {
+            if (
+                !username ||
+                !password
+            ) {
 
                 return res.status(400).json({
-
                     success: false,
-
                     message:
                         "نام کاربری و رمز عبور را وارد کنید."
-
                 });
 
             }
 
-            // =================================================
-            // دریافت کاربر از PostgreSQL
-            // =================================================
-
             const result =
                 await pool.query(
-
                     `
                     SELECT
                         id,
@@ -888,24 +721,22 @@ app.post(
 
                     FROM users
 
-                    WHERE LOWER(username) = LOWER($1)
+                    WHERE LOWER(username)
+                        = LOWER($1)
 
                     LIMIT 1
                     `,
-
                     [username]
-
                 );
 
-            if (result.rows.length === 0) {
+            if (
+                result.rows.length === 0
+            ) {
 
                 return res.status(401).json({
-
                     success: false,
-
                     message:
                         "نام کاربری یا رمز عبور اشتباه است."
-
                 });
 
             }
@@ -913,57 +744,36 @@ app.post(
             const user =
                 result.rows[0];
 
-            // =================================================
-            // بررسی فعال بودن کاربر
-            // =================================================
-
-            if (user.status === false) {
+            if (
+                user.status === false
+            ) {
 
                 return res.status(403).json({
-
                     success: false,
-
                     message:
                         "حساب کاربری شما غیرفعال است."
-
                 });
 
             }
 
-            // =================================================
-            // بررسی رمز عبور
-            // =================================================
-
             const passwordOK =
                 await bcrypt.compare(
-
                     password,
-
                     String(user.password)
-
                 );
 
             if (!passwordOK) {
 
                 return res.status(401).json({
-
                     success: false,
-
                     message:
                         "نام کاربری یا رمز عبور اشتباه است."
-
                 });
 
             }
 
-            // =================================================
-            // ایجاد Session
-            // =================================================
-
             req.session.user = {
-
-                id:
-                    user.id,
+                id: user.id,
 
                 fullname:
                     user.fullname ||
@@ -975,15 +785,10 @@ app.post(
                 role:
                     user.role ||
                     "consultant"
-
             };
 
-            // =================================================
-            // ذخیره Session
-            // =================================================
-
             req.session.save(
-                function (sessionError) {
+                sessionError => {
 
                     if (sessionError) {
 
@@ -993,12 +798,9 @@ app.post(
                         );
 
                         return res.status(500).json({
-
                             success: false,
-
                             message:
                                 "خطا در ایجاد جلسه ورود."
-
                         });
 
                     }
@@ -1009,15 +811,11 @@ app.post(
                     );
 
                     return res.json({
-
                         success: true,
-
                         message:
                             "ورود با موفقیت انجام شد.",
-
                         user:
                             req.session.user
-
                     });
 
                 }
@@ -1031,43 +829,34 @@ app.post(
             );
 
             return res.status(500).json({
-
                 success: false,
-
                 message:
                     "خطا در ورود به سامانه."
-
             });
 
         }
 
     }
 );
+
 // =====================================================
 // LOGOUT
 // =====================================================
 
 app.post(
     "/api/logout",
-    function (
-        req,
-        res
-    ) {
+    (req, res) => {
 
         if (!req.session) {
 
             return res.json({
-
                 success: true
-
             });
 
         }
 
         req.session.destroy(
-            function (
-                error
-            ) {
+            error => {
 
                 if (error) {
 
@@ -1077,12 +866,9 @@ app.post(
                     );
 
                     return res.status(500).json({
-
                         success: false,
-
                         message:
                             "خروج از سامانه انجام نشد."
-
                     });
 
                 }
@@ -1090,24 +876,16 @@ app.post(
                 res.clearCookie(
                     "connect.sid",
                     {
-
                         httpOnly: true,
-
                         sameSite: "lax",
-
-                        secure:
-                            isProduction
-
+                        secure: isProduction
                     }
                 );
 
                 return res.json({
-
                     success: true,
-
                     message:
                         "با موفقیت خارج شدید."
-
                 });
 
             }
@@ -1117,22 +895,19 @@ app.post(
 );
 
 // =====================================================
-// دریافت تمام املاک از PostgreSQL
+// دریافت تمام املاک
 // =====================================================
 
 app.get(
     "/api/properties",
     requireAuth,
-    async function (
-        req,
-        res
-    ) {
+    async (req, res) => {
 
         try {
 
             const result =
-                await pool.query(`
-
+                await pool.query(
+                    `
                     SELECT
                         id,
                         code,
@@ -1143,8 +918,8 @@ app.get(
                     FROM properties
 
                     ORDER BY created_at DESC
-
-                `);
+                    `
+                );
 
             const properties =
                 result.rows
@@ -1154,12 +929,8 @@ app.get(
                     .filter(Boolean);
 
             return res.json({
-
                 success: true,
-
-                properties:
-                    properties
-
+                properties
             });
 
         } catch (error) {
@@ -1170,12 +941,9 @@ app.get(
             );
 
             return res.status(500).json({
-
                 success: false,
-
                 message:
                     "خطا در دریافت فایل‌های ملکی."
-
             });
 
         }
@@ -1184,24 +952,19 @@ app.get(
 );
 
 // =====================================================
-// دریافت یک ملک از PostgreSQL
+// دریافت یک ملک
 // =====================================================
 
 app.get(
     "/api/properties/:id",
     requireAuth,
-    async function (
-        req,
-        res
-    ) {
+    async (req, res) => {
 
         try {
 
             const result =
                 await pool.query(
-
                     `
-
                     SELECT
                         id,
                         code,
@@ -1214,15 +977,12 @@ app.get(
                     WHERE id = $1
 
                     LIMIT 1
-
                     `,
-
                     [
                         String(
                             req.params.id
                         )
                     ]
-
                 );
 
             if (
@@ -1230,28 +990,19 @@ app.get(
             ) {
 
                 return res.status(404).json({
-
                     success: false,
-
                     message:
                         "ملک پیدا نشد."
-
                 });
 
             }
 
-            const property =
-                normalizeDatabaseProperty(
-                    result.rows[0]
-                );
-
             return res.json({
-
                 success: true,
-
                 property:
-                    property
-
+                    normalizeDatabaseProperty(
+                        result.rows[0]
+                    )
             });
 
         } catch (error) {
@@ -1262,12 +1013,9 @@ app.get(
             );
 
             return res.status(500).json({
-
                 success: false,
-
                 message:
                     "خطا در دریافت اطلاعات ملک."
-
             });
 
         }
@@ -1276,48 +1024,32 @@ app.get(
 );
 
 // =====================================================
-// ثبت ملک در PostgreSQL
+// ثبت ملک
 // =====================================================
 
 app.post(
     "/api/properties",
     requireAuth,
-    async function (
-        req,
-        res
-    ) {
+    async (req, res) => {
 
         try {
 
             if (
-
                 !req.body ||
-
-                typeof req.body !==
-                    "object"
-
+                typeof req.body !== "object"
             ) {
 
                 return res.status(400).json({
-
                     success: false,
-
                     message:
                         "اطلاعات ملک ارسال نشده است."
-
                 });
 
             }
 
             const property = {
-
                 ...req.body
-
             };
-
-            // =================================================
-            // شناسه اصلی
-            // =================================================
 
             property.id =
                 "KS-" +
@@ -1327,29 +1059,17 @@ app.post(
                     .toString(36)
                     .substring(2, 7);
 
-            // =================================================
-            // کد فایل
-            // =================================================
-
             if (
-
                 !property.code ||
-
                 !String(
                     property.code
                 ).trim()
-
             ) {
 
                 property.code =
-                    "KS-" +
-                    Date.now();
+                    "KS-" + Date.now();
 
             }
-
-            // =================================================
-            // اطلاعات ثبت
-            // =================================================
 
             property.createdAt =
                 new Date()
@@ -1363,18 +1083,13 @@ app.post(
             property.createdById =
                 req.session.user.id;
 
-            // =================================================
-            // آرایه‌های ضروری
-            // =================================================
-
             if (
                 !Array.isArray(
                     property.features
                 )
             ) {
 
-                property.features =
-                    [];
+                property.features = [];
 
             }
 
@@ -1384,19 +1099,12 @@ app.post(
                 )
             ) {
 
-                property.images =
-                    [];
+                property.images = [];
 
             }
 
-            // =================================================
-            // ذخیره در PostgreSQL
-            // =================================================
-
             await pool.query(
-
                 `
-
                 INSERT INTO properties
                 (
                     id,
@@ -1410,14 +1118,9 @@ app.post(
                     $2,
                     $3::jsonb
                 )
-
                 `,
-
                 [
-
-                    String(
-                        property.id
-                    ),
+                    String(property.id),
 
                     property.code
                         ? String(
@@ -1428,9 +1131,7 @@ app.post(
                     JSON.stringify(
                         property
                     )
-
                 ]
-
             );
 
             console.log(
@@ -1439,15 +1140,10 @@ app.post(
             );
 
             return res.status(201).json({
-
                 success: true,
-
                 message:
                     "ملک با موفقیت ثبت شد.",
-
-                property:
-                    property
-
+                property
             });
 
         } catch (error) {
@@ -1458,12 +1154,9 @@ app.post(
             );
 
             return res.status(500).json({
-
                 success: false,
-
                 message:
                     "خطا در ذخیره اطلاعات ملک."
-
             });
 
         }
@@ -1472,24 +1165,19 @@ app.post(
 );
 
 // =====================================================
-// ویرایش ملک در PostgreSQL
+// ویرایش ملک
 // =====================================================
 
 app.put(
     "/api/properties/:id",
     requireAuth,
-    async function (
-        req,
-        res
-    ) {
+    async (req, res) => {
 
         try {
 
             const result =
                 await pool.query(
-
                     `
-
                     SELECT
                         id,
                         code,
@@ -1500,15 +1188,12 @@ app.put(
                     WHERE id = $1
 
                     LIMIT 1
-
                     `,
-
                     [
                         String(
                             req.params.id
                         )
                     ]
-
                 );
 
             if (
@@ -1516,12 +1201,9 @@ app.put(
             ) {
 
                 return res.status(404).json({
-
                     success: false,
-
                     message:
                         "ملک پیدا نشد."
-
                 });
 
             }
@@ -1532,17 +1214,16 @@ app.put(
                 );
 
             const updatedProperty = {
-
                 ...oldProperty,
-
                 ...req.body,
 
                 id:
                     oldProperty.id,
 
                 code:
-                    oldProperty.code ||
-                    req.body.code,
+                    req.body.code !== undefined
+                        ? req.body.code
+                        : oldProperty.code,
 
                 createdAt:
                     oldProperty.createdAt,
@@ -1564,7 +1245,6 @@ app.put(
 
                 updatedById:
                     req.session.user.id
-
             };
 
             if (
@@ -1573,8 +1253,7 @@ app.put(
                 )
             ) {
 
-                updatedProperty.features =
-                    [];
+                updatedProperty.features = [];
 
             }
 
@@ -1584,31 +1263,22 @@ app.put(
                 )
             ) {
 
-                updatedProperty.images =
-                    [];
+                updatedProperty.images = [];
 
             }
 
             await pool.query(
-
                 `
-
                 UPDATE properties
 
                 SET
-
                     code = $1,
-
                     property_data = $2::jsonb,
-
                     updated_at = NOW()
 
                 WHERE id = $3
-
                 `,
-
                 [
-
                     updatedProperty.code
                         ? String(
                             updatedProperty.code
@@ -1622,9 +1292,7 @@ app.put(
                     String(
                         oldProperty.id
                     )
-
                 ]
-
             );
 
             console.log(
@@ -1633,15 +1301,11 @@ app.put(
             );
 
             return res.json({
-
                 success: true,
-
                 message:
                     "ملک با موفقیت ویرایش شد.",
-
                 property:
                     updatedProperty
-
             });
 
         } catch (error) {
@@ -1652,12 +1316,9 @@ app.put(
             );
 
             return res.status(500).json({
-
                 success: false,
-
                 message:
                     "خطا در ویرایش ملک."
-
             });
 
         }
@@ -1666,38 +1327,30 @@ app.put(
 );
 
 // =====================================================
-// حذف ملک از PostgreSQL
+// حذف ملک - فقط مدیر
 // =====================================================
 
 app.delete(
     "/api/properties/:id",
     requireRole("admin"),
-    async function (
-        req,
-        res
-    ) {
+    async (req, res) => {
 
         try {
 
             const result =
                 await pool.query(
-
                     `
-
                     DELETE FROM properties
 
                     WHERE id = $1
 
                     RETURNING id
-
                     `,
-
                     [
                         String(
                             req.params.id
                         )
                     ]
-
                 );
 
             if (
@@ -1705,12 +1358,9 @@ app.delete(
             ) {
 
                 return res.status(404).json({
-
                     success: false,
-
                     message:
                         "ملک پیدا نشد."
-
                 });
 
             }
@@ -1721,12 +1371,9 @@ app.delete(
             );
 
             return res.json({
-
                 success: true,
-
                 message:
                     "ملک با موفقیت حذف شد."
-
             });
 
         } catch (error) {
@@ -1737,12 +1384,9 @@ app.delete(
             );
 
             return res.status(500).json({
-
                 success: false,
-
                 message:
                     "خطا در حذف ملک."
-
             });
 
         }
@@ -1757,10 +1401,7 @@ app.delete(
 app.post(
     "/api/users",
     requireRole("admin"),
-    async function (
-        req,
-        res
-    ) {
+    async (req, res) => {
 
         try {
 
@@ -1790,51 +1431,36 @@ app.post(
             ) {
 
                 return res.status(400).json({
-
                     success: false,
-
                     message:
                         "نام، نام کاربری و رمز عبور الزامی است."
-
                 });
 
             }
 
-            const users =
-                getUsers();
-
             const exists =
-                users.some(
-                    function (
-                        user
-                    ) {
+                await pool.query(
+                    `
+                    SELECT id
 
-                        return (
+                    FROM users
 
-                            String(
-                                user.username
-                            )
-                            .toLowerCase()
+                    WHERE LOWER(username)
+                        = LOWER($1)
 
-                            ===
-
-                            username
-                                .toLowerCase()
-
-                        );
-
-                    }
+                    LIMIT 1
+                    `,
+                    [username]
                 );
 
-            if (exists) {
+            if (
+                exists.rows.length > 0
+            ) {
 
                 return res.status(400).json({
-
                     success: false,
-
                     message:
                         "این نام کاربری قبلاً ثبت شده است."
-
                 });
 
             }
@@ -1846,44 +1472,63 @@ app.post(
                 );
 
             const newUser = {
-
                 id:
-                    Date.now(),
+                    String(Date.now()),
 
-                fullname:
-                    fullname,
+                fullname,
 
-                username:
-                    username,
+                username,
 
                 password:
                     hashedPassword,
 
-                role:
-                    role,
+                role,
 
-                status:
-                    true
-
+                status: true
             };
 
-            users.push(
-                newUser
+            await pool.query(
+                `
+                INSERT INTO users
+                (
+                    id,
+                    fullname,
+                    username,
+                    password,
+                    role,
+                    status
+                )
+
+                VALUES
+                (
+                    $1,
+                    $2,
+                    $3,
+                    $4,
+                    $5,
+                    $6
+                )
+                `,
+                [
+                    newUser.id,
+                    newUser.fullname,
+                    newUser.username,
+                    newUser.password,
+                    newUser.role,
+                    newUser.status
+                ]
             );
 
-            saveUsers(
-                users
+            console.log(
+                "USER CREATED:",
+                newUser.username
             );
 
             return res.status(201).json({
-
                 success: true,
-
                 message:
                     "کاربر با موفقیت ایجاد شد.",
-
                 user: {
-
                     id:
                         newUser.id,
 
@@ -1898,9 +1543,7 @@ app.post(
 
                     status:
                         newUser.status
-
                 }
-
             });
 
         } catch (error) {
@@ -1911,12 +1554,9 @@ app.post(
             );
 
             return res.status(500).json({
-
                 success: false,
-
                 message:
                     "خطا در ایجاد کاربر."
-
             });
 
         }
@@ -1931,51 +1571,51 @@ app.post(
 app.get(
     "/api/users",
     requireRole("admin"),
-    function (
-        req,
-        res
-    ) {
+    async (req, res) => {
 
         try {
 
+            const result =
+                await pool.query(
+                    `
+                    SELECT
+                        id,
+                        fullname,
+                        username,
+                        role,
+                        status,
+                        created_at,
+                        updated_at
+
+                    FROM users
+
+                    ORDER BY created_at ASC
+                    `
+                );
+
             const users =
-                getUsers();
+                result.rows.map(
+                    user => ({
+                        id:
+                            user.id,
 
-            const safeUsers =
-                users.map(
-                    function (
-                        user
-                    ) {
+                        fullname:
+                            user.fullname,
 
-                        return {
+                        username:
+                            user.username,
 
-                            id:
-                                user.id,
+                        role:
+                            user.role,
 
-                            fullname:
-                                user.fullname,
-
-                            username:
-                                user.username,
-
-                            role:
-                                user.role,
-
-                            status:
-                                user.status
-
-                        };
-
-                    }
+                        status:
+                            user.status
+                    })
                 );
 
             return res.json({
-
                 success: true,
-
-                users:
-                    safeUsers
-
+                users
             });
 
         } catch (error) {
@@ -1986,12 +1626,9 @@ app.get(
             );
 
             return res.status(500).json({
-
                 success: false,
-
                 message:
                     "خطا در دریافت کاربران."
-
             });
 
         }
@@ -2006,110 +1643,79 @@ app.get(
 app.delete(
     "/api/users/:id",
     requireRole("admin"),
-    function (
-        req,
-        res
-    ) {
+    async (req, res) => {
 
         try {
 
-            let users =
-                getUsers();
-
             const target =
-                users.find(
-                    function (
-                        user
-                    ) {
+                await pool.query(
+                    `
+                    SELECT
+                        id,
+                        username
 
-                        return (
+                    FROM users
 
-                            String(
-                                user.id
-                            )
+                    WHERE id = $1
 
-                            ===
-
-                            String(
-                                req.params.id
-                            )
-
-                        );
-
-                    }
+                    LIMIT 1
+                    `,
+                    [
+                        String(
+                            req.params.id
+                        )
+                    ]
                 );
 
-            if (!target) {
+            if (
+                target.rows.length === 0
+            ) {
 
                 return res.status(404).json({
-
                     success: false,
-
                     message:
                         "کاربر پیدا نشد."
-
                 });
 
             }
 
             if (
-
                 String(
-                    target.username
-                )
-                .toLowerCase()
-
-                ===
-
+                    target.rows[0].username
+                ).toLowerCase() ===
                 "admin"
-
             ) {
 
                 return res.status(403).json({
-
                     success: false,
-
                     message:
                         "مدیر اصلی قابل حذف نیست."
-
                 });
 
             }
 
-            users =
-                users.filter(
-                    function (
-                        user
-                    ) {
+            await pool.query(
+                `
+                DELETE FROM users
 
-                        return (
+                WHERE id = $1
+                `,
+                [
+                    String(
+                        req.params.id
+                    )
+                ]
+            );
 
-                            String(
-                                user.id
-                            )
-
-                            !==
-
-                            String(
-                                req.params.id
-                            )
-
-                        );
-
-                    }
-                );
-
-            saveUsers(
-                users
+            console.log(
+                "USER DELETED:",
+                target.rows[0].username
             );
 
             return res.json({
-
                 success: true,
-
                 message:
                     "کاربر با موفقیت حذف شد."
-
             });
 
         } catch (error) {
@@ -2120,12 +1726,9 @@ app.delete(
             );
 
             return res.status(500).json({
-
                 success: false,
-
                 message:
                     "خطا در حذف کاربر."
-
             });
 
         }
@@ -2139,18 +1742,13 @@ app.delete(
 
 app.get(
     "/",
-    function (
-        req,
-        res
-    ) {
+    (req, res) => {
 
         return res.sendFile(
-
             path.join(
                 projectPath,
                 "index.html"
             )
-
         );
 
     }
@@ -2162,18 +1760,12 @@ app.get(
 
 app.use(
     "/api",
-    function (
-        req,
-        res
-    ) {
+    (req, res) => {
 
         return res.status(404).json({
-
             success: false,
-
             message:
                 "مسیر API پیدا نشد."
-
         });
 
     }
@@ -2184,31 +1776,23 @@ app.use(
 // =====================================================
 
 app.use(
-    function (
-        error,
-        req,
-        res,
-        next
-    ) {
+    (error, req, res, next) => {
 
         console.error(
             "EXPRESS ERROR:",
             error
         );
 
-        if (res.headersSent) {
-
+        if (
+            res.headersSent
+        ) {
             return next(error);
-
         }
 
         return res.status(500).json({
-
             success: false,
-
             message:
                 "خطای داخلی سرور."
-
         });
 
     }
@@ -2223,17 +1807,18 @@ async function startServer() {
     try {
 
         ensurePropertiesFile();
-
         ensureUsersFile();
 
-        // =================================================
-        // بررسی اتصال PostgreSQL
-        // =================================================
+        // ---------------------------------------------
+        // 1. اتصال PostgreSQL
+        // ---------------------------------------------
 
         const databaseConnected =
             await testDatabase();
 
-        if (!databaseConnected) {
+        if (
+            !databaseConnected
+        ) {
 
             throw new Error(
                 "PostgreSQL connection failed"
@@ -2241,41 +1826,35 @@ async function startServer() {
 
         }
 
-        // =================================================
-        // ساخت جدول‌ها
-        // =================================================
+        // ---------------------------------------------
+        // 2. ساخت جداول
+        // ---------------------------------------------
 
         await initializeDatabase();
 
-        // =================================================
-        // انتقال اطلاعات قدیمی
-        // =================================================
+        // ---------------------------------------------
+        // 3. Migration اطلاعات قدیمی
+        // ---------------------------------------------
 
         await migratePropertiesToDatabase();
 
-        // =================================================
-        // انتقال کاربران به PostgreSQL
-        // =================================================
-        
         await migrateUsersToDatabase();
-        
-        // =================================================
-        // تبدیل رمزهای قدیمی
-        // =================================================
-        
-        await migratePasswords();
-        // =================================================
-        // اجرای سرور
-        // =================================================
+
+        // ---------------------------------------------
+        // 4. Hash رمزهای دیتابیس
+        // ---------------------------------------------
+
+        await migrateDatabasePasswords();
+
+        // ---------------------------------------------
+        // 5. اجرای سرور
+        // ---------------------------------------------
 
         const server =
             app.listen(
-
                 PORT,
-
-                "0.0.0.0",
-
-                function () {
+                HOST,
+                () => {
 
                     console.log("");
 
@@ -2296,12 +1875,11 @@ async function startServer() {
                     );
 
                     console.log(
-                        "Port: " +
-                        PORT
+                        "Port: " + PORT
                     );
 
                     console.log(
-                        "Host: 0.0.0.0"
+                        "Host: " + HOST
                     );
 
                     console.log(
@@ -2333,20 +1911,26 @@ async function startServer() {
                     );
 
                     console.log(
+                        "Environment    : " +
+                        (
+                            isProduction
+                                ? "PRODUCTION"
+                                : "LOCAL"
+                        )
+                    );
+
+                    console.log(
                         "=========================================="
                     );
 
                     console.log("");
 
                 }
-
             );
 
         server.on(
             "error",
-            function (
-                error
-            ) {
+            error => {
 
                 console.error(
                     "SERVER ERROR:",
@@ -2379,9 +1963,7 @@ startServer();
 
 process.on(
     "uncaughtException",
-    function (
-        error
-    ) {
+    error => {
 
         console.error(
             "UNCAUGHT EXCEPTION:",
@@ -2393,9 +1975,7 @@ process.on(
 
 process.on(
     "unhandledRejection",
-    function (
-        error
-    ) {
+    error => {
 
         console.error(
             "UNHANDLED REJECTION:",

@@ -2,74 +2,47 @@
 
 const { Pool } = require("pg");
 
-// =====================================================
-// PostgreSQL Connection
-// Local + Render
-// =====================================================
-
 const isProduction =
     process.env.NODE_ENV === "production";
 
-const poolConfig = process.env.DATABASE_URL
-    ? {
-        connectionString: process.env.DATABASE_URL,
+const poolConfig = {
+    connectionString:
+        process.env.DATABASE_URL,
 
-        ssl: isProduction
-            ? {
-                rejectUnauthorized: false
-            }
-            : false,
+    max: 10,
 
-        max: 10,
+    idleTimeoutMillis: 30000,
 
-        idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 10000
+};
 
-        connectionTimeoutMillis: 10000
-    }
-    : {
-        host:
-            process.env.PGHOST ||
-            "127.0.0.1",
+if (!isProduction && !process.env.DATABASE_URL) {
+    poolConfig.host =
+        process.env.PGHOST || "127.0.0.1";
 
-        port:
-            Number(
-                process.env.PGPORT ||
-                5432
-            ),
+    poolConfig.port =
+        Number(process.env.PGPORT || 5432);
 
-        database:
-            process.env.PGDATABASE ||
-            "kolbeye_sabz",
+    poolConfig.database =
+        process.env.PGDATABASE || "kolbeye_sabz";
 
-        user:
-            process.env.PGUSER ||
-            "postgres",
+    poolConfig.user =
+        process.env.PGUSER || "postgres";
 
-        password:
-            process.env.PGPASSWORD ||
-            "123456",
+    poolConfig.password =
+        process.env.PGPASSWORD || "123456";
+}
 
-        ssl: false,
-
-        max: 10,
-
-        idleTimeoutMillis: 30000,
-
-        connectionTimeoutMillis: 10000
+if (isProduction) {
+    poolConfig.ssl = {
+        rejectUnauthorized: false
     };
+} else {
+    poolConfig.ssl = false;
+}
 
 const pool = new Pool(poolConfig);
 
-// =====================================================
-// مدیریت خطای Pool
-// =====================================================
-
-pool.on("error", error => {
-    console.error(
-        "Unexpected PostgreSQL pool error:",
-        error
-    );
-});
 
 // =====================================================
 // تست اتصال دیتابیس
@@ -101,13 +74,6 @@ async function testDatabase() {
         );
 
         console.log(
-            "Database mode:",
-            process.env.DATABASE_URL
-                ? "DATABASE_URL"
-                : "LOCAL"
-        );
-
-        console.log(
             "=========================================="
         );
 
@@ -135,6 +101,7 @@ async function testDatabase() {
     }
 }
 
+
 // =====================================================
 // ساخت جداول
 // =====================================================
@@ -146,10 +113,6 @@ async function initializeDatabase() {
         console.log(
             "در حال بررسی ساختار PostgreSQL..."
         );
-
-        // =================================================
-        // جدول کاربران
-        // =================================================
 
         await pool.query(`
 
@@ -163,25 +126,17 @@ async function initializeDatabase() {
 
                 password TEXT NOT NULL,
 
-                role TEXT NOT NULL
-                    DEFAULT 'consultant',
+                role TEXT NOT NULL DEFAULT 'consultant',
 
-                status BOOLEAN NOT NULL
-                    DEFAULT TRUE,
+                status BOOLEAN NOT NULL DEFAULT TRUE,
 
-                created_at TIMESTAMPTZ
-                    DEFAULT NOW(),
+                created_at TIMESTAMPTZ DEFAULT NOW(),
 
-                updated_at TIMESTAMPTZ
-                    DEFAULT NOW()
+                updated_at TIMESTAMPTZ DEFAULT NOW()
 
             )
 
         `);
-
-        // =================================================
-        // جدول املاک
-        // =================================================
 
         await pool.query(`
 
@@ -193,37 +148,27 @@ async function initializeDatabase() {
 
                 property_data JSONB NOT NULL,
 
-                created_at TIMESTAMPTZ
-                    DEFAULT NOW(),
+                created_at TIMESTAMPTZ DEFAULT NOW(),
 
-                updated_at TIMESTAMPTZ
-                    DEFAULT NOW()
+                updated_at TIMESTAMPTZ DEFAULT NOW()
 
             )
 
         `);
-
-        // =================================================
-        // Index کاربران
-        // =================================================
-
-        await pool.query(`
-
-            CREATE INDEX IF NOT EXISTS
-            users_username_idx
-            ON users(username)
-
-        `);
-
-        // =================================================
-        // Index املاک
-        // =================================================
 
         await pool.query(`
 
             CREATE INDEX IF NOT EXISTS
             properties_code_idx
             ON properties(code)
+
+        `);
+
+        await pool.query(`
+
+            CREATE INDEX IF NOT EXISTS
+            users_username_idx
+            ON users(username)
 
         `);
 
@@ -246,71 +191,6 @@ async function initializeDatabase() {
 
 }
 
-// =====================================================
-// تست سلامت کامل دیتابیس
-// =====================================================
-
-async function checkDatabaseHealth() {
-
-    let client;
-
-    try {
-
-        client = await pool.connect();
-
-        await client.query(
-            "SELECT 1"
-        );
-
-        return true;
-
-    } catch (error) {
-
-        console.error(
-            "DATABASE HEALTH ERROR:",
-            error
-        );
-
-        return false;
-
-    } finally {
-
-        if (client) {
-            client.release();
-        }
-
-    }
-
-}
-
-// =====================================================
-// بستن اتصال دیتابیس
-// =====================================================
-
-async function closeDatabase() {
-
-    try {
-
-        await pool.end();
-
-        console.log(
-            "PostgreSQL pool closed."
-        );
-
-    } catch (error) {
-
-        console.error(
-            "DATABASE CLOSE ERROR:",
-            error
-        );
-
-    }
-
-}
-
-// =====================================================
-// Export
-// =====================================================
 
 module.exports = {
 
@@ -318,10 +198,6 @@ module.exports = {
 
     testDatabase,
 
-    initializeDatabase,
-
-    checkDatabaseHealth,
-
-    closeDatabase
+    initializeDatabase
 
 };
