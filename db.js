@@ -5,48 +5,106 @@ const { Pool } = require("pg");
 const isProduction =
     process.env.NODE_ENV === "production";
 
+/* =========================================================
+   DATABASE URL
+========================================================= */
+
+const databaseUrl =
+    process.env.DATABASE_URL;
+
+let cleanDatabaseUrl =
+    databaseUrl;
+
+if (cleanDatabaseUrl) {
+    try {
+        const url =
+            new URL(cleanDatabaseUrl);
+
+        // حذف تنظیمات SSL از DATABASE_URL
+        url.searchParams.delete("sslmode");
+        url.searchParams.delete("ssl");
+        url.searchParams.delete("sslrootcert");
+        url.searchParams.delete("sslcert");
+        url.searchParams.delete("sslkey");
+
+        cleanDatabaseUrl =
+            url.toString();
+
+    } catch (error) {
+
+        console.error(
+            "DATABASE_URL parse error:",
+            error
+        );
+    }
+}
+
+/* =========================================================
+   POOL CONFIG
+========================================================= */
+
 const poolConfig = {
+
     connectionString:
-        process.env.DATABASE_URL,
+        cleanDatabaseUrl,
 
     max: 10,
 
-    idleTimeoutMillis: 30000,
+    idleTimeoutMillis:
+        30000,
 
-    connectionTimeoutMillis: 10000
+    connectionTimeoutMillis:
+        10000,
+
+    // این دیتابیس SSL ندارد
+    ssl: false
 };
 
-if (!isProduction && !process.env.DATABASE_URL) {
+/* =========================================================
+   LOCAL DEVELOPMENT DATABASE
+========================================================= */
+
+if (
+    !isProduction &&
+    !process.env.DATABASE_URL
+) {
+
     poolConfig.host =
-        process.env.PGHOST || "127.0.0.1";
+        process.env.PGHOST ||
+        "127.0.0.1";
 
     poolConfig.port =
-        Number(process.env.PGPORT || 5432);
+        Number(
+            process.env.PGPORT ||
+            5432
+        );
 
     poolConfig.database =
-        process.env.PGDATABASE || "kolbeye_sabz";
+        process.env.PGDATABASE ||
+        "kolbeye_sabz";
 
     poolConfig.user =
-        process.env.PGUSER || "postgres";
+        process.env.PGUSER ||
+        "postgres";
 
     poolConfig.password =
-        process.env.PGPASSWORD || "123456";
+        process.env.PGPASSWORD ||
+        "123456";
+
+    poolConfig.ssl =
+        false;
 }
 
-if (isProduction) {
-    poolConfig.ssl = {
-        rejectUnauthorized: false
-    };
-} else {
-    poolConfig.ssl = false;
-}
+/* =========================================================
+   POSTGRESQL POOL
+========================================================= */
 
-const pool = new Pool(poolConfig);
+const pool =
+    new Pool(poolConfig);
 
-
-// =====================================================
-// تست اتصال دیتابیس
-// =====================================================
+/* =========================================================
+   TEST DATABASE
+========================================================= */
 
 async function testDatabase() {
 
@@ -54,11 +112,13 @@ async function testDatabase() {
 
     try {
 
-        client = await pool.connect();
+        client =
+            await pool.connect();
 
-        const result = await client.query(
-            "SELECT NOW() AS now"
-        );
+        const result =
+            await client.query(
+                "SELECT NOW() AS now"
+            );
 
         console.log(
             "=========================================="
@@ -97,14 +157,12 @@ async function testDatabase() {
         if (client) {
             client.release();
         }
-
     }
 }
 
-
-// =====================================================
-// ساخت جداول
-// =====================================================
+/* =========================================================
+   INITIALIZE DATABASE
+========================================================= */
 
 async function initializeDatabase() {
 
@@ -114,62 +172,47 @@ async function initializeDatabase() {
             "در حال بررسی ساختار PostgreSQL..."
         );
 
-        await pool.query(`
+        /* USERS */
 
+        await pool.query(`
             CREATE TABLE IF NOT EXISTS users (
-
                 id TEXT PRIMARY KEY,
-
                 fullname TEXT NOT NULL,
-
                 username TEXT UNIQUE NOT NULL,
-
                 password TEXT NOT NULL,
-
                 role TEXT NOT NULL DEFAULT 'consultant',
-
                 status BOOLEAN NOT NULL DEFAULT TRUE,
-
                 created_at TIMESTAMPTZ DEFAULT NOW(),
-
                 updated_at TIMESTAMPTZ DEFAULT NOW()
-
             )
-
         `);
 
-        await pool.query(`
+        /* PROPERTIES */
 
+        await pool.query(`
             CREATE TABLE IF NOT EXISTS properties (
-
                 id TEXT PRIMARY KEY,
-
                 code TEXT,
-
                 property_data JSONB NOT NULL,
-
                 created_at TIMESTAMPTZ DEFAULT NOW(),
-
                 updated_at TIMESTAMPTZ DEFAULT NOW()
-
             )
-
         `);
 
-        await pool.query(`
+        /* PROPERTY CODE INDEX */
 
+        await pool.query(`
             CREATE INDEX IF NOT EXISTS
             properties_code_idx
             ON properties(code)
-
         `);
 
-        await pool.query(`
+        /* USERNAME INDEX */
 
+        await pool.query(`
             CREATE INDEX IF NOT EXISTS
             users_username_idx
             ON users(username)
-
         `);
 
         console.log(
@@ -186,11 +229,12 @@ async function initializeDatabase() {
         );
 
         throw error;
-
     }
-
 }
 
+/* =========================================================
+   EXPORT
+========================================================= */
 
 module.exports = {
 
