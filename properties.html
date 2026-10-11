@@ -595,9 +595,6 @@ function matchesFeatures(p,selected){
     });
 }
 
-    return selected.every(f=>(aliases[f]||[f]).some(v=>actual.includes(normalizeText(v))));
-}
-
 function dateValue(value){
     if(!value) return 0;
     const d=new Date(value);
