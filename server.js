@@ -28,6 +28,20 @@ const isProduction =
 
 app.set("trust proxy", 1);
 
+if (isProduction) {
+    app.use((req, res, next) => {
+        if (req.secure) {
+            return next();
+        }
+
+        return res.redirect(
+            308,
+            "https://" + req.headers.host + req.originalUrl
+        );
+    });
+}
+
+
 // =====================================================
 // فایل‌های قدیمی JSON
 // فقط برای Migration
