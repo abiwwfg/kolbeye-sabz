@@ -1934,28 +1934,59 @@ document.getElementById(
             }
 
 
-            /*
-               ================================
-               EDIT USER
-               ================================
-               
-               توجه:
-               server.js فعلی تو هنوز
-               PUT /api/users/:id ندارد.
-               
-               بنابراین فعلاً ویرایش را
-               از این صفحه انجام نمی‌دهیم.
-            */
+           
+/*
+   ================================
+   EDIT USER
+   ================================
+*/
 
-            else{
+else {
 
-                alert(
-                    "در این مرحله ویرایش کاربران هنوز در server.js فعال نشده است."
-                );
+    // پیدا کردن اطلاعات فعلی کاربر
+    const currentUser = users.find(
+        user =>
+            String(user.id) === String(editingUserId)
+    );
 
-                return;
+    if (!currentUser) {
+        throw new Error(
+            "کاربر موردنظر پیدا نشد."
+        );
+    }
 
-            }
+    // ارسال اطلاعات جدید به سرور
+    const result = await requestAPI(
+        "/api/users/" + encodeURIComponent(editingUserId),
+        {
+            method: "PUT",
+
+            body: JSON.stringify({
+                fullname: name,
+                username: username,
+                password: password,
+                role: role,
+
+                // حفظ وضعیت فعلی کاربر
+                status: currentUser.status !== false
+            })
+        }
+    );
+
+    // بررسی نتیجه درخواست
+    if (!result || !result.success) {
+        throw new Error(
+            result && result.message
+                ? result.message
+                : "ویرایش کاربر ناموفق بود."
+        );
+    }
+
+    alert(
+        "اطلاعات کاربر با موفقیت ویرایش شد."
+    );
+
+}
 
 
             closeUserModal();
