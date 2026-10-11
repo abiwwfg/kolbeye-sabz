@@ -4,6 +4,7 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const session = require("express-session");
+const PgSession = require("connect-pg-simple")(session);
 const bcrypt = require("bcrypt");
 
 const {
@@ -55,27 +56,37 @@ app.use(express.urlencoded({
 // Session
 // =====================================================
 
+const sessionSecret = process.env.SESSION_SECRET;
+
+if (!sessionSecret || sessionSecret.length < 32) {
+    throw new Error(
+        "SESSION_SECRET must contain at least 32 characters."
+    );
+}
+
 app.use(
     session({
-        secret:
-            process.env.SESSION_SECRET ||
-            "kolbeye-sabz-secret-key-2026",
+        store: new PgSession({
+            pool,
+            tableName: "user_sessions",
+            createTableIfMissing: true
+        }),
+
+        secret: sessionSecret,
 
         resave: false,
-
         saveUninitialized: false,
-
         rolling: true,
 
         cookie: {
             httpOnly: true,
             sameSite: "lax",
             secure: isProduction,
-            maxAge:
-                1000 * 60 * 60 * 8
+            maxAge: 1000 * 60 * 60 * 8
         }
     })
 );
+
 
 // =====================================================
 // فایل‌های استاتیک
