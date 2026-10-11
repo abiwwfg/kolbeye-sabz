@@ -105,6 +105,7 @@ app.get("/health", (req, res) => {
     return res.status(200).json({
         success: true,
         status: "ok",
+        version: "session-fix-2",
         message:
             "Kolbeye Sabz Server is running",
         port: PORT
