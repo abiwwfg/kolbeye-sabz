@@ -1662,6 +1662,155 @@ app.get(
     }
 );
 
+ // =====================================================
+ // ویرایش کاربران - فقط مدیر
+ // =====================================================
+
+app.put(
+    "/api/users/:id",
+    requireRole("admin"),
+    async (req, res) => {
+        try {
+            const id = String(req.params.id);
+
+            const fullname = String(
+                req.body.fullname || ""
+            ).trim();
+
+            const username = String(
+                req.body.username || ""
+            ).trim();
+
+            const password = String(
+                req.body.password || ""
+            );
+
+            const role = String(
+                req.body.role || ""
+            );
+
+            const status = req.body.status;
+
+            if (!fullname || !username) {
+                return res.status(400).json({
+                    success: false,
+                    message: "نام و نام کاربری الزامی است."
+                });
+            }
+
+            if (!["admin", "consultant"].includes(role)) {
+                return res.status(400).json({
+                    success: false,
+                    message: "نقش کاربر معتبر نیست."
+                });
+            }
+
+            if (typeof status !== "boolean") {
+                return res.status(400).json({
+                    success: false,
+                    message: "وضعیت کاربر معتبر نیست."
+                });
+            }
+
+            const existing = await pool.query(
+                `SELECT id, username, role, status
+                 FROM users
+                 WHERE id = $1
+                 LIMIT 1`,
+                [id]
+            );
+
+            if (existing.rows.length === 0) {
+                return res.status(404).json({
+                    success: false,
+                    message: "کاربر پیدا نشد."
+                });
+            }
+
+            const currentUser = existing.rows[0];
+
+            // محافظت از حساب مدیر اصلی
+            if (currentUser.username.toLowerCase() === "admin") {
+                if (
+                    username.toLowerCase() !== "admin" ||
+                    role !== "admin" ||
+                    status !== true
+                ) {
+                    return res.status(403).json({
+                        success: false,
+                        message:
+                            "نام کاربری، نقش و وضعیت مدیر اصلی قابل تغییر نیست."
+                    });
+                }
+            }
+
+            const duplicate = await pool.query(
+                `SELECT id
+                 FROM users
+                 WHERE LOWER(username) = LOWER($1)
+                   AND id <> $2
+                 LIMIT 1`,
+                [username, id]
+            );
+
+            if (duplicate.rows.length > 0) {
+                return res.status(409).json({
+                    success: false,
+                    message: "این نام کاربری قبلاً ثبت شده است."
+                });
+            }
+
+            let hashedPassword = null;
+
+            if (password.trim()) {
+                hashedPassword = await bcrypt.hash(
+                    password,
+                    12
+                );
+            }
+
+            const result = await pool.query(
+                `UPDATE users
+                 SET fullname = $1,
+                     username = $2,
+                     role = $3,
+                     status = $4,
+                     password = COALESCE($5, password),
+                     updated_at = NOW()
+                 WHERE id = $6
+                 RETURNING id, fullname, username, role, status`,
+                [
+                    fullname,
+                    username,
+                    role,
+                    status,
+                    hashedPassword,
+                    id
+                ]
+            );
+
+            console.log(
+                "USER UPDATED:",
+                result.rows[0].username
+            );
+
+            return res.json({
+                success: true,
+                message: "اطلاعات کاربر با موفقیت ویرایش شد.",
+                user: result.rows[0]
+            });
+
+        } catch (error) {
+            console.error("UPDATE USER ERROR:", error);
+
+            return res.status(500).json({
+                success: false,
+                message: "خطا در ویرایش کاربر."
+            });
+        }
+    }
+);
+
 // =====================================================
 // حذف کاربر
 // =====================================================
