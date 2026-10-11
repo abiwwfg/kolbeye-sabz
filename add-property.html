@@ -488,17 +488,23 @@
                 <label class="feature-check"><input type="checkbox" value="elevator" class="feature"> آسانسور</label>
                 <label class="feature-check"><input type="checkbox" value="parking" class="feature"> پارکینگ</label>
                 <label class="feature-check"><input type="checkbox" value="storage" class="feature"> انباری</label>
-                <label class="feature-check"><input type="checkbox" value="balcony" class="feature"> بالکن</label>
-                <label class="feature-check"><input type="checkbox" value="terrace" class="feature"> تراس</label>
+                <label class="feature-check"><input type="checkbox" value="balcony" class="feature"> تراس</label>
+                <label class="feature-check"><input type="checkbox" value="masterBedroom" class="feature"> اتاق مستر</label>
+                <label class="feature-check"><input type="checkbox" value="furnishableTerrace" class="feature"> تراس قابل چیدمان</label>
+                <label class="feature-check"><input type="checkbox" value="walkInCloset" class="feature"> اتاق کلوزت (رختکن)</label>
+                <label class="feature-check"><input type="checkbox" value="laundryRoom" class="feature"> لاندری روم</label>
+                <label class="feature-check"><input type="checkbox" value="luxuryLobby" class="feature"> لابی مجلل</label>
+                <label class="feature-check"><input type="checkbox" value="inUnitStorage" class="feature"> انباری داخل واحد</label>
+                <label class="feature-check"><input type="checkbox" value="customBuilt" class="feature"> شخصی‌ساز</label>
                 <label class="feature-check"><input type="checkbox" value="pool" class="feature"> استخر</label>
                 <label class="feature-check"><input type="checkbox" value="sauna" class="feature"> سونا</label>
-                <label class="feature-check"><input type="checkbox" value="jacuzzi" class="feature"> جکوزی</label>
-                <label class="feature-check"><input type="checkbox" value="gym" class="feature"> سالن ورزشی</label>
+                <label class="feature-check"><input type="checkbox" value="jacuzzi" class="feature"> وان جکوزی</label>
+                <label class="feature-check"><input type="checkbox" value="decorativeCeilingLighting" class="feature"> سقف کناف و نورپردازی</label>
                 <label class="feature-check"><input type="checkbox" value="closet" class="feature"> کمد دیواری</label>
                 <label class="feature-check"><input type="checkbox" value="cabinet" class="feature"> کابینت MDF</label>
                 <label class="feature-check"><input type="checkbox" value="highGlossCabinet" class="feature"> کابینت هایگلاس</label>
-                <label class="feature-check"><input type="checkbox" value="package" class="feature"> پکیج</label>
-                <label class="feature-check"><input type="checkbox" value="radiator" class="feature"> رادیاتور</label>
+                <label class="feature-check"><input type="checkbox" value="tvWall" class="feature"> TV WALL</label>
+                <label class="feature-check"><input type="checkbox" value="permanentView" class="feature"> ویو ابدی</label>
                 <label class="feature-check"><input type="checkbox" value="floorHeating" class="feature"> گرمایش از کف</label>
                 <label class="feature-check"><input type="checkbox" value="airCondition" class="feature"> کولر گازی</label>
                 <label class="feature-check"><input type="checkbox" value="doubleGlass" class="feature"> پنجره دوجداره</label>
@@ -1016,79 +1022,94 @@
         }
     }
 
+    // تبدیل تصاویر موبایل به JPEG کم‌حجم برای پیش‌نمایش و ذخیره در API
+    function processImage(file) {
+        return new Promise(function (resolve, reject) {
+            var name = file.name || "تصویر";
+            var type = (file.type || "").toLowerCase();
+            var looksLikeImage = type.indexOf("image/") === 0 ||
+                /\.(jpe?g|png|webp|gif|bmp|heic|heif|avif)$/i.test(name);
+
+            if (!looksLikeImage) {
+                reject(new Error("فایل «" + name + "» تصویر نیست."));
+                return;
+            }
+            if (file.size > 25 * 1024 * 1024) {
+                reject(new Error("تصویر «" + name + "» بزرگ‌تر از ۲۵ مگابایت است."));
+                return;
+            }
+
+            var objectUrl = URL.createObjectURL(file);
+            var img = new Image();
+            var finished = false;
+            function finish(error, data) {
+                if (finished) return;
+                finished = true;
+                URL.revokeObjectURL(objectUrl);
+                img.onload = null;
+                img.onerror = null;
+                if (error) reject(error);
+                else resolve(data);
+            }
+            img.onload = function () {
+                try {
+                    var maxSide = 1600;
+                    var scale = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+                    var canvas = document.createElement("canvas");
+                    canvas.width = Math.max(1, Math.round(img.naturalWidth * scale));
+                    canvas.height = Math.max(1, Math.round(img.naturalHeight * scale));
+                    var ctx = canvas.getContext("2d");
+                    if (!ctx) throw new Error("پردازش تصویر در گوشی پشتیبانی نمی‌شود.");
+                    ctx.fillStyle = "#ffffff";
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    var data = canvas.toDataURL("image/jpeg", 0.78);
+                    if (!data || data.indexOf("data:image/jpeg") !== 0) {
+                        throw new Error("تبدیل تصویر انجام نشد.");
+                    }
+                    finish(null, data);
+                } catch (error) {
+                    finish(new Error("پردازش «" + name + "» ناموفق بود: " + error.message));
+                }
+            };
+            img.onerror = function () {
+                finish(new Error("تصویر «" + name + "» باز نشد. اگر HEIC/HEIF است، نسخه JPG آن را انتخاب کنید."));
+            };
+            img.src = objectUrl;
+        });
+    }
+
     function setupImages() {
-
         var input = $("propertyImages");
-
         if (!input) return;
 
-        input.addEventListener(
-            "change",
-            function (event) {
-
-                var files =
-                    Array.from(
-                        event.target.files || []
-                    );
-
-                if (!files.length) return;
-
-                files.forEach(function (file) {
-
-                    if (
-                        !file.type ||
-                        file.type.indexOf("image/") !== 0
-                    ) {
-                        return;
-                    }
-
-                    /*
-                     * محدودیت منطقی برای جلوگیری از پر شدن
-                     * سریع properties.json / request body.
-                     */
-                    if (file.size > 5 * 1024 * 1024) {
-                        alert(
-                            "تصویر «" +
-                            file.name +
-                            "» بیشتر از ۵ مگابایت است و اضافه نشد."
-                        );
-                        return;
-                    }
-
-                    var reader =
-                        new FileReader();
-
-                    reader.onload = function (e) {
-
-                        if (
-                            e.target &&
-                            e.target.result
-                        ) {
-                            selectedImages.push(
-                                e.target.result
-                            );
-
-                            renderImages();
-                        }
-                    };
-
-                    reader.onerror = function () {
-                        alert(
-                            "خواندن تصویر «" +
-                            file.name +
-                            "» ناموفق بود."
-                        );
-                    };
-
-                    reader.readAsDataURL(file);
-                });
-
-                /*
-                 * امکان انتخاب دوباره همان فایل را حفظ می‌کند.
-                 */
-                input.value = "";
+        input.addEventListener("change", async function (event) {
+            var files = Array.from(event.target.files || []);
+            if (!files.length) {
+                return;
             }
-        );
+
+            var count = $("imageCount");
+            var errors = [];
+            if (count) count.textContent = "در حال پردازش " + files.length + " تصویر...";
+
+            for (var i = 0; i < files.length; i++) {
+                try {
+                    var imageData = await processImage(files[i]);
+                    selectedImages.push(imageData);
+                    renderImages();
+                } catch (error) {
+                    errors.push(error.message || "خطا در خواندن تصویر");
+                }
+            }
+
+            // بعد از پایان پردازش پاک شود تا انتخاب دوباره همان عکس ممکن باشد.
+            input.value = "";
+            renderImages();
+            if (errors.length) {
+                alert(errors.join("\n"));
+            }
+        });
     }
 
     function getSelectedFeatures() {
