@@ -450,16 +450,69 @@ function getPrice(p){return firstValue(p,["price","salePrice","totalPrice","sell
 function getDeposit(p){return firstValue(p,["deposit","rahn","rentDeposit"])}
 function getRent(p){return firstValue(p,["rent","ejare","monthlyRent"])}
 function getImages(p){return Array.isArray(p.images)?p.images:(Array.isArray(p.photos)?p.photos:[])}
-function getFeatures(p){return Array.isArray(p.features)?p.features:[]}
+
+function getFeatures(p){
+    let features=p.features;
+
+    if(typeof features==="string"){
+        try{features=JSON.parse(features)}
+        catch(e){features=[]}
+    }
+
+    if(Array.isArray(features)){
+        return features.filter(Boolean);
+    }
+
+    if(features && typeof features==="object"){
+        return Object.keys(features).filter(key=>{
+            const value=features[key];
+            return value===true || value===1 ||
+                value==="true" || value==="1";
+        });
+    }
+
+    return [];
+}
+
+
 
 const featureNames={
-    elevator:"آسانسور",parking:"پارکینگ",storage:"انباری",balcony:"بالکن",
-    terrace:"تراس",pool:"استخر",sauna:"سونا",jacuzzi:"جکوزی",gym:"سالن ورزشی",
-    closet:"کمد دیواری",cabinet:"کابینت MDF",highGlossCabinet:"کابینت هایگلاس",
-    package:"پکیج",radiator:"رادیاتور",floorHeating:"گرمایش از کف",
-    airCondition:"کولر گازی",doubleGlass:"شیشه دوجداره",securityDoor:"درب ضد سرقت",
-    intercom:"آیفون تصویری",roofGarden:"روف گاردن",camera:"دوربین مداربسته",guard:"نگهبانی"
+    elevator:"آسانسور",
+    parking:"پارکینگ",
+    storage:"انباری",
+    balcony:"تراس",
+    terrace:"تراس",
+    furnishableTerrace:"تراس قابل چیدمان",
+    masterBedroom:"اتاق مستر",
+    pool:"استخر",
+    sauna:"سونا",
+    jacuzzi:"وان جکوزی",
+    jacuzziBathtub:"وان جکوزی",
+    gym:"سالن ورزشی",
+    decorativeCeilingLighting:"سقف کناف و نورپردازی",
+    knaufCeiling:"سقف کناف و نورپردازی",
+    closet:"کمد دیواری",
+    cabinet:"کابینت MDF",
+    highGlossCabinet:"کابینت هایگلاس",
+    tvWall:"TV WALL",
+    permanentView:"ویو ابدی",
+    walkInCloset:"اتاق کلوزت (رختکن)",
+    laundryRoom:"لاندری روم",
+    luxuryLobby:"لابی مجلل",
+    inUnitStorage:"انباری داخل واحد",
+    customBuilt:"شخصی‌ساز",
+    package:"پکیج",
+    radiator:"رادیاتور",
+    floorHeating:"گرمایش از کف",
+    airCondition:"کولر گازی",
+    doubleGlass:"پنجره دوجداره",
+    securityDoor:"درب ضد سرقت",
+    intercom:"آیفون تصویری",
+    roofGarden:"روف گاردن",
+    camera:"دوربین مداربسته",
+    guard:"نگهبانی"
 };
+
 
 function money(value){
     const n=numberValue(value);
@@ -512,15 +565,26 @@ function matchesFloor(p,s){
     return f===normalizeText(s)||numberValue(f)===Number(s);
 }
 
+
 function matchesFeatures(p,selected){
-    if(!selected.length) return true;
+    if(!selected.length)return true;
+
     const actual=getFeatures(p).map(normalizeText);
-    const aliases={
-        elevator:["elevator","آسانسور"],parking:["parking","پارکینگ"],storage:["storage","انباری"],
-        balcony:["balcony","بالکن"],terrace:["terrace","تراس"],pool:["pool","استخر"],
-        sauna:["sauna","سونا"],jacuzzi:["jacuzzi","جکوزی"],gym:["gym","سالن ورزشی"],
-        camera:["camera","دوربین","دوربین مداربسته"],guard:["guard","نگهبانی"]
-    };
+
+    return selected.every(key=>{
+        const label=featureNames[key]||key;
+
+        return actual.some(value=>{
+            return value===normalizeText(key) ||
+                value===normalizeText(label) ||
+                (key==="balcony" &&
+                 value===normalizeText("تراس")) ||
+                (key==="terrace" &&
+                 value===normalizeText("balcony"));
+        });
+    });
+}
+
     return selected.every(f=>(aliases[f]||[f]).some(v=>actual.includes(normalizeText(v))));
 }
 
@@ -577,8 +641,20 @@ function getFilteredProperties(){
     return list;
 }
 
+
 function getFeatureHTML(p){
-    return getFeatures(p).map(f=>`<span class="feature">${escapeHTML(featureNames[f]||f)}</span>`).join("");
+    const features=getFeatures(p);
+    const displayed=new Set();
+
+    return features.map(feature=>{
+        const key=String(feature);
+        const label=featureNames[key]||key;
+
+        if(displayed.has(label))return "";
+        displayed.add(label);
+
+        return `<span class="feature">${escapeHTML(label)}</span>`;
+    }).join("");
 }
 
 function render(){
