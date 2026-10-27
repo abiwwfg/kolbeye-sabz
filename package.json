@@ -1,14 +1,15 @@
+
 {
   "name": "kolbeye-sabz",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "سامانه تخصصی املاک کلبه سبز",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "connect-pg-simple": "^10.0.0",
